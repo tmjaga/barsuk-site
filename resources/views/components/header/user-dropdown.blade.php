@@ -15,7 +15,7 @@
     >
         <span
             class="flex items-center justify-center text-center mr-3 overflow-hidden rounded-full h-11 w-11 bg-gray-200 text-black dark:bg-gray-700 dark:text-white">
-            {{ Auth::user()->initials() }}
+            {{ Auth::guard('admin')->user()->initials() }}
         </span>
 
        <span class="block mr-1 font-medium text-theme-sm">{{ Auth::user()->name }}</span>
@@ -46,8 +46,8 @@
     >
         <!-- User Info -->
         <div>
-            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ Auth::user()->name }}</span>
-            <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</span>
+            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ Auth::guard('admin')->user()->name }}</span>
+            <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">{{ Auth::guard('admin')->user()->email }}</span>
         </div>
 
         <!-- Menu Items -->
@@ -64,7 +64,7 @@
                                 fill="currentColor"
                             />
                         </svg>',
-                        'path' => route('settings.profile.edit'),
+                        'path' => route('admin.settings.profile.edit'),
                     ],
                 ];
             @endphp
@@ -85,10 +85,10 @@
         </ul>
 
         <!-- Sign Out -->
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('admin.logout') }}">
             @csrf
             <a
-                href="{{ route('logout') }}"
+                href="{{ route('admin.logout') }}"
                 class="flex items-center w-full gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
                 onclick="event.preventDefault(); this.closest('form').submit();"
             >

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -46,4 +46,3 @@ class NewPasswordController extends Controller
                         ->withErrors(['email' => __($status)]);
     }
 }
-

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -26,4 +26,3 @@ class PasswordResetLinkController extends Controller
         return back()->with('status', __('A reset link will be sent if the account exists.'));
     }
 }
-

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <x-common.page-breadcrumb pageTitle="User Profile" />

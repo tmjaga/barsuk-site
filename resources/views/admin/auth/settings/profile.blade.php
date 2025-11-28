@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <x-common.page-breadcrumb pageTitle="Profile">
@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('settings.profile.update') }}" class="space-y-6">
+        <form method="POST" action="{{ route('admin.settings.profile.update') }}" class="space-y-6">
             @csrf
             @method('PUT')
 

@@ -1,4 +1,4 @@
-@extends('layouts.fullscreen-layout')
+@extends('admin.layouts.fullscreen-layout')
 
 @section('content')
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">

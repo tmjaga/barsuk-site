@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -32,4 +32,3 @@ class ConfirmationController extends Controller
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }
-
