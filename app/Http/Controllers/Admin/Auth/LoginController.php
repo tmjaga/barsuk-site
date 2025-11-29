@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginUserRequest;
+use Arr;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,16 +21,14 @@ class LoginController extends Controller
         return view('admin.auth.signin');
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(LoginUserRequest $request): RedirectResponse
     {
-        $request->validate([
-            'email' => ['required', 'string', 'email', 'exists:admins,email'],
-            'password' => ['required', 'string'],
-        ]);
+        $credentials = Arr::only($request->validated(), ['email', 'password']);
+        $remember = $request->boolean('remember');
 
         $this->ensureIsNotRateLimited($request);
 
-        if (! Auth::guard('admin')->attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+        if (! Auth::guard('admin')->attempt($credentials, $remember)) {
             RateLimiter::hit($this->throttleKey($request));
 
             throw ValidationException::withMessages([

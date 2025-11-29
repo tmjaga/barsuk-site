@@ -33,14 +33,11 @@ Route::middleware('auth:admin')->group(function () {
 */
 
 Route::middleware(['auth:admin'])->group(function () {
-    Route::get('/', function () {
-        return to_route('admin.dashboard');
-    })->name('home');
-
+    Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'edit'])->name('settings.profile.edit');
     Route::put('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'update'])->name('settings.profile.update');
-    Route::delete('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'destroy'])->name('settings.profile.destroy');
+    // Route::delete('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'destroy'])->name('settings.profile.destroy');
     Route::get('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'edit'])->name('settings.password.edit');
     Route::put('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'update'])->name('settings.password.update');
 });

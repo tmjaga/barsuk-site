@@ -14,7 +14,7 @@ class ProfileController extends Controller
 {
     public function edit(Request $request): View
     {
-        return view('pages.auth.settings.profile', [
+        return view('admin.settings.profile', [
             'user' => $request->user(),
         ]);
     }
@@ -43,7 +43,7 @@ class ProfileController extends Controller
 
         $user->save();
 
-        return to_route('settings.profile.edit')->with('status', __('Profile updated successfully'));
+        return to_route('admin.settings.profile.edit')->with('status', __('Profile updated successfully'));
     }
 
     public function destroy(Request $request): RedirectResponse

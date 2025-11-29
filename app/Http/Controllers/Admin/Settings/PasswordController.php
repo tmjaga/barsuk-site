@@ -13,7 +13,7 @@ class PasswordController extends Controller
 {
     public function edit(Request $request): View
     {
-        return view('pages.auth.settings.password', [
+        return view('admin.settings.password', [
             'user' => $request->user(),
         ]);
     }

@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
     <x-common.page-breadcrumb pageTitle="Password">
         <x-slot:breadcrumbs>
             <li>
-                <a href="{{ route('dashboard') }}" class="text-gray-700 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-500">Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-500">Dashboard</a>
             </li>
             <li>
                 <span class="text-gray-700 dark:text-gray-400">Password</span>
@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('settings.password.update') }}" class="space-y-6">
+        <form method="POST" action="{{ route('admin.settings.password.update') }}" class="space-y-6">
             @csrf
             @method('PUT')
 
