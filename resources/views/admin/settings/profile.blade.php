@@ -15,7 +15,7 @@
     <x-layouts.settings title="Profile" description="Update your name and email address">
         @if (session('status'))
             <div class="mb-6">
-                <x-ui.alert variant="success" :message="session('status')" />
+                <x-ui.alert :variant="session('variant')" :message="session('status')" />
             </div>
         @endif
 

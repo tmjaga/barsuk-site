@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
@@ -35,11 +36,17 @@ Route::middleware('auth:admin')->group(function () {
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // profile routes
     Route::get('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'edit'])->name('settings.profile.edit');
     Route::put('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'update'])->name('settings.profile.update');
-    // Route::delete('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'destroy'])->name('settings.profile.destroy');
+
+    // profile change password routes
     Route::get('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'edit'])->name('settings.password.edit');
     Route::put('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'update'])->name('settings.password.update');
+
+    // gallery albums routes
+    Route::resource('albums', AlbumController::class);
 });
 
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');

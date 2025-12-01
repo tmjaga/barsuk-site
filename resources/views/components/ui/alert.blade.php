@@ -6,7 +6,8 @@
     'message' => '',
     'showLink' => false,
     'linkHref' => '#',
-    'linkText' => 'Learn more'
+    'linkText' => 'Learn more',
+    'duration' => 0, // duration in seconds
 ])
 
 @php
@@ -49,7 +50,13 @@
     $icon = $icons[$variant] ?? $icons['info'];
 @endphp
 
-<div class="rounded-xl border p-4 {{ $containerClass }}">
+<div
+    x-data="{ show: true }"
+    x-init="@if($duration > 0) setTimeout(() => show = false, {{ $duration * 1000 }}) @endif"
+    x-show="show"
+    x-transition
+    class="rounded-xl border p-4 {{ $containerClass }}">
+
     <div class="flex items-start gap-3">
         <div class="-mt-0.5 {{ $iconClass }}">
             {!! $icon !!}
@@ -67,8 +74,8 @@
             @endif
 
             @if($showLink)
-                <a 
-                    href="{{ $linkHref }}" 
+                <a
+                    href="{{ $linkHref }}"
                     class="inline-block mt-3 text-sm font-medium text-gray-500 underline dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
                 >
                     {{ $linkText }}
