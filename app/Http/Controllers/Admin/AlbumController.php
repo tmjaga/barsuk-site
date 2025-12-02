@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AlbumController extends Controller
@@ -12,9 +13,13 @@ class AlbumController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(Request $request): JsonResponse|View
     {
-        $albums = Album::all();
+        $albums = Album::latest()->paginate(config('app.items_per_page'));
+
+        if ($request->ajax()) {
+            return response()->json($albums);
+        }
 
         return view('admin.gallery.albums-index', compact('albums'));
     }
@@ -64,11 +69,11 @@ class AlbumController extends Controller
      */
     public function destroy(Album $album)
     {
-        //$album->delete();
+        $album->delete();
 
         return redirect()->back()->with([
-                'status' => __('Album has been deleted'),
-                'variant' => 'success',
-            ]);
+            'status' => __('Album has been deleted'),
+            'variant' => 'success',
+        ]);
     }
 }

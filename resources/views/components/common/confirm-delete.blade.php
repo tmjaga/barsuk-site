@@ -2,7 +2,7 @@
     'title' => '',
     'text' => '',
     'confirmText' => 'Yes, Delete',
-    'action' => null
+    'routeName' => ''
 ])
 
 <div x-data="{
@@ -10,8 +10,9 @@
         title: '{{ $title }}',
         text: '{{ $text }}',
         confirmText: '{{ $confirmText }}',
-        action: '{{ $action }}'
-    }" class="inline-block">
+        action: '',
+    }"
+     x-init="action = `{{ $routeName }}`.replace(':id', album.id)"class="inline-block">
 
     <div @click="isModalOpen = true">
         {{ $slot }}
@@ -43,8 +44,7 @@
                 <p x-text="text" class="text-gray-500 mb-6"></p>
                 <div class="flex items-center justify-center w-full gap-3 mt-7">
                     <button @click="isModalOpen = false" class="px-4 py-2 border rounded-lg">Cancel</button>
-
-                    <form :action="action" method="POST" x-show="action">
+                    <form :action="action" method="POST">
                         @csrf
                         @method('DELETE')
                         <button type="submit" x-text="confirmText" class="px-4 py-2 bg-red-600 text-white rounded-lg"></button>

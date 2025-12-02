@@ -16,7 +16,7 @@ class AlbumFactory extends Factory
      */
     public function definition(): array
     {
-        static $number = 1;
+        $number = 1;
 
         return [
             'title' => 'Test Album #'.$number++,

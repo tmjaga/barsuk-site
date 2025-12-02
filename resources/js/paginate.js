@@ -1,0 +1,55 @@
+export default (initialData = {}) => {
+
+    return {
+        currentPage: initialData.current_page || 1,
+        totalPages: initialData.last_page || 1,
+        data: initialData.data || [],
+        perPage: initialData.per_page || 10,
+        totalEntries: initialData.total || 0,
+        pagesAroundCurrent: [],
+
+        init() {
+            this.updatePagesAroundCurrent();
+            this.updateEntries();
+        },
+
+        updatePagesAroundCurrent() {
+            const pages = [];
+
+            for (let i = 1; i <= this.totalPages; i++) {
+                pages.push(i);
+            }
+
+            this.pagesAroundCurrent = pages;
+        },
+
+        updateEntries() {
+            this.startEntry = (this.currentPage - 1) * this.perPage + 1;
+            this.endEntry = Math.min(this.currentPage * this.perPage, this.totalEntries);
+        },
+
+        goToPage(page) {
+            console.log('Going to page:', page);
+            if (page < 1 || page > this.totalPages) return;
+            this.currentPage = page;
+            this.fetchPage(page);
+        },
+
+        prevPage() { this.goToPage(this.currentPage - 1); },
+        nextPage() { this.goToPage(this.currentPage + 1); },
+
+        fetchPage(page) {
+            axios.get(`/admin/albums?page=${page}`)
+                .then(res => {
+                    const data = res.data;
+                    this.data = data.data;
+                    this.totalPages = data.last_page;
+                    this.totalEntries = data.total;
+                    this.perPage = data.per_page;
+                    this.updatePagesAroundCurrent();
+                    this.updateEntries();
+                })
+                .catch(err => console.error(err));
+        }
+    };
+};

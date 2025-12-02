@@ -11,6 +11,8 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+
+
     <!-- Alpine.js -->
     {{-- <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script> --}}
 
@@ -89,6 +91,8 @@
         })();
     </script>
 
+    @stack('header_scripts')
+
 </head>
 
 <body
@@ -129,8 +133,9 @@
 
 </div>
 
-</body>
-
 @stack('scripts')
 
+@stack('footer_scripts')
+
+</body>
 </html>
