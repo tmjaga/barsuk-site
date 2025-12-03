@@ -1,0 +1,5 @@
+<div  x-show="{{ $show ?? 'false' }}"
+      x-transition.opacity
+      class="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white/70 dark:bg-black">
+  <div class="h-16 w-16 animate-spin rounded-full border-4 border-solid border-gray-300 border-t-transparent"></div>
+</div>

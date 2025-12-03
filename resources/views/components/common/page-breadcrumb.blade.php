@@ -1,4 +1,7 @@
-@props(['pageTitle' => 'Page'])
+@props([
+    'pageTitle' => 'Page',
+    'breadcrumbs' => [],
+])
 
 <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
     <h2 class="text-xl font-semibold text-gray-800 dark:text-white/90">
@@ -7,32 +10,33 @@
     <nav>
         <ol class="flex items-center gap-1.5">
             <li>
-                <a
-                    class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
-                    href="{{ route('admin.home') }}"
-                >
+                <a class="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400" href="{{ route('admin.home') }}">
                     Home
-                    <svg
-                        class="stroke-current"
-                        width="17"
-                        height="16"
-                        viewBox="0 0 17 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366"
-                            stroke=""
-                            stroke-width="1.2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        />
+                    <svg class="stroke-current" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366" stroke="" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </a>
             </li>
-            <li class="text-sm text-gray-800 dark:text-white/90">
-                {{ $pageTitle }}
-            </li>
+            @if(is_array($breadcrumbs) && count($breadcrumbs) > 0)
+                @foreach ($breadcrumbs as $breadcrumb)
+                    <li class="text-sm @if (!$loop->last) text-gray-500 dark:text-gray-400 @else text-gray-800 dark:text-white/90 @endif">
+                        @if (!$loop->last)
+                            <a class="inline-flex items-center gap-1.5" href="{{ $breadcrumb['url'] }}">
+                                {{ $breadcrumb['label'] }}
+                                <svg class="stroke-current" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6.0765 12.667L10.2432 8.50033L6.0765 4.33366" stroke="" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        @else
+                            {{ $breadcrumb['label'] }}
+                        @endif
+                    </li>
+                @endforeach
+            @else
+                <li class="text-sm text-gray-800 dark:text-white/90">
+                    {{ $pageTitle }}
+                </li>
+            @endif
         </ol>
     </nav>
 </div>

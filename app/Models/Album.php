@@ -10,7 +10,7 @@ class Album extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'active'];
 
     protected $appends = ['status_badge'];
 
