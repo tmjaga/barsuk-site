@@ -150,35 +150,3 @@
     </div>
 @endsection
 
-@push('footer_scripts')
-    <script>
-        document.addEventListener('alpine:init', () => {
-            axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            Alpine.data('albumSearch', () => ({
-                search: '',
-                albums: [],
-                loading: false,
-
-                async fetchAlbums() {
-                    this.loading = true;
-
-                    try {
-                        const response = await axios.get('{{ route('admin.albums.index') }}', {
-                            params: {
-                                search: this.search
-                            }
-                        });
-
-                        this.albums = response.data;
-                    } catch (error) {
-                        console.error(error);
-                    } finally {
-                        this.loading = false;
-                    }
-                }
-            }));
-        });
-    </script>
-@endpush
-
