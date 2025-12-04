@@ -17,7 +17,7 @@
         </div>
     @endif
 
-    <div x-data="paginate(@js($albums))" class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div x-data="listingpage(@js($albums))" class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- loader (spinner)-->
         <x-common.loader :show="'loading'" style="display: none;" />
         <!-- search form-->
@@ -155,7 +155,6 @@
         document.addEventListener('alpine:init', () => {
             axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            //console.log(axios.defaults.headers.common);
             Alpine.data('albumSearch', () => ({
                 search: '',
                 albums: [],
@@ -180,8 +179,6 @@
                 }
             }));
         });
-
-
     </script>
 @endpush
 

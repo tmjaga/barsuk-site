@@ -1,12 +1,12 @@
 import './bootstrap';
 import Alpine from 'alpinejs';
 import $ from 'jquery';
-import paginate from './paginate.js'
+import listingPage from './listing_page.js'
 
 window.$ = window.jQuery = $;
 window.Alpine = Alpine;
 
 // attach alpine modules data
-Alpine.data('paginate', paginate);
+Alpine.data('listingpage', listingPage);
 
 Alpine.start();

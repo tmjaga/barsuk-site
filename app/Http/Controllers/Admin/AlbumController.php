@@ -49,14 +49,13 @@ class AlbumController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //dd('new', $request->all());
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'active' => 'sometimes|boolean',
         ]);
 
+        // process 'active' checkbox
         $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
-
 
         Album::create($validated);
 
@@ -87,11 +86,13 @@ class AlbumController extends Controller
      */
     public function update(Request $request, Album $album): RedirectResponse
     {
+        // TODO on Edit operation try to store current page and search parameters to return to page with search value
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'active' => 'sometimes|boolean',
         ]);
 
+        // process 'active' checkbox
         $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
 
         $album->update($validated);
