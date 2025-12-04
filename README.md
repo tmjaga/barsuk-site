@@ -1,27 +1,11 @@
-# TailAdmin Laravel Starter Kit 
+# Nail Salon Management System
 
-This starter kit is based on [TailAdmin Laravel - Free Laravel Dashboard](https://github.com/TailAdmin/tailadmin-laravel).
+A simple Laravel 12 application is based on  [TailAdmin Laravel Starter Kit](https://github.com/LaravelDaily/TailAdmin-Laravel-Starter-Kit) for managing Nail Salon Manicure Services. 
 
-We decided to merge our [LaravelDaily/starter-kit](https://github.com/LaravelDaily/starter-kit) with TailAdmin components.
+Video Lesson [New TailAdmin Laravel Starter Kit with Basic Auth](https://www.youtube.com/watch?v=CKMnmHIo1uo&t=405s)
 
-As a result, you get full **simple** Laravel Auth (*login, register, forget password, profile*), styled as TailAdmin.
+[Tail Admin Template hompage](https://tailadmin.com)
 
-![](https://laraveldaily.com/uploads/2025/11/tailadmin-starter-kit-profile.png)
-
-![](https://laraveldaily.com/uploads/2025/11/tailadmin-starter-kit-login.png)
-
-The main point is no React/Vue/Livewire required. Only Blade and Tailwind.
-
-Inside [TailAdmin](https://tailadmin.com/), there are many more components and pages, so explore them and add them manually. This repository is created as a **starter** kit.
-
----
-
-## How to use
-
-To use this kit, you can install it using:
-
-```
-laravel new --using=laraveldaily/tailadmin-starter-kit
-```
-
-From there, you can modify the kit to your needs.
+## Used Components
+- [Alpine.js](https://alpinejs.dev) all componenets implemented with this framework
+- [Tippy.js](https://atomiks.github.io/tippyjs) - tooltips for Tailwind Css
