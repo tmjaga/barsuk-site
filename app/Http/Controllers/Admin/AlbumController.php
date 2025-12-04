@@ -66,11 +66,11 @@ class AlbumController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Displayphotos in the specified resource.
      */
-    public function show(string $id)
+    public function show(Album $album)
     {
-        //
+        dd($album);
     }
 
     /**
