@@ -10,7 +10,7 @@ import 'tippy.js/themes/light-border.css';
 window.$ = window.jQuery = $;
 window.Alpine = Alpine;
 
-// attach alpine modules data
+// register listingpage component
 Alpine.data('listingpage', listingPage);
 
 Alpine.start();
