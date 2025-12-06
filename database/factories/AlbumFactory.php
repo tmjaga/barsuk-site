@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Album;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AlbumFactory extends Factory
 {
+    protected static int $number = 1;
+
     /**
      * Define the model's default state.
      *
@@ -16,10 +19,19 @@ class AlbumFactory extends Factory
      */
     public function definition(): array
     {
-        $number = 1;
-
         return [
-            'title' => 'Test Album #'.$number++,
+            'title' => 'Test Album #'.self::$number++,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Album $album) {
+            for ($i = 1; $i <= 3; $i++) {
+                $album->addMediaFromUrl('https://picsum.photos/200/300?random='.rand(1, 1000))
+                    ->withCustomProperties(['title' => 'Image '.$i])
+                    ->toMediaCollection('images');
+            }
+        });
     }
 }

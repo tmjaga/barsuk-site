@@ -10,9 +10,13 @@
         title: '{{ $title }}',
         text: '{{ $text }}',
         confirmText: '{{ $confirmText }}',
-        action: '',
-    }"
-     x-init="action = `{{ $routeName }}`.replace(':id', album.id)"class="inline-block">
+        currentItemId: null,
+        itemId:null,
+        get action() {
+            if (!this.itemId) return '';
+            return `{{ $routeName }}`.replace(':id', this.itemId)
+        }
+    }">
 
     <div @click="isModalOpen = true">
         {{ $slot }}

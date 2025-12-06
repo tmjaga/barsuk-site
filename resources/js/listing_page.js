@@ -1,6 +1,7 @@
 export default (initialData = {}) => {
 
     return {
+        url: initialData.url || '',
         currentPage: initialData.current_page || 1,
         totalPages: initialData.last_page || 1,
         data: initialData.data || [],
@@ -13,6 +14,7 @@ export default (initialData = {}) => {
         init() {
             this.updatePagesAroundCurrent();
             this.updateEntries();
+            console.log(this.data);
         },
 
         updatePagesAroundCurrent() {
@@ -42,7 +44,7 @@ export default (initialData = {}) => {
         nextPage() { this.goToPage(this.currentPage + 1); },
 
         fetchPage(page) {
-            axios.get('/admin/albums', {
+            axios.get(this.url, {
                 params: {
                     page: page,
                     search: this.search

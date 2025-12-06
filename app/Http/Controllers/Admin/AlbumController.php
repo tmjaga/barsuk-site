@@ -66,14 +66,6 @@ class AlbumController extends Controller
     }
 
     /**
-     * Displayphotos in the specified resource.
-     */
-    public function show(Album $album)
-    {
-        dd($album);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(Album $album): View

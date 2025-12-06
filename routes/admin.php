@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AlbumController;
+use App\Http\Controllers\Admin\AlbumMediaController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
@@ -22,7 +23,6 @@ Route::middleware('guest:admin')->group(function () {
 });
 
 /* uncommit if necessary
-
 Route::middleware('auth:admin')->group(function () {
     Route::get('verify-email', [VerificationController::class, 'notice'])->name('verification.notice');
     Route::post('verify-email', [VerificationController::class, 'store'])->middleware('throttle:6,1')->name('verification.store');
@@ -47,6 +47,17 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // gallery albums routes
     Route::resource('albums', AlbumController::class);
+
+    // gallery albums media routes
+    Route::group([
+        'prefix' => 'albums/{album}',
+        'as' => 'albums.media.',
+    ], function () {
+        Route::get('media', [AlbumMediaController::class, 'index'])->name('index');
+        // Route::post('media', [AlbumMediaController::class, 'index']);
+        // Route::put('media/{media}', [AlbumMediaController::class, 'index']);
+         Route::delete('media/{media}', [AlbumMediaController::class, 'destroy'])->name('destroy');
+    });
 });
 
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
