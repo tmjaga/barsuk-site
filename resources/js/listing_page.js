@@ -14,7 +14,7 @@ export default (initialData = {}) => {
         init() {
             this.updatePagesAroundCurrent();
             this.updateEntries();
-            console.log(this.data);
+            console.log('data: ', this.data);
         },
 
         updatePagesAroundCurrent() {

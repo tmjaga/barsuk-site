@@ -42,7 +42,10 @@
 
         </div>
 
-        <div class="max-w-full overflow-x-auto custom-scrollbar">
+        <div class="max-w-full overflow-x-auto custom-scrollbar" x-data="{
+        isModalOpen: false,
+        previewImage: ''
+        }">
             <table class="min-w-full">
                 <!-- table header start -->
                 <thead class="border-gray-100 border-y bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
@@ -88,21 +91,30 @@
                         </td>
                     </tr>
                 </template>
-
                 <template x-for="image in data" :key="image.id">
-                    <tr>
+                    <tr x-data="statusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
                                 <p x-text="image.custom_properties.title" class="text-gray-700 text-theme-sm dark:text-gray-400"></p>
                             </div>
                         </td>
-                        <td class="px-6 py-3 whitespace-nowrap">
-                            Status
-                            {{--
-                            <div x-html="album.status_badge" class="flex items-center justify-center"></div>
-                            --}}
+                        <td class="px-6 py-3 whitespace-nowrap text-center">
+                            <span
+                                x-text="image.custom_properties.active !== undefined ? getBadge(image.custom_properties.active).text : getBadge().text"
+                                :class="image.custom_properties.active !== undefined ? getBadge(image.custom_properties.active).color : getBadge().color"
+                                class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
+                            </span>
                         </td>
-                        <td>image</td>
+                        <td class="text-center justify-center p-2">
+                            <div class="mx-auto w-[150px] h-[100px]" data-tippy-content="@lang('View Image')">
+                                <div class="hover:cursor-pointer w-full h-full rounded-xl border border-gray-200 bg-white p-1 dark:border-gray-800 dark:bg-white/[0.03]"
+                                     @click="$dispatch('open-image', { src: $el.querySelector('img').src })">
+                                    <div class="w-full h-full overflow-hidden rounded-lg flex items-center justify-center">
+                                        <img :src="image.url" alt="photo" class="max-w-full max-h-full object-contain">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
                                 <a x-bind:href="`{{ route('admin.albums.edit', ':id') }}`.replace(':id', image.id)" data-tippy-content="@lang('Edit Image')" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
@@ -110,6 +122,7 @@
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M17.0911 3.53206C16.2124 2.65338 14.7878 2.65338 13.9091 3.53206L5.6074 11.8337C5.29899 12.1421 5.08687 12.5335 4.99684 12.9603L4.26177 16.445C4.20943 16.6931 4.286 16.9508 4.46529 17.1301C4.64458 17.3094 4.90232 17.3859 5.15042 17.3336L8.63507 16.5985C9.06184 16.5085 9.45324 16.2964 9.76165 15.988L18.0633 7.68631C18.942 6.80763 18.942 5.38301 18.0633 4.50433L17.0911 3.53206ZM14.9697 4.59272C15.2626 4.29982 15.7375 4.29982 16.0304 4.59272L17.0027 5.56499C17.2956 5.85788 17.2956 6.33276 17.0027 6.62565L16.1043 7.52402L14.0714 5.49109L14.9697 4.59272ZM13.0107 6.55175L6.66806 12.8944C6.56526 12.9972 6.49455 13.1277 6.46454 13.2699L5.96704 15.6283L8.32547 15.1308C8.46772 15.1008 8.59819 15.0301 8.70099 14.9273L15.0436 8.58468L13.0107 6.55175Z" fill=""></path>
                                     </svg>
                                 </a>
+                                <!-- Delete Image -->
                                 <x-common.confirm-delete
                                     title="Are you sure to Delete this Image?"
                                     route-name="{{ route('admin.albums.media.destroy',  [$album->id, ':id']) }}">
@@ -159,7 +172,26 @@
                 </p>
             </div>
         </div>
-
     </div>
+
+    <!-- Image Preview modal -->
+    <div x-data="{ isModalOpen: false, previewImage: '' }" @open-image.window="isModalOpen = true; previewImage = $event.detail.src;">
+        <div x-show="isModalOpen" class="fixed inset-0 flex items-center justify-center overflow-auto z-99999" style="display: none;">
+            <div class="fixed inset-0 bg-gray-400/50 backdrop-blur-[32px]" @click="isModalOpen = false"></div>
+            <div @click.outside="isModalOpen = false" class="relative w-full max-w-[55vw] max-h-[95vh] rounded-3xl bg-white p-3 dark:bg-gray-900 lg:p-3 flex items-center justify-center">
+                <!-- Close button -->
+                <button @click="isModalOpen = false" class="absolute flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-gray-200 hover:text-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white sm:right-6 sm:top-6 sm:h-11 sm:w-11 z-10">
+                    <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"></path>
+                    </svg>
+                </button>
+                <img :src="previewImage" class="max-w-full max-h-[90vh] object-contain rounded-xl">
+            </div>
+        </div>
+    </div>
+
 @endsection
+@push('footer_scripts')
+    <script src="{{ asset('js/status-badge.js') }}"></script>
+@endpush
 

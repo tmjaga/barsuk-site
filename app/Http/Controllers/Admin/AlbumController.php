@@ -26,9 +26,6 @@ class AlbumController extends Controller
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
 
-        // dd($albums);
-        // $albums = Album::latest()->paginate(config('app.items_per_page'));
-
         if ($request->ajax()) {
             return response()->json($albums);
         }

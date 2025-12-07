@@ -81,14 +81,18 @@
                 </template>
 
                 <template x-for="album in data" :key="album.id">
-                    <tr>
+                    <tr x-data="statusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
                                 <p x-text="album.title" class="text-gray-700 text-theme-sm dark:text-gray-400"></p>
                             </div>
                         </td>
-                        <td class="px-6 py-3 whitespace-nowrap">
-                            <div x-html="album.status_badge" class="flex items-center justify-center"></div>
+                        <td class="px-6 py-3 whitespace-nowrap text-center">
+                            <span
+                                x-text="album.active !== undefined ? getBadge(album.active).text : getBadge().text"
+                                :class="album.active !== undefined ? getBadge(album.active).color : getBadge().color"
+                                class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
+                            </span>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
@@ -153,3 +157,6 @@
     </div>
 @endsection
 
+@push('footer_scripts')
+    <script src="{{ asset('js/status-badge.js') }}"></script>
+@endpush

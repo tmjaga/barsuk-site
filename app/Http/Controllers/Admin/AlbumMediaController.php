@@ -29,6 +29,12 @@ class AlbumMediaController extends Controller
             ->withQueryString();
 
         if ($request->ajax()) {
+            $images->getCollection()->transform(function ($image) {
+                $image->url = $image->getUrl();
+
+                return $image;
+            });
+
             return response()->json($images);
         }
 
@@ -40,5 +46,4 @@ class AlbumMediaController extends Controller
 
         dd($album, $media);
     }
-
 }

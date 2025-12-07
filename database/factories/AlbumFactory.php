@@ -29,7 +29,10 @@ class AlbumFactory extends Factory
         return $this->afterCreating(function (Album $album) {
             for ($i = 1; $i <= 3; $i++) {
                 $album->addMediaFromUrl('https://picsum.photos/200/300?random='.rand(1, 1000))
-                    ->withCustomProperties(['title' => 'Image '.$i])
+                    ->withCustomProperties([
+                        'title' => 'Image '.$i,
+                        'active' => 1,
+                    ])
                     ->toMediaCollection('images');
             }
         });
