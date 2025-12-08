@@ -13,7 +13,7 @@
 
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-            <form action="{{ isset($album) ? route('admin.albums.update', $album) : route('admin.albums.store') }}" method="POST">
+            <form action="{{ isset($album) ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST">
                 @csrf
                 @isset($album)
                     @method('PUT')

@@ -14,7 +14,7 @@
 
     <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <div class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
-            <form action="{{ isset($album) && isset($image) ? route('admin.albums.update', $album) : route('admin.albums.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ isset($album) && isset($image) ? route('admin.albums.media.update', [$album->id, $image->id]) : route('admin.albums.media.store', $album->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @isset($image)
                     @method('PUT')
@@ -34,9 +34,13 @@
                     <!-- Upload file -->
                     <div x-data=fileUploadPreview('{{ isset($image) ? $image->getUrl() : '' }}') class="w-1/2 px-2.5 mb-5">
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                            @lang('Upload file') @empty($image)<span class="text-red-500">*</span>@endempty
+                            @lang('Upload file') <span x-show="!fileData" class="text-red-500">*</span>
                         </label>
-                        <input @change="handleImageUpload" type="file" accept="image/*" name="file" class="focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400">
+                        <input @change="handleImageUpload" type="file" accept=".jpg, .jpeg, image/jpeg" name="file" class="focus:border-ring-brand-300 shadow-theme-xs focus:file:ring-brand-300 h-11 w-full overflow-hidden rounded-lg border border-gray-300 bg-transparent text-sm text-gray-500 transition-colors file:mr-5 file:border-collapse file:cursor-pointer file:rounded-l-lg file:border-0 file:border-r file:border-solid file:border-gray-200 file:bg-gray-50 file:py-3 file:pr-3 file:pl-3.5 file:text-sm file:text-gray-700 placeholder:text-gray-400 hover:file:bg-gray-100 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:text-white/90 dark:file:border-gray-800 dark:file:bg-white/[0.03] dark:file:text-gray-400 dark:placeholder:text-gray-400">
+                        @error('file')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                        <p x-show="error" x-text="error" class="text-red-500 mt-1 text-sm"></p>
                         <div x-show="fileData" class="text-center mt-3 bg-white shadow-md rounded-lg p-2 inline-block">
                             <h1 class="mb-2 text-sm font-medium">@lang('File Upload Preview')</h1>
                             <img :src="fileData" alt="preview image" class="rounded-lg max-w-[500px] max-h-[500px] object-contain">
@@ -72,20 +76,38 @@
         document.addEventListener('alpine:init', () => {
             Alpine.data('fileUploadPreview', (initialImage) => ({
                 fileData: initialImage || null,
+                error: null,
                 handleImageUpload(event) {
                     const file = event.target.files[0];
 
-                    if(file) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            this.fileData = e.target.result;
-                        }
-                        reader.readAsDataURL(file);
-
-                    } else {
+                    if (!file || !this.isValidImage(file)) {
+                        event.target.value = '';
                         this.fileData = null;
+                        return;
                     }
-                }
+
+                    const reader = new FileReader();
+
+                    reader.onload = (e) => {
+                        this.fileData = e.target.result;
+                        this.error = null;
+                    }
+
+                    reader.readAsDataURL(file);
+                },
+
+                isValidImage(file) {
+                    const allowedTypes = ['image/jpeg', 'image/jpg'];
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    const allowedExtensions = ['jpg', 'jpeg'];
+
+                    if (!allowedTypes.includes(file.type) || !allowedExtensions.includes(extension)) {
+                        this.error = 'Only JPG/JPEG allowed';
+                        return false;
+                    }
+
+                    return true;
+                },
             }));
         });
     </script>

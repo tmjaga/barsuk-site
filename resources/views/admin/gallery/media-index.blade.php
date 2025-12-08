@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-        $pageTitle = __('Album ['.$album->title.' ] Photos');
+        $pageTitle = __('Album ['.$album->title.'] Photos');
     @endphp
     <x-common.page-breadcrumb  pageTitle="{{ $pageTitle }}" :breadcrumbs="[
         ['label' => 'Albums', 'url' => route('admin.albums.index')],
