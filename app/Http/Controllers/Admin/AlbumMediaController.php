@@ -41,6 +41,17 @@ class AlbumMediaController extends Controller
         return view('admin.gallery.media-index', compact('album', 'images'));
     }
 
+    public function create(Album $album): View
+    {
+        return view('admin.gallery.media-addedit', compact('album'));
+    }
+
+    public function edit(Album $album, Media $image): View
+    {
+        return view('admin.gallery.media-addedit', compact('album', 'image'));
+    }
+
+
     public function destroy(Album $album, Media $media): RedirectResponse
     {
 

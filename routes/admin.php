@@ -54,9 +54,11 @@ Route::middleware(['auth:admin'])->group(function () {
         'as' => 'albums.media.',
     ], function () {
         Route::get('media', [AlbumMediaController::class, 'index'])->name('index');
+        Route::get('media/create', [AlbumMediaController::class, 'create'])->name('create');
+        Route::get('media/{image}/edit', [AlbumMediaController::class, 'edit'])->name('edit');
         // Route::post('media', [AlbumMediaController::class, 'index']);
         // Route::put('media/{media}', [AlbumMediaController::class, 'index']);
-         Route::delete('media/{media}', [AlbumMediaController::class, 'destroy'])->name('destroy');
+        Route::delete('media/{media}', [AlbumMediaController::class, 'destroy'])->name('destroy');
     });
 });
 

@@ -24,7 +24,7 @@
         <x-common.loader :show="'loading'" style="display: none;" />
         <!-- search form-->
         <div class="flex flex-col gap-3 sm:flex-row items-center p-3">
-            <a href="#" class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+            <a href="{{ route('admin.albums.media.create', ['album' => $album->id]) }}" class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -39,7 +39,6 @@
                 </span>
                 <input x-model.debounce.500ms="search" x-effect="goToPage()" type="text" placeholder="Search..." class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-10 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[300px] dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
             </div>
-
         </div>
 
         <div class="max-w-full overflow-x-auto custom-scrollbar" x-data="{
@@ -117,7 +116,7 @@
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
-                                <a x-bind:href="`{{ route('admin.albums.edit', ':id') }}`.replace(':id', image.id)" data-tippy-content="@lang('Edit Image')" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
+                                <a x-bind:href="`{{ route('admin.albums.media.edit', ['album' => $album->id, ':id']) }}`.replace(':id', image.id)" data-tippy-content="@lang('Edit Image')" class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
                                     <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M17.0911 3.53206C16.2124 2.65338 14.7878 2.65338 13.9091 3.53206L5.6074 11.8337C5.29899 12.1421 5.08687 12.5335 4.99684 12.9603L4.26177 16.445C4.20943 16.6931 4.286 16.9508 4.46529 17.1301C4.64458 17.3094 4.90232 17.3859 5.15042 17.3336L8.63507 16.5985C9.06184 16.5085 9.45324 16.2964 9.76165 15.988L18.0633 7.68631C18.942 6.80763 18.942 5.38301 18.0633 4.50433L17.0911 3.53206ZM14.9697 4.59272C15.2626 4.29982 15.7375 4.29982 16.0304 4.59272L17.0027 5.56499C17.2956 5.85788 17.2956 6.33276 17.0027 6.62565L16.1043 7.52402L14.0714 5.49109L14.9697 4.59272ZM13.0107 6.55175L6.66806 12.8944C6.56526 12.9972 6.49455 13.1277 6.46454 13.2699L5.96704 15.6283L8.32547 15.1308C8.46772 15.1008 8.59819 15.0301 8.70099 14.9273L15.0436 8.58468L13.0107 6.55175Z" fill=""></path>
                                     </svg>
@@ -125,7 +124,7 @@
                                 <!-- Delete Image -->
                                 <x-common.confirm-delete
                                     title="Are you sure to Delete this Image?"
-                                    route-name="{{ route('admin.albums.media.destroy',  [$album->id, ':id']) }}">
+                                    route-name="{{ route('admin.albums.media.destroy',  ['album' => $album->id, ':id']) }}">
                                     <!-- Trash icon -->
                                     <button @click="itemId = image.id" data-tippy-content="@lang('Delete Image')" class="flex items-center justify-center text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">
                                         <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">

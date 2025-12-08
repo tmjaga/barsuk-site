@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-        $pageTitle = @isset($album) ? __('Edit Album: '. $album->title) : __('Create New Album');
+        $pageTitle = @isset($album) ? __('Edit Album: '). $album->title : __('Create New Album');
         $pageLabel = @isset($album) ? __('Edit Album') : __('Create New Album');
     @endphp
     <x-common.page-breadcrumb pageTitle="{{ $pageTitle }}" :breadcrumbs="[
