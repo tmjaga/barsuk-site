@@ -5,12 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Album;
-use DB;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -52,7 +52,9 @@ class AlbumMediaController extends Controller
 
     public function edit(Album $album, Media $image): View
     {
-        return view('admin.gallery.media-addedit', compact('album', 'image'));
+        $moveToAlbums = $album::where('id', '!=', $album->id)->orderBy('title')->get();
+
+        return view('admin.gallery.media-addedit', compact('album', 'moveToAlbums', 'image'));
     }
 
     public function store(Request $request, Album $album): RedirectResponse
@@ -99,33 +101,54 @@ class AlbumMediaController extends Controller
             'title' => 'required|string|max:255',
             'active' => 'sometimes|boolean',
             'file' => 'nullable|image|mimes:jpg,jpeg|max:'.(int) (config('media-library.max_file_size') / 1024),
+            'move_to_album' => 'nullable|integer|exists:albums,id',
         ]);
 
         // process 'active' checkbox
         $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
+
         try {
-            $status = __('Image has been updated');
+            $status = __('Image has been updated.');
             $variant = 'success';
 
             if ($request->hasFile('file')) {
                 $file = $validated['file'];
-                $oldId = $image->id;
-                
-                $image->delete();
 
-                $newMedia = $album->addMedia($file)
-                    ->usingFileName(Str::random(10).'_'.$file->getClientOriginalName())
-                    ->withCustomProperties([
-                        'title' => $validated['title'],
-                        'active' => $validated['active'],
-                    ])
-                    ->toMediaCollection('images');
+                $newFileName = Str::random(10).'_'.$file->getClientOriginalName();
+                $newName = pathinfo($newFileName, PATHINFO_FILENAME);
+                $relativePath = $image->getPathRelativeToRoot();
 
-                DB::table('media')->where('id', $newMedia->id)->update(['id' => $oldId]);
-            } else {
-                $image->setCustomProperty('title', $validated['title']);
-                $image->setCustomProperty('active', $validated['active']);
+                // replace old file
+                Storage::disk($image->disk)->put(
+                    $relativePath,
+                    file_get_contents($file)
+                );
+
+                $image->update([
+                    'file_name' => $newFileName,
+                    'name' => $newName,
+                    'mime_type' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                ]);
+
+                if (method_exists($image, 'generateConversions')) {
+                    $image->generateConversions();
+                }
+            }
+
+            // update custom properties
+            $image->setCustomProperty('title', $validated['title']);
+            $image->setCustomProperty('active', $validated['active']);
+            $image->save();
+
+            // move to album
+            if (! empty($validated['move_to_album']) && $validated['move_to_album'] != $album->id) {
+                $newAlbumId = (int) $validated['move_to_album'];
+
+                $image->model_id = $newAlbumId;
+                $image->model_type = Album::class;
                 $image->save();
+                $status .= __(' And moved to another album.');
             }
         } catch (\Throwable $e) {
             Log::error('Image update error', [
