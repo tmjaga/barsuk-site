@@ -103,10 +103,6 @@
 @push('footer_scripts')
     <script>
         document.addEventListener('alpine:init', () => {
-            Alpine.store('image', {
-                fileData: null
-            });
-
             Alpine.data('fileUploadPreview', (initialImage) => ({
                 fileData: initialImage || null,
                 error: null,
