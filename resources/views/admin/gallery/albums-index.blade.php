@@ -4,10 +4,14 @@
     <x-common.page-breadcrumb pageTitle="{{__('Albums')}}">
         <x-slot:breadcrumbs>
             <li>
-                <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-500">Dashboard</a>
+                <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-500">
+                    @lang('Dashboard')
+                </a>
             </li>
             <li>
-                <span class="text-gray-700 dark:text-gray-400">Albums</span>
+                <span class="text-gray-700 dark:text-gray-400">
+                    @lang('Albums')
+                </span>
             </li>
         </x-slot:breadcrumbs>
     </x-common.page-breadcrumb>

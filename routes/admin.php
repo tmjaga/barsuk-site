@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AlbumMediaController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
@@ -60,6 +61,9 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::put('media/{image}', [AlbumMediaController::class, 'update'])->name('update');
         Route::delete('media/{image}', [AlbumMediaController::class, 'destroy'])->name('destroy');
     });
+
+    // categories routes
+    Route::resource('categories', CategoryController::class);
 });
 
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
