@@ -124,7 +124,7 @@
                     </svg>
                 </button>
 
-                <form class="" method="POST" :action="formAction">
+                <form @submit.prevent="submitForm" method="POST" :action="formAction">
                     @csrf
                     <input type="hidden" name="_method" :value="formMethod">
                     <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800 dark:text-white/90">
@@ -135,7 +135,8 @@
                         <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                             @lang('Album Title') <span class="text-red-500">*</span>
                         </label>
-                        <input name="title" value="" x-model="formData.title" type="text" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                        <input name="title" value="{{ old('title', $album->title ?? '') }}" x-model="formData.title" type="text" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                        <p x-show="$v.formData.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
                     </div>
 
                     <div class="mt-6">
@@ -147,7 +148,7 @@
                     </div>
 
                     <div class="flex items-center justify-end w-full gap-3 mt-6">
-                        <button type="button" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+                        <button type="submit" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
                             @lang('Save Changes')
                         </button>
                         <button @click="isModalOpen = false" type="button" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 sm:w-auto">
@@ -181,6 +182,15 @@
                     update: "{{ route('admin.categories.update', ':id') }}",
                     store: "{{ route('admin.categories.store') }}",
                 },
+                validations: {
+                    'formData.title': ['required', 'min:3'],
+                },
+
+                init() {
+                    console.log('init: ');
+
+                    this.$validation(this)
+                },
 
                 openCreateModal() {
                     this.resetForm();
@@ -197,6 +207,7 @@
                     this.isLoading = true;
 
                     try {
+
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', categoryId));
                         // TODO For test errors uncomment line below
                         //const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
@@ -209,6 +220,11 @@
                         this.modalTitle = '@lang("Edit Category")';
 
                         this.$dispatch('update-toggle', this.formData.active);
+
+                        // reset validation
+                        if (this.$v?.reset) {
+                            this.$v.reset()
+                        }
 
                         this.isModalOpen = true;
                     } catch (error) {
@@ -223,11 +239,24 @@
                     };
 
                     this.errors = {};
+
+                    // reset validation
+                    if (this.$v?.reset) {
+                        this.$v.reset()
+                    }
                 },
 
                 async submitForm() {
                     this.errors = {};
 
+                    this.formData.title = this.formData.title.trim();
+                    this.$v.validate();
+
+                    if (this.$v.formData.title.$invalid) {
+                        return;
+                    }
+
+                    /*
                     try {
                         const response = await fetch(this.formAction, {
                             method: this.formMethod === 'PUT' ? 'POST' : 'POST',
@@ -252,6 +281,8 @@
                     } catch (error) {
                         console.error('Error submitting form:', error);
                     }
+
+                     */
                 }
             }));
         });
