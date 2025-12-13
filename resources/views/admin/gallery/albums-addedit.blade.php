@@ -71,7 +71,7 @@
                     this.title = this.title.trim();
                     this.$v.validate();
 
-                    if (this.$v.$invalid || this.$v.title.$invalid) {
+                    if (this.$v.title.$invalid) {
                         return;
                     }
 

@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -38,9 +39,19 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category): JsonResponse
+    public function edit(string $id): JsonResponse
     {
-        return response()->json($category);
+        try {
+            $category = Category::findOrFail($id);
+
+            return response()->json($category);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::error('Category not found', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => __('Category not found')], 404);
+        }
     }
 
     /**

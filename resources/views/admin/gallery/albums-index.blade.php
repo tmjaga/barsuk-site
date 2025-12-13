@@ -17,7 +17,7 @@
     </x-common.page-breadcrumb>
     @if (session('status'))
         <div class="mb-6">
-            <x-ui.alert duration="3" :variant="session('variant')" :message="session('status')" />
+            <x-ui.alert :duration="3" :variant="session('variant')" :message="session('status')" />
         </div>
     @endif
 

@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <x-common.page-breadcrumb pageTitle="{{__('Albums')}}">
+    <x-common.page-breadcrumb pageTitle="{{__('Categories')}}">
         <x-slot:breadcrumbs>
             <li>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600 dark:text-gray-400 dark:hover:text-brand-500">
@@ -15,11 +15,13 @@
             </li>
         </x-slot:breadcrumbs>
     </x-common.page-breadcrumb>
-    @if (session('status'))
+
+    <template x-if="$store.alert.show">
         <div class="mb-6">
-            <x-ui.alert duration="3" :variant="session('variant')" :message="session('status')" />
+            <x-ui.alert />
+
         </div>
-    @endif
+    </template>
 
     <div x-data="categoryModal" class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- add new -->
@@ -136,14 +138,13 @@
                         <input name="title" value="" x-model="formData.title" type="text" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
                     </div>
 
-                    <div class="mt-6"></div>
-                    <x-forms.checkbox-status
-                        name="active"
-                        label="{{ __('Active') }}"
-                        x-model="formData.active"
-                        :checked="1"
-                        id="category_id"
-                    ></x-forms.checkbox-status>
+                    <div class="mt-6">
+                        <x-forms.checkbox-status
+                            name="active"
+                            label="{{ __('Active') }}"
+                            id="category_id"
+                        ></x-forms.checkbox-status>
+                    </div>
 
                     <div class="flex items-center justify-end w-full gap-3 mt-6">
                         <button type="button" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
@@ -187,12 +188,7 @@
                     this.formMethod = 'POST';
                     this.modalTitle = '@lang("Add New Category")';
 
-                    // update Active checkbox
-                    const checkbox = document.querySelector('#category_id');
-                    if (checkbox) {
-                        checkbox.checked = !!this.formData.active;
-                        checkbox.dispatchEvent(new Event('change'));
-                    }
+                    this.$dispatch('update-toggle', this.formData.active);
 
                     this.isModalOpen = true;
                 },
@@ -202,6 +198,8 @@
 
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', categoryId));
+                        // TODO For test errors uncomment line below
+                        //const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                         const category = response.data;
 
                         this.formData.title = category.title;
@@ -210,17 +208,11 @@
                         this.formMethod = 'PUT';
                         this.modalTitle = '@lang("Edit Category")';
 
-                        // update Active checkbox
-                        const checkbox = document.querySelector('#category_id');
-                        if (checkbox) {
-                            checkbox.checked = !!this.formData.active;
-                            checkbox.dispatchEvent(new Event('change'));
-                        }
+                        this.$dispatch('update-toggle', this.formData.active);
 
                         this.isModalOpen = true;
                     } catch (error) {
-                        console.error('Error loading category:', error);
-                        //alert('Error loading category data');
+                        Alpine.store('alert').error(error?.response?.data?.message);
                     }
                 },
 

@@ -6,7 +6,11 @@
     'id' => 'toggle_' . uniqid(),
 ])
 
-<div x-data="{ switcherToggle: {{ $checked ? 'true' : 'false' }} }">
+<div x-data="{ switcherToggle: {{ $checked ? 'true' : 'false' }} }"
+
+     @update-toggle.window="switcherToggle = $event.detail"
+
+>
     <label for="{{ $id }}" class="flex cursor-pointer items-center gap-3 text-sm font-medium text-gray-700 select-none dark:text-gray-400">
         <div class="relative">
             <input
