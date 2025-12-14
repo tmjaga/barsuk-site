@@ -12,8 +12,17 @@ export default (initialData = {}) => {
         loading: false,
 
         init() {
+            this.fetchPage(this.currentPage);
             this.updatePagesAroundCurrent();
             this.updateEntries();
+
+            this.$watch('search', () => {
+                this.goToPage();
+            });
+
+            this.$el.addEventListener('reload-items', () => {
+                this.fetchPage(1);
+            });
         },
 
         updatePagesAroundCurrent() {
@@ -51,6 +60,7 @@ export default (initialData = {}) => {
             }).then(res => {
                 const data = res.data;
                 this.data = data.data;
+
                 this.totalPages = data.last_page;
                 this.totalEntries = data.total;
                 this.perPage = data.per_page;

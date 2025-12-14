@@ -2,30 +2,29 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): JsonResponse|View
     {
-        $categories = Category::all();
+        $categories = Category::orderByDesc('id')->get();
+
+        if ($request->ajax()) {
+            return response()->json(['data' => $categories]);
+        }
 
         return view('admin.catalog.category-index', compact('categories'));
-    }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -33,7 +32,27 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'active' => 'sometimes|boolean',
+            ]);
+
+            // process 'active' checkbox
+            $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
+
+            Category::create($validated);
+
+            return response()->json([
+                'message' => __('Category created successfully'),
+            ], 201);
+        } catch (Throwable $e) {
+            Log::error('Error updating Category', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => __('Error updating Category')], 500);
+        }
     }
 
     /**
@@ -45,7 +64,7 @@ class CategoryController extends Controller
             $category = Category::findOrFail($id);
 
             return response()->json($category);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (Throwable $e) {
             Log::error('Category not found', [
                 'message' => $e->getMessage(),
             ]);
@@ -59,14 +78,49 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category): JsonResponse
     {
-        //
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'active' => 'sometimes|boolean',
+            ]);
+
+            // process 'active' checkbox
+            $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
+
+            $category->update($validated);
+
+            return response()->json([
+                'message' => 'Category updated successfully',
+            ]);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => __('Error updating Category'),
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category): JsonResponse
     {
-        //
+        try {
+            $category->delete();
+
+            return response()->json([
+                'message' => __('Category deleted successfully'),
+            ]);
+
+        } catch (Throwable $e) {
+            Log::error('Category not found', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => __('Unexpected error while deleting category'),
+            ], 500);
+        }
+
     }
 }

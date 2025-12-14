@@ -8,10 +8,6 @@ export default {
         linkText: 'Learn more',
         duration: 3, // seconds
 
-        init() {
-            console.log('duration22: ', this.duration);
-        },
-
         showAlert(data = {}) {
             this.show = true;
             this.variant = data.variant || 'info';
