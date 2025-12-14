@@ -15,6 +15,21 @@
         get action() {
             if (!this.itemId) return '';
             return `{{ $routeName }}`.replace(':id', this.itemId)
+        },
+
+        deleteItem() {
+            if (this.loading || !this.action) return;
+
+            this.loading = true;
+            axios.delete(this.action).then(response => {
+                    this.$dispatch('reload-items');
+                    Alpine.store('alert').success(response?.data?.message);
+                }).catch(error => {
+                    Alpine.store('alert').error(error?.response?.data?.message);
+                }).finally(() => {
+                    this.loading = false;
+                    this.isModalOpen = false;
+                });
         }
     }">
 
@@ -48,10 +63,10 @@
                 <p x-text="text" class="text-gray-500 mb-6"></p>
                 <div class="flex items-center justify-center w-full gap-3 mt-7">
                     <button @click="isModalOpen = false" class="px-4 py-2 border rounded-lg">Cancel</button>
-                    <form :action="action" method="POST">
+                    <form x-on:submit.prevent="deleteItem" :action="action" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" x-text="confirmText" class="px-4 py-2 bg-red-600 text-white rounded-lg"></button>
+                        <button :disabled="loading" type="submit" x-text="confirmText" class="px-4 py-2 bg-red-600 text-white rounded-lg"></button>
                     </form>
                 </div>
             </div>

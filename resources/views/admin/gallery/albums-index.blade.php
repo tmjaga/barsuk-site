@@ -20,7 +20,12 @@
             <x-ui.alert :duration="3" :variant="session('variant')" :message="session('status')" />
         </div>
     @endif
-
+    <template x-if="$store.alert.show">
+        <div class="mb-6">
+            <x-ui.alert />
+        </div>
+    </template>
+    
     <div x-data="listingpage()" class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- loader (spinner)-->
         <x-common.loader :show="'loading'" style="display: none;" />

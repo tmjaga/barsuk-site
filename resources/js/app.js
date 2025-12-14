@@ -8,7 +8,6 @@ import 'tippy.js/themes/light-border.css';
 import alpidate from 'alpidate';
 import alertStore from './alert_store.js'
 
-
 window.$ = window.jQuery = $;
 window.Alpine = Alpine;
 
@@ -20,8 +19,6 @@ Alpine.store('alert', alertStore);
 
 // register alpidate validate plugin
 Alpine.plugin(alpidate);
-
-
 
 window.initTooltips = function() {
     tippy('[data-tippy-content]', {

@@ -19,7 +19,6 @@
     <template x-if="$store.alert.show">
         <div class="mb-6">
             <x-ui.alert />
-
         </div>
     </template>
 

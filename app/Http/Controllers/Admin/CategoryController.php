@@ -113,12 +113,12 @@ class CategoryController extends Controller
             ]);
 
         } catch (Throwable $e) {
-            Log::error('Category not found', [
+            Log::error('Error deleting category', [
                 'message' => $e->getMessage(),
             ]);
 
             return response()->json([
-                'message' => __('Unexpected error while deleting category'),
+                'message' => __('Error while deleting category'),
             ], 500);
         }
 

@@ -21,7 +21,7 @@ export default (initialData = {}) => {
             });
 
             this.$el.addEventListener('reload-items', () => {
-                this.fetchPage(1);
+                this.goToPage();
             });
         },
 

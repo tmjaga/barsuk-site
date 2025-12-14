@@ -9,6 +9,8 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Mockery\Exception;
 
 class AlbumController extends Controller
 {
@@ -95,13 +97,22 @@ class AlbumController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Album $album): RedirectResponse
+    public function destroy(Album $album): JsonResponse
     {
-        $album->delete();
+        try {
+            $album->delete();
 
-        return redirect()->back()->with([
-            'status' => __('Album has been deleted'),
-            'variant' => 'success',
-        ]);
+            return response()->json([
+                'message' => __('Album deleted successfully'),
+            ]);
+        } catch (Throwable $e) {
+            Log::error('Error deleting album', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => __('Error while deleting album'),
+            ], 500);
+        }
     }
 }
