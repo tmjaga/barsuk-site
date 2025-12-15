@@ -25,7 +25,7 @@
             <x-ui.alert />
         </div>
     </template>
-    
+
     <div x-data="listingpage()" class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
         <!-- loader (spinner)-->
         <x-common.loader :show="'loading'" style="display: none;" />
@@ -111,7 +111,7 @@
                                     </svg>
                                 </a>
                                 <x-common.confirm-delete
-                                    title="Are you sure to Delete this Album?"
+                                    title="{{ __('Are you sure to Delete this Album?') }}"
                                     route-name="{{ route('admin.albums.destroy', ':id') }}">
                                     <!-- Trash icon -->
                                     <button @click="itemId = album.id" data-tippy-content="@lang('Delete Album')" class="flex items-center justify-center text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">

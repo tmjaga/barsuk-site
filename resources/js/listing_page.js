@@ -1,4 +1,4 @@
-export default (initialData = {}) => {
+export default function (initialData = {}) {
 
     return {
         url: initialData.url || '',
