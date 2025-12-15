@@ -5,33 +5,12 @@
     'routeName' => ''
 ])
 
-<div x-data="{
-        isModalOpen: false,
-        title: '{{ $title }}',
-        text: '{{ $text }}',
-        confirmText: '{{ $confirmText }}',
-        currentItemId: null,
-        itemId:null,
-        get action() {
-            if (!this.itemId) return '';
-            return `{{ $routeName }}`.replace(':id', this.itemId)
-        },
-
-        deleteItem() {
-            if (this.loading || !this.action) return;
-
-            this.loading = true;
-            axios.delete(this.action).then(response => {
-                    this.$dispatch('reload-items');
-                    Alpine.store('alert').success(response?.data?.message);
-                }).catch(error => {
-                    Alpine.store('alert').error(error?.response?.data?.message);
-                }).finally(() => {
-                    this.loading = false;
-                    this.isModalOpen = false;
-                });
-        }
-    }">
+<div
+    x-data="deleteItem({
+        title: @js($title),
+        routeName: @js($routeName)
+    })"
+>
 
     <div @click="isModalOpen = true">
         {{ $slot }}
