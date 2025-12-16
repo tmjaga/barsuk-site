@@ -280,9 +280,8 @@
                     } finally {
                         this.resetForm()
                     }
-
-
                 }
             }));
         });
-    </script>@endpush
+    </script>
+@endpush

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest:admin')->group(function () {
@@ -64,6 +65,9 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // categories routes
     Route::resource('categories', CategoryController::class);
+
+    // services routes
+    Route::resource('services', ServiceController::class);
 });
 
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
