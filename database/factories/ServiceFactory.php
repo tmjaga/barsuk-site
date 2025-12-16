@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ServiceFactory extends Factory
 {
+    protected static int $number = 1;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +20,9 @@ class ServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'category_id' => Category::factory(),
+            'title' => 'Test Service #'.self::$number++,
+            'description' => $this->faker->paragraph(),
         ];
     }
 }
