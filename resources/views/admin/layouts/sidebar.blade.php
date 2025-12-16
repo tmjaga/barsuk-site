@@ -17,12 +17,18 @@
         initializeActiveMenus() {
             const currentPath = '{{ $currentPath }}';
 
+
             @foreach ($menuGroups as $groupIndex => $menuGroup)
                 @foreach ($menuGroup['items'] as $itemIndex => $item)
                     @if (isset($item['subItems']))
                         // Check if any submenu item matches current path
                         @foreach ($item['subItems'] as $subItem)
-                            if (currentPath === '{{ ltrim($subItem['path'], '/') }}' ||
+                            subItemPath = '{{ ltrim($subItem['path'], '/') }}';
+                             if (subItemPath.startsWith('http://') || subItemPath.startsWith('https://')) {
+                                const url = new URL(subItemPath);
+                                subItemPath = url.pathname.replace(/^\//, '');
+                            }
+                            if (currentPath === subItemPath ||
                                 window.location.pathname === '{{ $subItem['path'] }}') {
                                 this.openSubmenus['{{ $groupIndex }}-{{ $itemIndex }}'] = true;
                             }
@@ -47,7 +53,12 @@
             return this.openSubmenus[key] || false;
         },
         isActive(path) {
-            return window.location.pathname === path || '{{ $currentPath }}' === path.replace(/^\//, '');
+            let pathOnly = path;
+            if (path.startsWith('http://') || path.startsWith('https://')) {
+                const url = new URL(path);
+                pathOnly = url.pathname;
+            }
+            return window.location.pathname === pathOnly || '{{ $currentPath }}' === pathOnly.replace(/^\//, '');
         }
     }"
     :class="{
@@ -60,6 +71,7 @@
     @mouseleave="$store.sidebar.setHovered(false)">
     <!-- Logo Section -->
 
+    {{ $currentPath }}
     <div class="pt-8 pb-7 flex"
         :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
         'xl:justify-center' :
@@ -152,7 +164,13 @@
                                                             :class="isActive('{{ $subItem['path'] }}') ?
                                                                 'menu-dropdown-item-active' :
                                                                 'menu-dropdown-item-inactive'">
+                                                            <!-- Icon -->
+                                                            <span>
+                                                                {!! MenuHelper::getIconSvg($subItem['icon']) !!}
+                                                            </span>
                                                             {{ $subItem['name'] }}
+
+
                                                             <span class="flex items-center gap-1 ml-auto">
                                                                 @if (!empty($subItem['new']))
                                                                     <span
