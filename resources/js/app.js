@@ -2,12 +2,12 @@ import './bootstrap';
 import Alpine from 'alpinejs';
 import $ from 'jquery';
 import listingPage from './listing_page.js'
-import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 import 'tippy.js/themes/light-border.css';
 import alpidate from 'alpidate';
 import alertStore from './alert_store.js'
 import deleteItem from "./delete_item.js";
+import { delegate } from 'tippy.js';
 
 window.$ = window.jQuery = $;
 window.Alpine = Alpine;
@@ -24,16 +24,14 @@ Alpine.plugin(alpidate);
 // register deleteItem function to use in confirm-delete blade component
 Alpine.data('deleteItem', deleteItem);
 
-window.initTooltips = function() {
-    tippy('[data-tippy-content]', {
-        placement: 'bottom',
-        animation: 'fade',
-        arrow: true,
-        theme: 'light-border'
-    });
-};
-
-initTooltips();
+// initialize/register tippy for dynamic content
+delegate( document.body, {
+    target: '[data-tippy-content]',
+    placement: 'bottom',
+    animation: 'fade',
+    arrow: true,
+    theme: 'light-border'
+});
 
 Alpine.start();
 

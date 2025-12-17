@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,8 +16,24 @@ class ServiceController extends Controller
      */
     public function index(Request $request): JsonResponse|View
     {
+        $search = $request->query('search');
+        $category = $request->query('category');
 
-        return view('admin.catalog.service-index');
+        $services = Service::query()
+            ->with('category')
+            ->when($category, fn ($q) => $q->where('category_id', $category))
+            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
+            ->latest()
+            ->paginate(config('app.items_per_page'))
+            ->withQueryString();
+
+        if ($request->ajax()) {
+            return response()->json($services);
+        }
+
+        $categories = Category::orderBy('title')->get();
+
+        return view('admin.catalog.service-index', compact('services', 'categories', 'category'));
     }
 
     /**

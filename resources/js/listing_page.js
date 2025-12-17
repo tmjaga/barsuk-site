@@ -9,6 +9,7 @@ export default function (initialData = {}) {
         totalEntries: initialData.total || 0,
         pagesAroundCurrent: [],
         search: '',
+        filters: {},
         loading: false,
 
         init() {
@@ -55,7 +56,9 @@ export default function (initialData = {}) {
             axios.get(this.url, {
                 params: {
                     page: page,
-                    search: this.search
+                    search: this.search,
+                    ...this.filters
+
                 }
             }).then(res => {
                 const data = res.data;

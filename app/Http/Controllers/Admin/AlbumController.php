@@ -10,7 +10,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Mockery\Exception;
 
 class AlbumController extends Controller
 {
@@ -20,10 +19,9 @@ class AlbumController extends Controller
     public function index(Request $request): JsonResponse|View
     {
         $search = $request->query('search');
+
         $albums = Album::query()
-            ->when($search, function ($query) use ($search) {
-                $query->where('title', 'like', "%{$search}%");
-            })
+            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
             ->latest()
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
