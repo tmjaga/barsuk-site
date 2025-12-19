@@ -20,10 +20,13 @@ class ServiceSeeder extends Seeder
             return;
         }
 
+        Service::factory(5)->create();
+        /*
         Service::factory(5)->make()->each(function ($service) use ($categories) {
             $service->category_id = $categories->random()->id;
             $service->save();
         });
+        */
 
         echo "Services seeded successfully!\n";
     }

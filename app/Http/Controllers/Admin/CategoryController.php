@@ -30,7 +30,7 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
             $validated = $request->validate([
@@ -90,10 +90,14 @@ class CategoryController extends Controller
             $category->update($validated);
 
             return response()->json([
-                'message' => 'Category updated successfully',
+                'message' => __('Category updated successfully'),
             ]);
 
         } catch (Throwable $e) {
+            Log::error('Category update error', [
+                'message' => $e->getMessage(),
+            ]);
+
             return response()->json([
                 'message' => __('Error updating Category'),
             ], 500);

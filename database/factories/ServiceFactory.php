@@ -20,7 +20,7 @@ class ServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            'category_id' => Category::factory(),
+            'category_id' => Category::query()->inRandomOrder()->value('id'),
             'title' => 'Test Service #'.self::$number++,
             'description' => $this->faker->paragraph(),
         ];

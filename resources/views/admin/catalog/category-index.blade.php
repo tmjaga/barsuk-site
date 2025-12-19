@@ -269,11 +269,10 @@
                             },
                         });
 
-
                         this.isModalOpen = false;
                         Alpine.store('alert').success(response?.data?.message);
+
                         this.$dispatch('reload-items');
-                        //location.reload();
                     } catch (error) {
                         this.isModalOpen = false;
                         Alpine.store('alert').error(error?.response?.data?.message);

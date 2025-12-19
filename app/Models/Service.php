@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
+    protected $fillable = ['title', 'category_id', 'description', 'active'];
+
     /** @use HasFactory<\Database\Factories\ServiceFactory> */
     use HasFactory;
 
