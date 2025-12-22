@@ -49,11 +49,16 @@ class ServiceController extends Controller
                 'title' => 'required|string|max:255',
                 'category_id' => 'required|exists:categories,id',
                 'description' => 'nullable|string',
+                'hours' => 'required|digits:2',
+                'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
             ]);
 
             // process 'active' checkbox
             $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
+
+            // process duration
+            $validated['duration'] = sprintf('%02d:%02d', $validated['hours'], $validated['minutes']);
 
             Service::create($validated);
 
@@ -97,11 +102,17 @@ class ServiceController extends Controller
                 'title' => 'required|string|max:255',
                 'category_id' => 'required|exists:categories,id',
                 'description' => 'nullable|string',
+                'hours' => 'required|digits:2',
+                'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
             ]);
 
+
             // process 'active' checkbox
             $validated['active'] = Status::from((int) ($validated['active'] ?? 0));
+
+            // process duration
+            $validated['duration'] = sprintf('%02d:%02d', $validated['hours'], $validated['minutes']);
 
             $service->update($validated);
 
