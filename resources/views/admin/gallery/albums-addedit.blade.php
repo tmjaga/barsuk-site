@@ -11,8 +11,8 @@
     ]" >
     </x-common.page-breadcrumb>
 
-    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div x-data="album_validate()" class="space-y-6 border-t border-gray-100 p-5 sm:p-6 dark:border-gray-800">
+    <div class="rounded-2xl border border-gray-200 bg-white">
+        <div x-data="album_validate()" class="space-y-6 border-t border-gray-100 p-5 sm:p-6">
             <form @submit.prevent="submit" action="{{ isset($album) ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST">
                 @csrf
                 @isset($album)
@@ -21,10 +21,10 @@
 
                 <div class="-mx-2.5 flex flex-wrap gap-y-5">
                     <div class="w-full px-2.5">
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
                             @lang('Album Title') <span class="text-red-500">*</span>
                         </label>
-                        <input name="title" x-model="title" value="" type="text" class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                        <input name="title" x-model="title" value="" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
                         <p x-show="$v.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
                         @error('title')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -44,7 +44,7 @@
                                 @lang('Save Changes')
                             </button>
 
-                            <a href="{{ route('admin.albums.index') }}" class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                            <a href="{{ route('admin.albums.index') }}" class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800">
                                 @lang('Cancel')
                             </a>
                         </div>

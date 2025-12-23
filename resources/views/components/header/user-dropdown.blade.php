@@ -9,12 +9,12 @@
 }" @click.away="closeDropdown()">
     <!-- User Button -->
     <button
-        class="flex items-center text-gray-700 dark:text-gray-400"
+        class="flex items-center text-gray-700"
         @click.prevent="toggleDropdown()"
         type="button"
     >
         <span
-            class="flex items-center justify-center text-center mr-3 overflow-hidden rounded-full h-11 w-11 bg-gray-200 text-black dark:bg-gray-700 dark:text-white">
+            class="flex items-center justify-center text-center mr-3 overflow-hidden rounded-full h-11 w-11 bg-gray-200 text-black">
             {{ Auth::guard('admin')->user()->initials() }}
         </span>
 
@@ -41,17 +41,17 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        class="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark z-50"
+        class="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg z-50"
         style="display: none;"
     >
         <!-- User Info -->
         <div>
-            <span class="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">{{ Auth::guard('admin')->user()->name }}</span>
-            <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">{{ Auth::guard('admin')->user()->email }}</span>
+            <span class="block font-medium text-gray-700 text-theme-sm">{{ Auth::guard('admin')->user()->name }}</span>
+            <span class="mt-0.5 block text-theme-xs text-gray-500">{{ Auth::guard('admin')->user()->email }}</span>
         </div>
 
         <!-- Menu Items -->
-        <ul class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
+        <ul class="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200">
             @php
                 $menuItems = [
                     [
@@ -73,9 +73,9 @@
                 <li>
                     <a
                         href="{{ $item['path'] }}"
-                        class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                        class="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
                     >
-                        <span class="text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">
+                        <span class="text-gray-500 group-hover:text-gray-700">
                             {!! $item['icon'] !!}
                         </span>
                         {{ $item['text'] }}
@@ -89,10 +89,10 @@
             @csrf
             <a
                 href="{{ route('admin.logout') }}"
-                class="flex items-center w-full gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                class="flex items-center w-full gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
                 onclick="event.preventDefault(); this.closest('form').submit();"
             >
-                <span class="text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-300">
+                <span class="text-gray-500 group-hover:text-gray-700">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
