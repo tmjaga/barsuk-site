@@ -8,7 +8,8 @@
 <div
     x-data="deleteItem({
         title: @js($title),
-        routeName: @js($routeName)
+        routeName: @js($routeName),
+        text: @js($text)
     })"
 >
 
