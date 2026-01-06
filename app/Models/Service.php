@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Service extends Model
 {
     protected $fillable = ['title', 'category_id', 'description', 'duration', 'active'];
 
-    /** @use HasFactory<\Database\Factories\ServiceFactory> */
     use HasFactory;
 
     protected function duration(): Attribute
@@ -40,5 +40,10 @@ class Service extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function orders(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class);
     }
 }
