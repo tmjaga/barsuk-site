@@ -11,8 +11,17 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'names',
+        'email',
+        'phone',
+        'order_date',
+        'status',
+    ];
+
     protected $casts = [
         'status' => OrderStatus::class,
+        'order_date' => 'datetime:d.m.Y H:i',
     ];
 
     public function services(): BelongsToMany

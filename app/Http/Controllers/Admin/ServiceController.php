@@ -14,9 +14,6 @@ use Throwable;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request): JsonResponse|View
     {
         $search = $request->query('search');
@@ -106,7 +103,6 @@ class ServiceController extends Controller
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
             ]);
-
 
             // process 'active' checkbox
             $validated['active'] = Status::from((int) ($validated['active'] ?? 0));

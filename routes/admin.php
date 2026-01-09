@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -68,6 +69,10 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // services routes
     Route::resource('services', ServiceController::class);
+
+    // orders routes
+    Route::resource('orders', OrderController::class);
+    Route::patch('orders/uodate-status/{order}', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 });
 
 Route::post('logout', [LoginController::class, 'destroy'])->name('logout');

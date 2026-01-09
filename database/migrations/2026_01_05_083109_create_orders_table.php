@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('names');
             $table->string('email')->unique();
             $table->string('phone');
+            $table->dateTime('order_date');
             $table->tinyInteger('status')
                 ->default(OrderStatus::PENDING->value)
                 ->index();
