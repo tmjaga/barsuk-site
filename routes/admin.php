@@ -71,7 +71,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::resource('services', ServiceController::class);
 
     // orders routes
-    Route::resource('orders', OrderController::class);
+    Route::resource('orders', OrderController::class)->only(['index', 'edit', 'update', 'destroy']);
     Route::patch('orders/uodate-status/{order}', [OrderController::class, 'updateStatus'])->name('orders.update-status');
 });
 

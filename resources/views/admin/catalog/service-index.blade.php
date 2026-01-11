@@ -217,9 +217,7 @@
                     <form @submit.prevent="submitForm" method="POST" :action="formAction">
                         @csrf
                         <input type="hidden" name="_method" :value="formMethod">
-                        <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800">
-                            Modal Title
-                        </h4>
+                        <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800"></h4>
 
                         <div class="w-full mb-5">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700">
@@ -255,7 +253,7 @@
                         <!-- time field -->
                         <div class="mb-5">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Duration in minutes') <span class="text-red-500">*</span>
+                                @lang('Duration') <span class="text-red-500">*</span>
                             </label>
                             <div class="flex items-center gap-2">
                                 <!-- Hours -->

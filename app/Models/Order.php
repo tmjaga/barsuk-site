@@ -21,7 +21,7 @@ class Order extends Model
 
     protected $casts = [
         'status' => OrderStatus::class,
-        'order_date' => 'datetime:d.m.Y H:i',
+        'order_date' => 'datetime',
     ];
 
     public function services(): BelongsToMany

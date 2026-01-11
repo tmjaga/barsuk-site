@@ -22,12 +22,12 @@
         </div>
     </template>
 
-    <div x-data="serviceModal()">
+    <div x-data="orderModal()">
         <div x-data="listingpage()" class="rounded-2xl border border-gray-200 bg-white">
         <!-- loader (spinner)-->
         <x-common.loader :show="'loading'" style="display: none;" />
         <!-- search form-->
-        <div class="flex flex-col gap-3 sm:flex-row items-center p-3">
+        <div class="flex flex-col sm:flex-row justify-end p-3">
             <!-- status select input-->
             <div x-data="{ isOptionSelected: {{ $status ? 'true' : 'false' }} }" class="relative z-20 bg-transparent">
                 <select x-model="filters.status" @change="$dispatch('reload-items');" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden" :class="isOptionSelected &amp;&amp; 'text-gray-800'" @change="isOptionSelected = true">
@@ -108,12 +108,13 @@
                     <tr x-data="orderStatusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <p x-text="order.order_date" class="text-gray-700 text-theme-sm"></p>
+                                <p x-text="$formatDate(order.order_date)" class="text-gray-700 text-theme-sm"></p>
                             </div>
                         </td>
-                        <td class="px-6 py-3 whitespace-nowrap">
-                            <div class="flex items-center">
+                        <td class="px-6 py-3">
+                            <div class="flex flex-col">
                                 <p x-text="order.names" class="text-gray-700 text-theme-sm"></p>
+                                <small class="block text-gray-500" x-html="`[${order.email}]`"></small>
                             </div>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-start">
@@ -143,7 +144,7 @@
                                             <template x-for="(orderStatusTitle, orderStatus) in statuses;" :key="orderStatus">
                                                 <li>
                                                     <button x-text="orderStatusTitle" @click="updateStatus(orderStatus)"
-                                                            class="flex w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5">
+                                                            class="flex w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 hover:bg-gray-100">
                                                     </button>
                                                 </li>
                                             </template>
@@ -157,8 +158,8 @@
                                     </svg>
                                 </a>
                                 <x-common.confirm-delete
-                                    title="{{ __('Are you sure to Delete this Service?') }}"
-                                    route-name="{{ route('admin.services.destroy', ':id') }}">
+                                    title="{{ __('Are you sure to Delete this Order?') }}"
+                                    route-name="{{ route('admin.orders.destroy', ':id') }}">
                                     <!-- Trash icon -->
                                     <button @click="itemId = order.id" data-tippy-content="@lang('Delete Service')" class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                         <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +207,7 @@
                 </p>
             </div>
         </div>
-            <!-- Add/Edit category modal -->
+            <!-- Edit Order modal -->
             <div x-show="isModalOpen" class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999" style="display: none;">
                 <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
                 <div @click.outside="isModalOpen = false" class="relative w-full max-w-[584px] rounded-3xl bg-white p-6 lg:p-10">
@@ -218,75 +219,78 @@
                     </button>
 
                     <form @submit.prevent="submitForm" method="POST" :action="formAction">
+
                         @csrf
                         <input type="hidden" name="_method" :value="formMethod">
-                        <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800">
-                            Modal Title
-                        </h4>
+                        <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800"></h4>
 
-                        <div class="w-full mb-5">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Service Title') <span class="text-red-500">*</span>
-                            </label>
-                            <input name="title" value="" x-model="formData.title" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                            <p x-show="$v.formData.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
-                        </div>
+                        <div class="-mx-2.5 flex flex-wrap gap-y-5">
+                            <!-- date field -->
+                            <div class="w-full px-2.5 xl:w-1/2" >
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Order Date'): <span class="text-red-500">*</span>
+                                </label>
+                                <x-forms.date-picker
+                                    id="order_date"
+                                    name="order_date"
+                                    format="d.m.Y" />
 
-
-                        <div class="w-full mb-5">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Service Category') <span class="text-red-500">*</span>
-                            </label>
-                            <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
-                                <p x-show="$v.formData.category_id.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please select a Category')</p>
-                                <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </span>
+                                <p x-show="errors.orderDate" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Date')</p>
                             </div>
-                        </div>
-
-                        <!-- time field -->
-                        <div class="mb-5">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Duration in minutes') <span class="text-red-500">*</span>
-                            </label>
-                            <div class="flex items-center gap-2">
-                                <!-- Hours -->
-                                <input x-model="formData.hours" type="number" name="hours" placeholder="HH" class="w-32 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                <span class="text-gray-500 font-semibold">:</span>
-                                <!-- Minutes -->
-                                <input x-model="formData.minutes" type="number" name="minutes" placeholder="MM" class="w-32 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-
+                            <!-- time field -->
+                            <div class="w-full px-2.5 xl:w-1/2" >
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Order Time'): <span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <input name="order_time" x-model="formData.orderTime" type="time" placeholder="12:00" onclick="this.showPicker()" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                    <span class="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
+                                        <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M3.04175 9.99984C3.04175 6.15686 6.1571 3.0415 10.0001 3.0415C13.8431 3.0415 16.9584 6.15686 16.9584 9.99984C16.9584 13.8428 13.8431 16.9582 10.0001 16.9582C6.1571 16.9582 3.04175 13.8428 3.04175 9.99984ZM10.0001 1.5415C5.32867 1.5415 1.54175 5.32843 1.54175 9.99984C1.54175 14.6712 5.32867 18.4582 10.0001 18.4582C14.6715 18.4582 18.4584 14.6712 18.4584 9.99984C18.4584 5.32843 14.6715 1.5415 10.0001 1.5415ZM9.99998 10.7498C9.58577 10.7498 9.24998 10.4141 9.24998 9.99984V5.4165C9.24998 5.00229 9.58577 4.6665 9.99998 4.6665C10.4142 4.6665 10.75 5.00229 10.75 5.4165V9.24984H13.3334C13.7476 9.24984 14.0834 9.58562 14.0834 9.99984C14.0834 10.4141 13.7476 10.7498 13.3334 10.7498H10.0001H9.99998Z" fill=""></path>
+                                        </svg>
+                                    </span>
+                                </div>
                             </div>
-                            <p x-show="$v.formData.hours.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Only digits for Hours from 00 to 05 allowed')</p>
-                            <p x-show="$v.formData.minutes.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Only digits for Minutes from 00 to 59 allowed')</p>
-                        </div>
-
-                        <div class="w-full">
+                            <div class="w-full px-2.5 xl:w-1/2">
                             <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Service Description')
+                                @lang('Name'):
                             </label>
-                            <textarea name="description" x-model="formData.description" placeholder="Enter a description..." type="text" rows="6" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"></textarea>
+                            <p x-text="formData.name" class="text-gray-700 text-theme-sm"></p>
                         </div>
-
-                        <div class="mt-6">
-                            <x-forms.checkbox-status
-                                name="active"
-                                label="{{ __('Active') }}"
-                                id="service_id"
-                                model="formData.active"
-                            ></x-forms.checkbox-status>
+                            <div class="w-full px-2.5 xl:w-1/2">
+                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                @lang('Email'):
+                            </label>
+                            <p x-text="formData.email" class="text-gray-700 text-theme-sm"></p>
                         </div>
+                            <div class="w-full px-2.5">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Status'):
+                                </label>
+                                <!-- status -->
+                                <div class="flex">
+                                    <template x-for="(label, value) in statuses" :key="value">
+                                        <label class="mr-3 relative flex cursor-pointer items-center gap-1 text-sm font-medium select-none"
+                                            :class="formData.status == value ? 'text-gray-700' : 'text-gray-500'">
+                                            <input type="radio" name="status" class="sr-only" :value="value" x-model="formData.status">
 
-                        <div class="flex items-center justify-end w-full gap-3 mt-6">
-                            <button type="submit" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
-                                @lang('Save Changes')
-                            </button>
-                            <button @click="isModalOpen = false" type="button" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
-                                @lang('Cancel')
-                            </button>
+                                            <span class="flex h-5 w-5 items-center justify-center rounded-full border-[1.25px]"
+                                                :class="formData.status == value ? 'border-brand-500 bg-brand-500' : 'border-gray-300 bg-transparent'">
+                                                <span class="h-2 w-2 rounded-full bg-white" :class="formData.status == value ? 'block' : 'hidden'"></span>
+                                            </span>
+                                            <span x-text="label"></span>
+                                        </label>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-end w-full gap-3 mt-6">
+                                <button type="submit" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+                                    @lang('Save Changes')
+                                </button>
+                                <button @click="isModalOpen = false" type="button" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
+                                    @lang('Cancel')
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -303,78 +307,67 @@
     <script>
         window.orderStatuses = @json(\App\Enums\OrderStatus::titles());
 
-        console.log(window.orderStatuses);
-
-
         document.addEventListener('alpine:init', () => {
-            Alpine.data('serviceModal', () => ({
+            Alpine.data('orderModal', () => ({
                 isModalOpen: false,
                 isLoading: false,
+                statuses: window.orderStatuses,
                 formData: {
-                    title: '',
-                    category_id: '',
-                    description: '',
-                    hours: '00',
-                    minutes: '10',
-                    active: 1
+                    name: '',
+                    email: '',
+                    phone: '',
+                    orderDate: new Date().toISOString().slice(0, 10),
+                    orderTime: new Date().toTimeString().slice(0, 5),
+                    status: 0,
+                    services: []
                 },
                 errors: {},
+                dateRef: null,
                 formAction: '',
                 formMethod: 'POST',
                 modalTitle: '',
                 routeTemplates: {
-                    edit: "{{ route('admin.services.edit', ':id') }}",
-                    update: "{{ route('admin.services.update', ':id') }}",
-                    store: "{{ route('admin.services.store') }}",
+                    edit: "{{ route('admin.orders.edit', ':id') }}",
+                    update: "{{ route('admin.orders.update', ':id') }}"
                 },
                 validations: {
-                    'formData.title': ['required', 'min:2'],
-                    'formData.category_id': ['required'],
-                    'formData.hours': ['required', 'regex:^(0[0-5])$'],
-                    'formData.minutes': ['required', 'regex:^(0[0-9]|[1-5][0-9])$'],
+                    'formData.orderTime': ['required'],
                 },
 
                 init() {
                     this.$validation(this)
+                    this.$el.addEventListener('date-change', (event) => {
+                        this.dateRef = event.detail.instance.element;
+                        this.validateDate();
+                    });
+
                 },
 
-                openCreateModal() {
-                    this.resetForm();
-                    this.formAction = this.routeTemplates.store;
-                    this.formMethod = 'POST';
-                    this.modalTitle = '@lang("Add New Service")';
-
-                    this.$dispatch('update-toggle', this.formData.active);
-
-                    this.isModalOpen = true;
-                },
-
-                async openEditModal(serviceId) {
+                async openEditModal(orderId) {
                     this.isLoading = true;
-
                     try {
-                        const response = await axios.get(this.routeTemplates.edit.replace(':id', serviceId));
+                        const response = await axios.get(this.routeTemplates.edit.replace(':id', orderId));
                         // TODO For test errors uncomment line below
                         // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
-                        const service = response.data;
-                        const [hours, minutes] = service.duration.split(':');
+                        const order = response.data;
 
-                        this.formData.title = service.title;
-                        this.formData.category_id = service.category_id;
-                        this.formData.hours = hours.padStart(2, '00');
-                        this.formData.minutes = minutes.padStart(2, '00');
-                        this.formData.active = service.active;
-                        this.formData.description = service.description;
-                        this.formAction = this.routeTemplates.update.replace(':id', serviceId);
-                        this.formMethod = 'PUT';
-                        this.modalTitle = '@lang("Edit Service")';
+                        this.formData.name = order.names;
+                        this.formData.email = order.email;
+                        this.formData.phone = order.phone;
+                        this.formData.orderDate = order.order_date.split('T')[0];
+                        this.formData.orderTime = order.order_date.split('T')[1].slice(0, 5);
 
-                        this.$dispatch('update-toggle', this.formData.active);
-
-                        // reset validation
-                        if (this.$v?.reset) {
-                            this.$v.reset()
+                        // set order date value in to the date picker
+                        const datePicker = document.querySelector('#order_date').closest('[x-data]');
+                        if (datePicker && datePicker._x_dataStack) {
+                            datePicker._x_dataStack[0].setDate(new Date(this.formData.orderDate));
                         }
+
+                        this.formData.status = order.status,
+                        this.formData.services = order.services,
+                        this.formAction = this.routeTemplates.update.replace(':id', orderId);
+                        this.formMethod = 'PUT';
+                        this.modalTitle = '@lang("Edit Order")';
 
                         this.isModalOpen = true;
                     } catch (error) {
@@ -383,16 +376,8 @@
                 },
 
                 resetForm() {
-                    this.formData = {
-                        title: '',
-                        category_id: '',
-                        description: '',
-                        hours: '00',
-                        minutes: '10',
-                        active: 1
-                    };
-
                     this.errors = {};
+                    this.dateRef = null;
 
                     // reset validation
                     if (this.$v?.reset) {
@@ -400,16 +385,29 @@
                     }
                 },
 
+                validateDate() {
+                    delete this.errors.orderDate;
+
+                    if (this.dateRef &&  !this.dateRef.value.trim()) {
+                        this.errors.orderDate = true;
+
+                        return false;
+                    }
+
+                    return true
+                },
+
                 async submitForm() {
                     this.errors = {};
 
-                    this.formData.title = this.formData.title.trim();
-                    this.formData.description = this.formData.description.trim();
+                    this.formData.orderTime = this.formData.orderTime.trim();
                     this.$v.validate();
 
-                    if (this.$v.formData.title.$invalid ||
-                        this.$v.formData.hours.$invalid ||
-                        this.$v.formData.minutes.$invalid) {
+                    if (!this.validateDate()) {
+                        return;
+                    }
+
+                    if (this.$v.formData.orderTime.$invalid) {
                         return;
                     }
 
@@ -417,7 +415,11 @@
                         const response = await axios({
                             url: this.formAction,
                             method: 'post',
-                            data: this.formData,
+                            data: {
+                                'order_date': this.dateRef.value,
+                                'order_time': this.formData.orderTime,
+                                'status': this.formData.status,
+                            },
                             headers: {
                                 'X-HTTP-Method-Override': this.formMethod,
                             },

@@ -147,6 +147,5 @@ class ServiceController extends Controller
                 'message' => __('Error while deleting service'),
             ], 500);
         }
-
     }
 }
