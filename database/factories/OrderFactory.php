@@ -18,7 +18,8 @@ class OrderFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->phoneNumber(),
             'status' => $this->faker->randomElement(OrderStatus::cases()),
-            'order_date' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'order_start' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'order_end' => null,
         ];
     }
 }

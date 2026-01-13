@@ -25,7 +25,7 @@ class OrderController extends Controller
                 $status !== null && OrderStatus::tryFrom((int) $status),
                 fn ($q) => $q->where('status', (int) $status)
             )
-            ->latest('order_date')
+            ->latest('order_start')
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
 
@@ -65,7 +65,7 @@ class OrderController extends Controller
             $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time']);
 
             $order->update([
-                'order_date' => $orderDateTime,
+                'order_start' => $orderDateTime,
                 'status' => $validated['status'],
             ]);
 

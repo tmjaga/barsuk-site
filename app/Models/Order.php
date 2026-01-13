@@ -15,17 +15,43 @@ class Order extends Model
         'names',
         'email',
         'phone',
-        'order_date',
+        'order_start',
+        'order_end',
         'status',
     ];
 
     protected $casts = [
         'status' => OrderStatus::class,
-        'order_date' => 'datetime',
+        'order_start' => 'datetime',
+        'order_end' => 'datetime',
     ];
+
+    protected static function booted(): void
+    {
+        static::saved(function (Order $order) {
+            $order->calculateOrderEnd();
+        });
+    }
 
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class);
+    }
+
+    public function calculateOrderEnd(): void
+    {
+        if (! $this->order_start) {
+            return;
+        }
+
+        $totalMinutes = (int) $this->services()->sum('duration');
+
+        $newEnd = $this->order_start->copy()->addMinutes($totalMinutes);
+
+        if (! $this->order_end || ! $this->order_end->equalTo($newEnd)) {
+            $this->fill([
+                'order_end' => $newEnd,
+            ])->saveQuietly();
+        }
     }
 }

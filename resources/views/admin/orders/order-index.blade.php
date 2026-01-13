@@ -108,7 +108,7 @@
                     <tr x-data="orderStatusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <p x-text="$formatDate(order.order_date)" class="text-gray-700 text-theme-sm"></p>
+                                <p x-text="$formatDate(order.order_start)" class="text-gray-700 text-theme-sm"></p>
                             </div>
                         </td>
                         <td class="px-6 py-3">
@@ -354,8 +354,8 @@
                         this.formData.name = order.names;
                         this.formData.email = order.email;
                         this.formData.phone = order.phone;
-                        this.formData.orderDate = order.order_date.split('T')[0];
-                        this.formData.orderTime = order.order_date.split('T')[1].slice(0, 5);
+                        this.formData.orderDate = order.order_start.split('T')[0];
+                        this.formData.orderTime = order.order_start.split('T')[1].slice(0, 5);
 
                         // set order date value in to the date picker
                         const datePicker = document.querySelector('#order_date').closest('[x-data]');
