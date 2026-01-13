@@ -13,9 +13,9 @@ class OrderSeeder extends Seeder
         $services = Service::pluck('id');
 
         Order::factory(10)->create()->each(function (Order $order) use ($services) {
-            $order->services()->attach(
-                $services->random(rand(1, 3))->toArray()
-            );
+            $attachedServices = $services->random(rand(1, 3))->toArray();
+            $order->services()->attach($attachedServices);
+            $order->calculateOrderEnd();
         });
     }
 }
