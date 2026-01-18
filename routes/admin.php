@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AlbumMediaController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
@@ -73,6 +74,15 @@ Route::middleware(['auth:admin'])->group(function () {
     // orders routes
     Route::resource('orders', OrderController::class)->only(['index', 'edit', 'update', 'destroy']);
     Route::patch('orders/uodate-status/{order}', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-});
 
-Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+    // calendar routes
+    Route::group([
+        'prefix' => 'calendar',
+        'as' => 'calendar.',
+    ], function () {
+        Route::get('/', [CalendarController::class, 'index'])->name('index');
+        Route::get('/events', [CalendarController::class, 'events'])->name('events');
+    });
+
+    Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+});

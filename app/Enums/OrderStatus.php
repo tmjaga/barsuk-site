@@ -23,11 +23,32 @@ enum OrderStatus: int
     {
         $titles = array_reduce(self::cases(), function ($carry, $case) {
             $carry[$case->value] = $case->title();
+
             return $carry;
         }, []);
 
         asort($titles, SORT_NATURAL | SORT_FLAG_CASE);
 
         return $titles;
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::PENDING => '#f59e0b',
+            self::CONFIRMED => '#22c55e',
+            self::REJECTED => '#ef4444',
+            self::COMPLETED => '#60a5fa',
+        };
+    }
+
+    public function statusKey(): string
+    {
+        return match ($this) {
+            self::PENDING => 'warning',
+            self::CONFIRMED => 'primary',
+            self::REJECTED => 'danger',
+            self::COMPLETED => 'success',
+        };
     }
 }

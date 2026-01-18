@@ -16,8 +16,6 @@
         },
         initializeActiveMenus() {
             const currentPath = '{{ $currentPath }}';
-
-
             @foreach ($menuGroups as $groupIndex => $menuGroup)
                 @foreach ($menuGroup['items'] as $itemIndex => $item)
                     @if (isset($item['subItems']))

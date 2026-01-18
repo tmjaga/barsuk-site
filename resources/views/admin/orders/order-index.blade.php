@@ -70,6 +70,13 @@
                         </div>
                     </th>
                     <th class="px-6 py-3 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <p class="font-medium text-gray-500 text-theme-xs">
+                                @lang('Phone')
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-start justify-start">
                             <p class="items-start font-medium text-gray-500 text-theme-xs">
                                 @lang('Services')
@@ -117,11 +124,15 @@
                                 <small class="block text-gray-500" x-html="`[${order.email}]`"></small>
                             </div>
                         </td>
+                        <td class="px-6 py-3">
+                            <div class="flex flex-col">
+                                <p x-text="order.phone" class="text-gray-700 text-theme-sm"></p>
+                            </div>
+                        </td>
                         <td class="px-6 py-3 whitespace-nowrap text-start">
                             <template x-for="service in order.services" :key="service.id">
                                 <div class="text-gray-700 text-theme-sm" x-text="service.title"></div>
                             </template>
-
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-center">
                             <span
@@ -219,12 +230,37 @@
                     </button>
 
                     <form @submit.prevent="submitForm" method="POST" :action="formAction">
-
                         @csrf
                         <input type="hidden" name="_method" :value="formMethod">
                         <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800"></h4>
 
                         <div class="-mx-2.5 flex flex-wrap gap-y-5">
+                            <!-- names field -->
+                            <div class="w-full px-2.5">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Person Name'): <span class="text-red-500">*</span>
+                                </label>
+                                <input name="names" value="" x-model="formData.names" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                <p x-show="$v.formData.names.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Names')</p>
+                            </div>
+                            <!-- email field -->
+                            <div class="w-full px-2.5">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Email'): <span class="text-red-500">*</span>
+                                </label>
+                                <input name="email" value="" x-model="formData.email" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                <p x-show="$v.formData.email.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Email')</p>
+                                <p x-show="errors.email" x-text="errors.email" class="text-red-500 text-sm mt-1"></p>
+                            </div>
+                            <!-- phone field -->
+                            <div class="w-full px-2.5">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Phone'): <span class="text-red-500">*</span>
+                                </label>
+                                <input name="phone" value="" x-model="formData.phone" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                <p x-show="$v.formData.phone.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('!Please enter a valid Phone Number')</p>
+                                <p x-show="errors.phone" x-text="errors.email" class="text-red-500 text-sm mt-1"></p>
+                            </div>
                             <!-- date field -->
                             <div class="w-full px-2.5 xl:w-1/2" >
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
@@ -251,18 +287,18 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Name'):
-                            </label>
-                            <p x-text="formData.name" class="text-gray-700 text-theme-sm"></p>
-                        </div>
-                            <div class="w-full px-2.5 xl:w-1/2">
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                @lang('Email'):
-                            </label>
-                            <p x-text="formData.email" class="text-gray-700 text-theme-sm"></p>
-                        </div>
+                            <!-- services multi select field -->
+                            <div class="w-full px-2.5">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    @lang('Services'): <span class="text-red-500">*</span>
+                                </label>
+                                <x-forms.multi-select
+                                    name="services"
+                                    id="services"
+                                    :options="$allServices"
+                                    :placeholder="__('Select Services')"
+                                />
+                            </div>
                             <div class="w-full px-2.5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
                                     @lang('Status'):
@@ -306,14 +342,17 @@
     <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         window.orderStatuses = @json(\App\Enums\OrderStatus::titles());
+        window.allServices = @json($allServices);
 
         document.addEventListener('alpine:init', () => {
             Alpine.data('orderModal', () => ({
                 isModalOpen: false,
+                openServices: false,
                 isLoading: false,
+                allServices: @js($allServices),
                 statuses: window.orderStatuses,
                 formData: {
-                    name: '',
+                    names: '',
                     email: '',
                     phone: '',
                     orderDate: new Date().toISOString().slice(0, 10),
@@ -331,40 +370,48 @@
                     update: "{{ route('admin.orders.update', ':id') }}"
                 },
                 validations: {
+                    'formData.names': ['required', 'min:10'],
+                    'formData.email': ['required', 'email'],
                     'formData.orderTime': ['required'],
+                    'formData.phone':['required', 'regex:^\\+?[0-9]+$']
                 },
-
                 init() {
                     this.$validation(this)
                     this.$el.addEventListener('date-change', (event) => {
                         this.dateRef = event.detail.instance.element;
                         this.validateDate();
                     });
-
                 },
 
                 async openEditModal(orderId) {
                     this.isLoading = true;
+                    this.errors = {};
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', orderId));
                         // TODO For test errors uncomment line below
                         // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                         const order = response.data;
 
-                        this.formData.name = order.names;
+                        this.formData.names = order.names;
                         this.formData.email = order.email;
                         this.formData.phone = order.phone;
                         this.formData.orderDate = order.order_start.split('T')[0];
                         this.formData.orderTime = order.order_start.split('T')[1].slice(0, 5);
+                        this.formData.services = order.services.map(s => s.id);
 
-                        // set order date value in to the date picker
+                        // set order date value in to the date picker component
                         const datePicker = document.querySelector('#order_date').closest('[x-data]');
                         if (datePicker && datePicker._x_dataStack) {
                             datePicker._x_dataStack[0].setDate(new Date(this.formData.orderDate));
                         }
 
+                        // set selected options in to the multi select component
+                        const multiSelect = document.querySelector('#services').closest('[x-data]');
+                        if (multiSelect && multiSelect._x_dataStack) {
+                            multiSelect._x_dataStack[0].selected = [...this.formData.services];
+                        }
+
                         this.formData.status = order.status,
-                        this.formData.services = order.services,
                         this.formAction = this.routeTemplates.update.replace(':id', orderId);
                         this.formMethod = 'PUT';
                         this.modalTitle = '@lang("Edit Order")';
@@ -378,13 +425,21 @@
                 resetForm() {
                     this.errors = {};
                     this.dateRef = null;
+                    this.formData = {
+                        names: '',
+                        email: '',
+                        phone: '',
+                        orderDate: new Date().toISOString().slice(0, 10),
+                        orderTime: new Date().toTimeString().slice(0, 5),
+                        status: 0,
+                        services: []
+                    };
 
                     // reset validation
                     if (this.$v?.reset) {
                         this.$v.reset()
                     }
                 },
-
                 validateDate() {
                     delete this.errors.orderDate;
 
@@ -396,14 +451,17 @@
 
                     return true
                 },
-
                 async submitForm() {
                     this.errors = {};
-
+                    this.formData.names = this.formData.names.trim();
+                    this.formData.email = this.formData.email.trim();
                     this.formData.orderTime = this.formData.orderTime.trim();
                     this.$v.validate();
 
-                    if (!this.validateDate()) {
+                    if (!this.validateDate() ||
+                        this.$v.formData.names.$invalid ||
+                        this.$v.formData.email.$invalid ||
+                        this.$v.formData.phone.$invalid) {
                         return;
                     }
 
@@ -416,6 +474,9 @@
                             url: this.formAction,
                             method: 'post',
                             data: {
+                                'names': this.formData.names,
+                                'email': this.formData.email,
+                                'phone': this.formData.phone,
                                 'order_date': this.dateRef.value,
                                 'order_time': this.formData.orderTime,
                                 'status': this.formData.status,
@@ -425,16 +486,16 @@
                             },
                         });
 
-                        //this.isModalOpen = false;
                         Alpine.store('alert').success(response?.data?.message);
-
                         this.$dispatch('reload-items');
-                    } catch (error) {
-                        //this.isModalOpen = false;
-                        Alpine.store('alert').error(error?.response?.data?.message);
-                    } finally {
                         this.isModalOpen = false;
                         this.resetForm()
+                    } catch (error) {
+                        if (error.status === 500) {
+                            Alpine.store('alert').error(error?.response?.data?.message);
+                        } else {
+                            this.errors = error.response.data.errors;
+                        }
                     }
                 }
             }));
@@ -453,7 +514,6 @@
 
                         this.$dispatch('reload-items');
                     } catch (error) {
-                        console.log(error);
                         Alpine.store('alert').error(error?.response?.data?.message);
                     } finally {
                         this.openDropDown = false

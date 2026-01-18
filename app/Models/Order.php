@@ -54,4 +54,20 @@ class Order extends Model
             ])->saveQuietly();
         }
     }
+
+    // custom calendar_event attribute for FullCalendar
+    public function getCalendarEventAttribute(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->names,
+            'start' => $this->order_start->toIso8601String(),
+            'end' => $this->order_end?->toIso8601String(),
+            'extendedProps' => [
+                'calendar' => $this->status->statusKey(),
+                'email' => $this->email,
+                'phone' => $this->phone,
+            ],
+        ];
+    }
 }

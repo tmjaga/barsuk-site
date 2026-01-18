@@ -48,5 +48,15 @@ delegate( document.body, {
     theme: 'light-border'
 });
 
-Alpine.start();
 
+// lazy loading Initialize components on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    // calendar init
+    if (document.querySelector('#calendar')) {
+        import('./calendar-init').then(module => {
+            window.calendar = module.calendarInit();
+        });
+    }
+});
+
+Alpine.start();

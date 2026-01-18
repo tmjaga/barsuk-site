@@ -133,6 +133,8 @@
 
 </div>
 
+@stack('footer_css')
+
 @stack('scripts')
 
 @stack('footer_scripts')

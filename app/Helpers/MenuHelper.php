@@ -38,7 +38,11 @@ class MenuHelper
                 'name' => __('Orders'),
                 'path' => route('admin.orders.index'),
             ],
-
+            [
+                'icon' => 'calendar',
+                'name' => __('Calendar'),
+                'path' => route('admin.calendar.index'),
+            ],
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -33,9 +34,11 @@ class OrderController extends Controller
             return response()->json($orders);
         }
 
+        $allServices = Service::select('id', 'title')->orderBy('title')->get();
+
         $orderStatuses = OrderStatus::titles();
 
-        return view('admin.orders.order-index', compact('orders', 'orderStatuses', 'status'));
+        return view('admin.orders.order-index', compact('orders', 'orderStatuses', 'status', 'allServices'));
     }
 
     public function edit(string $id): JsonResponse
@@ -55,19 +58,20 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order): JsonResponse
     {
+        $validated = $request->validate([
+            'names' => 'required',
+            'email' => 'required|email|unique:orders,email,'.$order->id,
+            'order_date' => 'required|date',
+            'order_time' => 'required|date_format:H:i',
+            'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
+            'status' => ['required', new Enum(OrderStatus::class)],
+        ]);
+
         try {
-            $validated = $request->validate([
-                'order_date' => 'required|date',
-                'order_time' => 'required|date_format:H:i',
-                'status' => ['required', new Enum(OrderStatus::class)],
-            ]);
-
             $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time']);
+            $validated['order_start'] = $orderDateTime;
 
-            $order->update([
-                'order_start' => $orderDateTime,
-                'status' => $validated['status'],
-            ]);
+            $order->update($validated);
 
             return response()->json([
                 'message' => __('Order updated successfully'),
