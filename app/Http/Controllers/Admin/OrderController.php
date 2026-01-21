@@ -35,7 +35,6 @@ class OrderController extends Controller
         }
 
         $allServices = Service::select('id', 'title')->orderBy('title')->get();
-
         $orderStatuses = OrderStatus::titles();
 
         return view('admin.orders.order-index', compact('orders', 'orderStatuses', 'status', 'allServices'));
@@ -65,6 +64,7 @@ class OrderController extends Controller
             'order_time' => 'required|date_format:H:i',
             'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
             'status' => ['required', new Enum(OrderStatus::class)],
+            'services' => 'required|array|min:1',
         ]);
 
         try {
@@ -72,6 +72,9 @@ class OrderController extends Controller
             $validated['order_start'] = $orderDateTime;
 
             $order->update($validated);
+
+            // update order services
+            $order->services()->sync($validated['services']);
 
             return response()->json([
                 'message' => __('Order updated successfully'),

@@ -61,8 +61,8 @@ class Order extends Model
         return [
             'id' => $this->id,
             'title' => $this->names,
-            'start' => $this->order_start->toIso8601String(),
-            'end' => $this->order_end?->toIso8601String(),
+            'start' => $this->order_start->format('Y-m-d\TH:i:s'),
+            'end'   => $this->order_end->format('Y-m-d\TH:i:s'),
             'extendedProps' => [
                 'calendar' => $this->status->statusKey(),
                 'email' => $this->email,

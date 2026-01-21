@@ -21,7 +21,7 @@ export default function (initialData = {}) {
                 this.goToPage();
             });
 
-            this.$el.addEventListener('reload-items', () => {
+            window.addEventListener('reload-items', () => {
                 this.goToPage();
             });
         },
