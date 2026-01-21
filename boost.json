@@ -3,8 +3,8 @@
         "phpstorm"
     ],
     "editors": [
-        "phpstorm",
-        "vscode"
+        "phpstorm"
     ],
-    "guidelines": []
+    "guidelines": [],
+    "herd_mcp": true
 }

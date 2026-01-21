@@ -3,9 +3,19 @@
         "laravel-boost": {
             "command": "C:\\Users\\anatoly\\.config\\herd\\bin\\php83\\php.exe",
             "args": [
-                "D:\\LaravelVueProjects\\barsuk-site\\artisan",
+                "-d",
+                "variables_order=EGPCS",
+                "artisan",
                 "boost:mcp"
-            ]
+            ]        },
+        "herd": {
+            "command": "C:\\Users\\anatoly\\.config\\herd\\bin\\php83\\php.exe",
+            "args": [
+                "C:/Users/anatoly/.config/herd/bin/herd-mcp.phar"
+            ],
+            "env": {
+                "SITE_PATH": "D:\\LaravelVueProjects\\barsuk-site"
+            }
         }
     }
 }
