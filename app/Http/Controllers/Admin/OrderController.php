@@ -59,7 +59,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'names' => 'required',
-            'email' => 'required|email|unique:orders,email,'.$order->id,
+            'email' => 'required|email',
             'order_date' => 'required|date',
             'order_time' => 'required|date_format:H:i',
             'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
@@ -87,6 +87,39 @@ class OrderController extends Controller
             return response()->json([
                 'message' => __('Error updating Order'),
             ], 500);
+        }
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'names' => 'required',
+            'email' => 'required|email',
+            'order_date' => 'required|date',
+            'order_time' => 'required|date_format:H:i',
+            'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
+            'status' => ['required', new Enum(OrderStatus::class)],
+            'services' => 'required|array|min:1',
+        ]);
+
+        try {
+            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time']);
+            $validated['order_start'] = $orderDateTime;
+
+            $order = Order::create($validated);
+
+            // attach order services
+            $order->services()->attach($validated['services']);
+
+            return response()->json([
+                'message' => __('Order created successfully'),
+            ], 201);
+        } catch (Throwable $e) {
+            Log::error('Error creating Order', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json(['message' => __('Error creating Order')], 500);
         }
     }
 

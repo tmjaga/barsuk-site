@@ -37,80 +37,16 @@ export function calendarInit() {
     const calendarEl = document.querySelector("#calendar");
 
     const calendarHeaderToolbar = {
-      //left: "prev,next addEventButton",
-      left: "prev,next",
+      left: "prev,next, addEventButton",
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay",
     };
 
-    // Modal Functions
-    const openModal = () => {
-      const modal = document.getElementById("eventModal");
-      if (modal) {
-        modal.style.display = "flex";
-        document.body.style.overflow = "hidden"; // Prevent background scroll
-      }
-    };
-
-    // Reset modal fields
-    function resetModalFields() {
-      if (getModalTitleEl) getModalTitleEl.value = "";
-      if (getModalStartDateEl) getModalStartDateEl.value = "";
-      if (getModalEndDateEl) getModalEndDateEl.value = "";
-
-      const getModalIfCheckedRadioBtnEl = document.querySelector(
-        'input[name="event-level"]:checked'
-      );
-      if (getModalIfCheckedRadioBtnEl) {
-        getModalIfCheckedRadioBtnEl.checked = false;
-      }
-    }
-
-    // Calendar Select function (when user clicks/drags on calendar)
-    const calendarSelect = (info) => {
-      resetModalFields();
-
-      // Update modal header
-      if (getModalHeaderEl) {
-        getModalHeaderEl.textContent = "Add Event";
-      }
-
-      // Show Add button, hide Update button
-      if (getModalAddBtnEl) getModalAddBtnEl.style.display = "flex";
-      if (getModalUpdateBtnEl) getModalUpdateBtnEl.style.display = "none";
-
-      // Set dates from selection
-      if (getModalStartDateEl) getModalStartDateEl.value = info.startStr;
-      if (getModalEndDateEl) {
-        getModalEndDateEl.value = info.endStr || info.startStr;
-      }
-
-      openModal();
-    };
-
     // Calendar AddEvent button click
     const calendarAddEvent = () => {
-      resetModalFields();
-
-      // Update modal header
-      if (getModalHeaderEl) {
-        getModalHeaderEl.textContent = "Add Event";
-      }
-
-      // Show Add button, hide Update button
-      if (getModalAddBtnEl) getModalAddBtnEl.style.display = "flex";
-      if (getModalUpdateBtnEl) getModalUpdateBtnEl.style.display = "none";
-
-      // Set default start date to today
-      const currentDate = new Date();
-      const yyyy = currentDate.getFullYear();
-      const mm = String(currentDate.getMonth() + 1).padStart(2, "0");
-      const dd = String(currentDate.getDate()).padStart(2, "0");
-      const combineDate = `${yyyy}-${mm}-${dd}`;
-
-      if (getModalStartDateEl) getModalStartDateEl.value = combineDate;
-
-      openModal();
+        let elem =  document.querySelector('[x-data="orderModal()"]');
+        let eventModal = Alpine.$data(elem);
+        eventModal.openCreateModal();
     };
 
     // Calendar Event Click function (when user clicks existing event)
@@ -131,13 +67,13 @@ export function calendarInit() {
       headerToolbar: calendarHeaderToolbar,
       events: get_events_url,
       firstDay: 1,
-      select: calendarSelect,
+      select: null,
       eventClick: calendarEventClick,
       displayEventTime: true,
       displayEventEnd: false,
       customButtons: {
         addEventButton: {
-          text: "Add Event +",
+          text: "Add Order",
           click: calendarAddEvent,
         },
       },
@@ -176,7 +112,6 @@ export function calendarInit() {
       },
     });
 
-
     // Render Calendar
     calendar.render();
 
@@ -186,7 +121,7 @@ export function calendarInit() {
 
   }
 
-    return calendar;
+  return calendar;
 }
 
 export default calendarInit;

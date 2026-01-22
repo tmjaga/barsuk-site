@@ -43,6 +43,11 @@
             openOptions: false,
             options,
             selected,
+            init() {
+                this.$watch('selected', () => {
+                    this.$dispatch('multiselect-changed')
+                })
+            },
             toggleOption(id) {
                 this.isSelected(id)
                     ? this.selected = this.selected.filter(i => i !== id)

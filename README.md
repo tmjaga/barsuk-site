@@ -10,3 +10,4 @@ Video Lesson [New TailAdmin Laravel Starter Kit with Basic Auth](https://www.you
 - [Alpine.js](https://alpinejs.dev) all componenets implemented with this framework
 - [Tippy.js](https://atomiks.github.io/tippyjs) - tooltips for Tailwind Css
 - [Alpidate](https://github.com/h7arash/alpidate) - a lightweight validation plugin for Alpine.js inspired by Vuelidate.
+- [Full Calendar](https://fullcalendar.io) - JavaScript Calendar

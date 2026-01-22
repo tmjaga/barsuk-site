@@ -47,11 +47,11 @@ class CategoryController extends Controller
                 'message' => __('Category created successfully'),
             ], 201);
         } catch (Throwable $e) {
-            Log::error('Error updating Category', [
+            Log::error('Error creating Category', [
                 'message' => $e->getMessage(),
             ]);
 
-            return response()->json(['message' => __('Error updating Category')], 500);
+            return response()->json(['message' => __('Error creating Category')], 500);
         }
     }
 

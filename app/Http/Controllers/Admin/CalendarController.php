@@ -26,7 +26,6 @@ class CalendarController extends Controller
         $end = $request->query('end');
         $orders = Order::whereBetween('order_start', [$start, $end])->get();
         $events = $orders->pluck('calendar_event');
-        //dd($events);
 
         return response()->json($events);
     }

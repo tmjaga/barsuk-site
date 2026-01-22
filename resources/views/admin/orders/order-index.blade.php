@@ -27,9 +27,15 @@
         <!-- loader (spinner)-->
         <x-common.loader :show="'loading'" style="display: none;" />
         <!-- search form-->
-        <div class="flex flex-col sm:flex-row justify-end p-3">
+        <div class="flex flex-col gap-3 sm:flex-row items-center p-3">
+            <a href="#" @click.prevent="$store.orderModal.instance?.openCreateModal()" class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                @lang('Add New')
+            </a>
             <!-- status select input-->
-            <div x-data="{ isOptionSelected: {{ $status ? 'true' : 'false' }} }" class="relative z-20 bg-transparent">
+            <div x-data="{ isOptionSelected: {{ $status ? 'true' : 'false' }} }" class="relative ml-auto z-20 bg-transparent">
                 <select x-model="filters.status" @change="$dispatch('reload-items');" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden" :class="isOptionSelected &amp;&amp; 'text-gray-800'" @change="isOptionSelected = true">
                     <option value="" class="text-gray-700">
                         @lang('Select Status')
