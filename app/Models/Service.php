@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Service extends Model
 {
-    protected $fillable = ['title', 'category_id', 'description', 'duration', 'active'];
+    protected $fillable = ['title', 'category_id', 'description', 'duration', 'active', 'price'];
 
     protected $casts = [
-        'price' => 'float',
+        'price' => 'decimal:2',
     ];
 
     use HasFactory;

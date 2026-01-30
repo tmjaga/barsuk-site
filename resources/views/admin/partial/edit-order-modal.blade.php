@@ -53,7 +53,7 @@
                     <p x-show="errors.orderDate" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Date')</p>
                 </div>
                 <!-- time field -->
-                <div class="w-full px-2.5 xl:w-1/2" >
+                <div class="w-full px-2.5 xl:w-1/2">
                     <label class="mb-1.5 block text-sm font-medium text-gray-700">
                         @lang('Order Time'): <span class="text-red-500">*</span>
                     </label>

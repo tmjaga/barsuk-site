@@ -49,6 +49,7 @@ class ServiceController extends Controller
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
+                'price' => 'required|numeric|regex:/^\d{1,8}(\.\d{1,2})?$/',
             ]);
 
             // process 'active' checkbox
@@ -102,6 +103,7 @@ class ServiceController extends Controller
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
+                'price' => 'required|numeric|regex:/^\d{1,8}(\.\d{1,2})?$/',
             ]);
 
             // process 'active' checkbox
