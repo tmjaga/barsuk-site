@@ -23,6 +23,8 @@ class ServiceFactory extends Factory
             'category_id' => Category::query()->inRandomOrder()->value('id'),
             'title' => 'Test Service #'.self::$number++,
             'description' => $this->faker->paragraph(),
+            'duration' => $this->faker->numberBetween(10, 120),
+            'price' => $this->faker->randomFloat(2, 10, 200),
         ];
     }
 }

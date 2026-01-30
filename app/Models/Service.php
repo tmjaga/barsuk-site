@@ -12,6 +12,10 @@ class Service extends Model
 {
     protected $fillable = ['title', 'category_id', 'description', 'duration', 'active'];
 
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     use HasFactory;
 
     protected function duration(): Attribute
