@@ -308,11 +308,11 @@
                     return `${day}.${month}.${year}`;
                 },
                 formatPrice(price) {
-                    return  price.toFixed(2).replace('.', ',');
+                    return  Number(price).toFixed(2);
                 },
                 get totalPrice() {
                     const totalPrice = this.selectedServices.reduce((total, service) => {
-                        return total + (service.price || 0);
+                        return total + Number(service.price || 0);
                     }, 0);
 
                     return  this.formatPrice(totalPrice);
