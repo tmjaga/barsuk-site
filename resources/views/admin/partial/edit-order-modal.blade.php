@@ -153,7 +153,7 @@
             },
             init() {
                 Alpine.store('orderModal').instance = this;
-                this.$validation(this)
+                this.$validation(this);
                 this.$el.addEventListener('date-change', (event) => {
                     this.dateRef = event.detail.instance.element;
                     this.validateDate();
@@ -197,9 +197,11 @@
                     this.formData.names = order.names;
                     this.formData.email = order.email;
                     this.formData.phone = order.phone;
-                    this.formData.orderDate = order.order_start.split('T')[0];
-                    this.formData.orderTime = order.order_start.split('T')[1].slice(0, 5);
+                    this.formData.orderDate = order.order_start.split(' ')[0];
+                    this.formData.orderTime = order.order_start.split(' ')[1].slice(0, 5);
                     this.formData.services = order.services.map(s => s.id);
+
+                    console.log(order)
 
                     // set order date value in to the date picker component
                     let datePicker = document.querySelector('#order_date').closest('[x-data]');
@@ -302,7 +304,7 @@
                     });
 
                     Alpine.store('alert').success(response?.data?.message);
-                    this.isModalOpen = false;
+
                     this.resetForm();
 
                     // dispatch event to window object to change listing
@@ -316,6 +318,8 @@
                     } else {
                         this.errors = error.response.data.errors;
                     }
+                } finally {
+                    this.isModalOpen = false;
                 }
             }
         }));

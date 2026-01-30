@@ -26,10 +26,11 @@ class OrderController extends Controller
                 $status !== null && OrderStatus::tryFrom((int) $status),
                 fn ($q) => $q->where('status', (int) $status)
             )
-            ->latest('order_start')
+            ->latest()
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
 
+        //dd($orders->toArray());
         if ($request->ajax()) {
             return response()->json($orders);
         }
@@ -68,13 +69,18 @@ class OrderController extends Controller
         ]);
 
         try {
-            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time']);
+            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time'])->format('Y-m-d H:i:s');
             $validated['order_start'] = $orderDateTime;
 
             $order->update($validated);
 
             // update order services
             $order->services()->sync($validated['services']);
+
+            // calculate order_end
+            $order->refresh();
+            $order->calculateOrderEnd();
+            $order->save();
 
             return response()->json([
                 'message' => __('Order updated successfully'),
@@ -103,13 +109,18 @@ class OrderController extends Controller
         ]);
 
         try {
-            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time']);
+            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time'])->format('Y-m-d H:i:s');
             $validated['order_start'] = $orderDateTime;
 
             $order = Order::create($validated);
 
             // attach order services
             $order->services()->attach($validated['services']);
+
+            // calculate order_end
+            $order->refresh();
+            $order->calculateOrderEnd();
+            $order->save();
 
             return response()->json([
                 'message' => __('Order created successfully'),

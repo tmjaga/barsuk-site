@@ -26,11 +26,18 @@ class Order extends Model
         'order_end' => 'datetime',
     ];
 
+    /*
     protected static function booted(): void
     {
-        static::saved(function (Order $order) {
+        static::saving(function (Order $order) {
             $order->calculateOrderEnd();
         });
+    }
+    */
+
+    protected function serializeDate(\DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 
     public function services(): BelongsToMany
@@ -46,13 +53,12 @@ class Order extends Model
 
         $totalMinutes = (int) $this->services()->sum('duration');
 
-        $newEnd = $this->order_start->copy()->addMinutes($totalMinutes);
-
-        if (! $this->order_end || ! $this->order_end->equalTo($newEnd)) {
-            $this->fill([
-                'order_end' => $newEnd,
-            ])->saveQuietly();
+        if ($totalMinutes <= 0) {
+            return;
         }
+
+        $newEnd = $this->order_start->copy()->addMinutes($totalMinutes);
+        $this->order_end = $newEnd;
     }
 
     // custom calendar_event attribute for FullCalendar
@@ -62,7 +68,7 @@ class Order extends Model
             'id' => $this->id,
             'title' => $this->names,
             'start' => $this->order_start->format('Y-m-d\TH:i:s'),
-            'end'   => $this->order_end->format('Y-m-d\TH:i:s'),
+            'end' => $this->order_end->format('Y-m-d\TH:i:s'),
             'extendedProps' => [
                 'calendar' => $this->status->statusKey(),
                 'email' => $this->email,
