@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Order\CreateOrderAction;
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Service;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class OrderController extends Controller
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
 
-        //dd($orders->toArray());
+        // dd($orders->toArray());
         if ($request->ajax()) {
             return response()->json($orders);
         }
@@ -56,26 +57,13 @@ class OrderController extends Controller
         }
     }
 
-    public function update(Request $request, Order $order): JsonResponse
+    public function update(StoreOrderRequest $request, Order $order): JsonResponse
     {
-        $validated = $request->validate([
-            'names' => 'required',
-            'email' => 'required|email',
-            'order_date' => 'required|date',
-            'order_time' => 'required|date_format:H:i',
-            'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
-            'status' => ['required', new Enum(OrderStatus::class)],
-            'services' => 'required|array|min:1',
-        ]);
-
         try {
-            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time'])->format('Y-m-d H:i:s');
-            $validated['order_start'] = $orderDateTime;
-
-            $order->update($validated);
+            $order->update($request->validated());
 
             // update order services
-            $order->services()->sync($validated['services']);
+            $order->services()->sync($request->validated()['services']);
 
             // calculate order_end
             $order->refresh();
@@ -94,44 +82,16 @@ class OrderController extends Controller
                 'message' => __('Error updating Order'),
             ], 500);
         }
+
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreOrderRequest $request, CreateOrderAction $createOrderAction): JsonResponse
     {
-        $validated = $request->validate([
-            'names' => 'required',
-            'email' => 'required|email',
-            'order_date' => 'required|date',
-            'order_time' => 'required|date_format:H:i',
-            'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
-            'status' => ['required', new Enum(OrderStatus::class)],
-            'services' => 'required|array|min:1',
-        ]);
+        $createOrderAction($request->validated());
 
-        try {
-            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time'])->format('Y-m-d H:i:s');
-            $validated['order_start'] = $orderDateTime;
-
-            $order = Order::create($validated);
-
-            // attach order services
-            $order->services()->attach($validated['services']);
-
-            // calculate order_end
-            $order->refresh();
-            $order->calculateOrderEnd();
-            $order->save();
-
-            return response()->json([
-                'message' => __('Order created successfully'),
-            ], 201);
-        } catch (Throwable $e) {
-            Log::error('Error creating Order', [
-                'message' => $e->getMessage(),
-            ]);
-
-            return response()->json(['message' => __('Error creating Order')], 500);
-        }
+        return response()->json([
+            'message' => __('Order created successfully'),
+        ], 201);
     }
 
     public function destroy(Order $order): JsonResponse

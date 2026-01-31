@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\OrderStatus;
-use App\Models\Order;
+use App\Actions\Order\CreateOrderAction;
+use App\Http\Requests\StoreOrderRequest;
 use App\Models\Service;
 use App\Services\BookingSlotService;
-use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rules\Enum;
-use Throwable;
 
 class BookingController extends Controller
 {
@@ -38,41 +34,12 @@ class BookingController extends Controller
         return response()->json(['data' => $slots]);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(StoreOrderRequest $request, CreateOrderAction $createOrderAction): JsonResponse
     {
-        $validated = $request->validate([
-            'names' => 'required',
-            'email' => 'required|email',
-            'order_date' => 'required|date',
-            'order_time' => 'required|date_format:H:i',
-            'phone' => 'required|regex:/^\+?[0-9]+$/|min:10',
-            'status' => ['required', new Enum(OrderStatus::class)],
-            'services' => 'required|array|min:1',
-        ]);
+        $createOrderAction($request->validated());
 
-        try {
-            $orderDateTime = Carbon::parse($validated['order_date'].' '.$validated['order_time'])->format('Y-m-d H:i:s');
-            $validated['order_start'] = $orderDateTime;
-
-            $order = Order::create($validated);
-
-            // attach order services
-            $order->services()->attach($validated['services']);
-
-            // calculate order_end
-            $order->refresh();
-            $order->calculateOrderEnd();
-            $order->save();
-
-            return response()->json([
-                'message' => __('Order created successfully'),
-            ], 201);
-        } catch (Throwable $e) {
-            Log::error('Error creating Order', [
-                'message' => $e->getMessage(),
-            ]);
-
-            return response()->json(['message' => __('Error creating Order')], 500);
-        }
+        return response()->json([
+            'message' => __('Booking created successfully'),
+        ], 201);
     }
 }
