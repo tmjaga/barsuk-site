@@ -49,6 +49,10 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'edit'])->name('settings.password.edit');
     Route::put('settings/password', [\App\Http\Controllers\Admin\Settings\PasswordController::class, 'update'])->name('settings.password.update');
 
+    // settings routes
+    Route::get('settings/', [\App\Http\Controllers\Admin\Settings\SettingController::class, 'index'])->name('settings.index');
+    Route::put('settings/', [\App\Http\Controllers\Admin\Settings\SettingController::class, 'update'])->name('settings.update');
+
     // gallery albums routes
     Route::resource('albums', AlbumController::class);
 
