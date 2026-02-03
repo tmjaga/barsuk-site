@@ -15,12 +15,12 @@ class BookingSlotService
         $date = Carbon::parse($date)->timezone(config('app.timezone'));
 
         $duration = (int) Service::whereIn('id', $serviceIds)->sum('duration');
-        $break = (int) config('booking.break_minutes');
+        $break = (int) settings()->break_minutes;
 
-        $workFrom = $date->copy()->setTimeFromTimeString(config('booking.work_from'));
-        $workTo = $date->copy()->setTimeFromTimeString(config('booking.work_to'));
+        $workFrom = $date->copy()->setTimeFromTimeString(settings()->work_from);
+        $workTo = $date->copy()->setTimeFromTimeString(settings()->work_to);
 
-        $step = (int) config('booking.slot_step_minutes');
+        $step = (int) settings()->slot_step_minutes;
 
         $orders = Order::whereDate('order_start', $date)->get();
 

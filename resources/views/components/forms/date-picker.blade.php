@@ -34,6 +34,7 @@
                 this.flatpickrInstance = flatpickr(this.$refs.dateInput, {
                     dateFormat: format,
                     defaultDate: initialValue,
+                    allowInput: false,
                     locale: {
                         firstDayOfWeek: 1
                     },
@@ -54,8 +55,31 @@
             },
 
             setDate(date) {
-                if (this.flatpickrInstance) {
-                    this.flatpickrInstance.setDate(date, true);
+                if (!this.flatpickrInstance) return;
+
+                const today = new Date();
+                today.setHours(0,0,0,0);
+
+                const selectedDate = new Date(date)
+                selectedDate.setHours(0,0,0,0);
+
+                this.flatpickrInstance.set('disable', []);
+                this.flatpickrInstance.set('minDate', null);
+
+                // important! set date before blocking dates in the past
+                this.flatpickrInstance.setDate(selectedDate, true);
+
+                // for Edit disable any dates in the past except the selected one
+                this.flatpickrInstance.set('disable', [
+                    function(d) {
+                        d.setHours(0,0,0,0);
+                        return d < today && d.getTime() !== selectedDate.getTime();
+                    }
+                ]);
+
+                // in addition, for Add disable any dates in past
+                if (selectedDate >= today) {
+                    this.flatpickrInstance.set('minDate', today);
                 }
             }
         }));

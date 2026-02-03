@@ -201,8 +201,6 @@
                     this.formData.orderTime = order.order_start.split(' ')[1].slice(0, 5);
                     this.formData.services = order.services.map(s => s.id);
 
-                    console.log(order)
-
                     // set order date value in to the date picker component
                     let datePicker = document.querySelector('#order_date').closest('[x-data]');
                     if (datePicker) {
