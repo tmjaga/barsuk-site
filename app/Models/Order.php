@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,14 +27,10 @@ class Order extends Model
         'order_end' => 'datetime',
     ];
 
-    /*
-    protected static function booted(): void
+    public function scopeCompleted(Builder $query): Builder
     {
-        static::saving(function (Order $order) {
-            $order->calculateOrderEnd();
-        });
+        return $query->where('status', OrderStatus::COMPLETED);
     }
-    */
 
     protected function serializeDate(\DateTimeInterface $date)
     {
