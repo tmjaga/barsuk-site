@@ -17,3 +17,13 @@ if (! function_exists('percentGrowth')) {
         return round((($current - $previous) / $previous) * 100, 1);
     }
 }
+
+if (! function_exists('minutes_to_hhmm')) {
+    function minutes_to_hhmm(int $minutes): string
+    {
+        $hours = intdiv($minutes, 60);
+        $mins = $minutes % 60;
+
+        return sprintf('%02d:%02d', $hours, $mins);
+    }
+}

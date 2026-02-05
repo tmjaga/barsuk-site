@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Cache;
 class Setting extends Model
 {
     protected $casts = [
-        'work_from' => 'datetime:H:i',
-        'work_to' => 'datetime:H:i',
+        'work_from' => 'string',
+        'work_to' => 'string',
     ];
 
     protected $fillable = ['work_from', 'work_to', 'break_minutes', 'slot_step_minutes'];

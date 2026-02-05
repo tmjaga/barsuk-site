@@ -19,3 +19,6 @@ Route::prefix('booking')->as('booking.')->group(function () {
     Route::post('/slots', [BookingController::class, 'slots'])->name('slots');
     Route::post('/order', [BookingController::class, 'store'])->name('order');
 });
+
+// TODO Delete this route
+Route::get('/mail', [BookingController::class, 'mail']);
