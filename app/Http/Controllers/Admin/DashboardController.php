@@ -6,6 +6,8 @@ use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -52,5 +54,27 @@ class DashboardController extends Controller
         $profitGrowth = percentGrowth($currentProfit, $previousProfit);
 
         return view('admin.pages.dashboard', compact('totalOrders', 'completedOrders', 'ordersProfit', 'ordersCompletedGrowth', 'profitGrowth'));
+    }
+
+    public function recentOrders(Request $request): JsonResponse
+    {
+        $status = $request->query('status');
+        $search = $request->query('search');
+
+        // when is needed to catch 0 satatus value
+        $orders = Order::with('services')
+            ->when(
+                $status !== null && OrderStatus::tryFrom((int) $status),
+                fn ($q) => $q->where('status', (int) $status)
+            )
+            ->when($search, fn ($q) => $q->where('names', 'like', "%{$search}%"))
+            ->when($search, fn ($q) => $q->orWhere('phone', 'like', "%{$search}%"))
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return response()->json([
+            'data' => $orders,
+        ]);
     }
 }

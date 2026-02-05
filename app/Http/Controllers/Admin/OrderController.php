@@ -21,7 +21,7 @@ class OrderController extends Controller
     {
         $status = $request->query('status');
 
-        // when to catch 0 satatus value
+        // when is needed to catch 0 satatus value
         $orders = Order::with('services')
             ->when(
                 $status !== null && OrderStatus::tryFrom((int) $status),
@@ -31,7 +31,6 @@ class OrderController extends Controller
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
 
-        // dd($orders->toArray());
         if ($request->ajax()) {
             return response()->json($orders);
         }

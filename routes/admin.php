@@ -40,6 +40,7 @@ Route::middleware('auth:admin')->group(function () {
 Route::middleware(['auth:admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/recent-orders', [DashboardController::class, 'recentOrders'])->name('dashboard.recent-orders');
 
     // profile routes
     Route::get('settings/profile', [\App\Http\Controllers\Admin\Settings\ProfileController::class, 'edit'])->name('settings.profile.edit');
