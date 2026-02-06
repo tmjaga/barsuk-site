@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'names',
@@ -72,5 +73,10 @@ class Order extends Model
                 'phone' => $this->phone,
             ],
         ];
+    }
+
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email;
     }
 }

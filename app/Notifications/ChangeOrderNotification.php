@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewOrderNotification extends Notification implements ShouldQueue
+class ChangeOrderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -22,7 +22,7 @@ class NewOrderNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Booking Changed')
-            ->view('emails.new-booking', [
+            ->view('emails.order-change', [
                 'order' => $this->data['order'],
                 'duration' => $this->data['duration'],
                 'total_price' => $this->data['total_price'],

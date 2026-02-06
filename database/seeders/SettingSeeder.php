@@ -19,6 +19,7 @@ class SettingSeeder extends Seeder
                 'work_to' => '18:00:00',
                 'break_minutes' => 30,
                 'slot_step_minutes' => 60,
+                'phone' => fake()->numerify('############'),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

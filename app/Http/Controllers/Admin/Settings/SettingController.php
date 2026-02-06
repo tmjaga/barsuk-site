@@ -28,6 +28,7 @@ class SettingController extends Controller
             'work_from' => 'required|date_format:H:i',
             'work_to' => 'required|date_format:H:i|after:work_from',
             'break_minutes' => 'required|integer|min:1',
+            'phone' => 'required|regex:/^\+?[0-9\s\-]{10,15}$/',
             'slot_step_minutes' => 'required|integer|min:1',
         ]);
 

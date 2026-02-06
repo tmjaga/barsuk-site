@@ -17,6 +17,7 @@ return new class extends Migration
             $table->time('work_to');
             $table->smallInteger('break_minutes')->unsigned();
             $table->smallInteger('slot_step_minutes')->unsigned();
+            $table->string('phone', 20);
             $table->timestamps();
         });
     }

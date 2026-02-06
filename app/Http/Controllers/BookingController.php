@@ -62,11 +62,11 @@ class BookingController extends Controller
 
     public function mail()
     {
-        //$order= Order::latest()->first();
         $order = Order::withSum('services', 'price')
             ->withSum('services', 'duration')
             ->latest()->first();
-        return view('emails.new-booking', compact('order'));
+
+        return view('emails.order-change', compact('order'));
 
     }
 }

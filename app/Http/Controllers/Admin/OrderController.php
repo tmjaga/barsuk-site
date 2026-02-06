@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
 use App\Models\Service;
+use App\Notifications\ChangeOrderNotification;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -68,6 +69,20 @@ class OrderController extends Controller
             $order->refresh();
             $order->calculateOrderEnd();
             $order->save();
+
+            // send notification to customer if order rejected
+            if ($order->wasChanged('status') && $order->status == OrderStatus::REJECTED) {
+                $order->loadSum('services', 'duration');
+                $order->loadSum('services', 'price');
+
+                $data = [
+                    'order' => $order,
+                    'duration' => $order->services_sum_duration,
+                    'total_price' => $order->services_sum_price,
+                ];
+
+                $order->notify(new ChangeOrderNotification($data));
+            }
 
             return response()->json([
                 'message' => __('Order updated successfully'),
