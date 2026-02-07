@@ -72,13 +72,12 @@ class OrderController extends Controller
 
             // send notification to customer if order rejected
             if ($order->wasChanged('status') && $order->status == OrderStatus::REJECTED) {
-                $order->loadSum('services', 'duration');
-                $order->loadSum('services', 'price');
+                $order->load('services')
+                    ->loadSum('services', 'duration')
+                    ->loadSum('services', 'price');
 
                 $data = [
-                    'order' => $order,
-                    'duration' => $order->services_sum_duration,
-                    'total_price' => $order->services_sum_price,
+                    'order' => $order->toArray(),
                 ];
 
                 $order->notify(new ChangeOrderNotification($data));
@@ -111,8 +110,21 @@ class OrderController extends Controller
     public function destroy(Order $order): JsonResponse
     {
         try {
+            $orderStatus = $order->status;
+            $order->load('services')
+                ->loadSum('services', 'duration')
+                ->loadSum('services', 'price');
+
+            $data = [
+                'order' => $order->toArray(),
+            ];
+
             $order->services()->detach();
             $order->delete();
+
+            if (in_array($orderStatus, [OrderStatus::PENDING, OrderStatus::CONFIRMED])) {
+                $order->notify(new ChangeOrderNotification($data));
+            }
 
             return response()->json([
                 'message' => __('Order deleted successfully'),
