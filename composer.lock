@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e46335517a8e03addc79817e1c3dbb7",
+    "content-hash": "2c983410a6cd7527d83e8a8fe5c139cd",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -7295,6 +7295,84 @@
                 "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.1.1"
             },
             "time": "2025-04-30T06:54:44+00:00"
+        },
+        {
+            "name": "hexters/logat",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hexters/logat.git",
+                "reference": "6a03f96deb6333ce8d7fd317a1793aaa29a59a35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hexters/logat/zipball/6a03f96deb6333ce8d7fd317a1793aaa29a59a35",
+                "reference": "6a03f96deb6333ce8d7fd317a1793aaa29a59a35",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hexters\\Logat\\LogatServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hexters\\Logat\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Asep",
+                    "email": "hexters@gmail.com"
+                }
+            ],
+            "description": "Extract locale keys from source code in seconds.",
+            "keywords": [
+                "i18n",
+                "json translations",
+                "language",
+                "language extractor",
+                "laravel",
+                "laravel i18n",
+                "laravel translation",
+                "localization",
+                "logat",
+                "translation",
+                "translation keys"
+            ],
+            "support": {
+                "issues": "https://github.com/hexters/logat/issues",
+                "source": "https://github.com/hexters/logat/tree/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.buymeacoffee.com/hexters",
+                    "type": "buy_me_a_coffee"
+                },
+                {
+                    "url": "https://github.com/hexters",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/hexters",
+                    "type": "ko_fi"
+                },
+                {
+                    "url": "https://www.patreon.com/hexters",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2025-05-18T23:55:33+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",

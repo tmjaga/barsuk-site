@@ -12,6 +12,15 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/lang/{locale}', function ($locale) {
+
+    if (in_array($locale, ['en', 'bg', 'ru'])) {
+        Session::put('admin_locale', $locale);
+    }
+
+    return back();
+})->name('lang.switch');
+
 Route::middleware('guest:admin')->group(function () {
     // Route::get('register', [RegistrationController::class, 'create'])->name('register');
     // Route::post('register', [RegistrationController::class, 'store']);

@@ -3,11 +3,10 @@
         "laravel-boost": {
             "command": "C:\\Users\\anatoly\\.config\\herd\\bin\\php83\\php.exe",
             "args": [
-                "-d",
-                "variables_order=EGPCS",
-                "artisan",
+                "D:\\LaravelVueProjects\\barsuk-site\\artisan",
                 "boost:mcp"
-            ]        },
+            ]
+        },
         "herd": {
             "command": "C:\\Users\\anatoly\\.config\\herd\\bin\\php83\\php.exe",
             "args": [

@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\OrderStatus;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Console\Command;

@@ -21,11 +21,13 @@
 
                 <div class="-mx-2.5 flex flex-wrap gap-y-5">
                     <div class="w-full px-2.5">
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                            @lang('Album Title') <span class="text-red-500">*</span>
+                        <label class="mb-1.5 block text-sm font-bold text-gray-700">
+                            {{__('Album Title')}} <span class="text-red-500">*</span>
                         </label>
                         <input name="title" x-model="title" value="" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                        <p x-show="$v.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
+                        <p x-show="$v.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">
+                            {{__('Please enter a valid Title')}}
+                        </p>
                         @error('title')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -41,11 +43,11 @@
                     <div class="w-full px-2.5">
                         <div class="mt-1 flex items-center gap-3">
                             <button type="submit" class="bg-brand-500 hover:bg-brand-600 flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white">
-                                @lang('Save Changes')
+                                {{__('Save Changes')}}
                             </button>
 
                             <a href="{{ route('admin.albums.index') }}" class="flex items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800">
-                                @lang('Cancel')
+                                {{__('Cancel')}}
                             </a>
                         </div>
                     </div>

@@ -1,3 +1,8 @@
+@php
+    $currentLocale = app()->getLocale();
+    $languages = config('logat.languages');
+@endphp
+
 <header
     class="sticky top-0 flex w-full bg-white border-gray-200 z-99999 xl:border-b"
     x-data="{
@@ -7,8 +12,7 @@
         }
     }">
     <div class="flex flex-col items-center justify-between grow xl:flex-row xl:px-6">
-        <div
-            class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
+        <div class="flex items-center justify-between w-full gap-2 px-3 py-3 border-b border-gray-200 sm:gap-4 xl:justify-normal xl:border-b-0 xl:px-0 lg:py-4">
 
             <!-- Desktop Sidebar Toggle Button (visible on xl and up) -->
             <button
@@ -69,9 +73,36 @@
 
         <!-- Application Menu (mobile) and Right Side Actions (desktop) -->
         <div :class="isApplicationMenuOpen ? 'flex' : 'hidden'"
-            class="items-center justify-between w-full gap-4 px-5 py-4 xl:flex shadow-theme-md xl:justify-end xl:px-0 xl:shadow-none">
+            class="mr-3 items-center justify-between w-full gap-4 px-5 py-4 xl:flex shadow-theme-md xl:justify-end xl:px-0 xl:shadow-none">
             <!-- User Dropdown -->
             <x-header.user-dropdown />
+        </div>
+
+
+        <!-- language selector -->
+        <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" class="flex items-center gap-2 rounded-lg  bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50">
+                <span class="fi fi-{{ $languages[$currentLocale]['flag'] }}"></span>
+                <span>{{ strtoupper($currentLocale) }}</span>
+                <svg class="h-4 w-4 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+            </button>
+            <div
+                x-show="open"
+                @click.outside="open = false"
+                x-transition
+                class="absolute right-0 mt-2 w-40 rounded-lg border border-gray-200 bg-white shadow-lg"
+            >
+                @foreach($languages as $locale => $lang)
+                    <a href="{{ route('admin.lang.switch', $locale) }}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100
+                       {{ $currentLocale === $locale ? 'bg-gray-100 font-semibold' : '' }}"
+                    >
+                        <span class="fi fi-{{ $lang['flag'] }}"></span>
+                        <span>{{ $lang['label'] }}</span>
+                    </a>
+                @endforeach
+            </div>
         </div>
     </div>
 </header>

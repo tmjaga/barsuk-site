@@ -8,8 +8,9 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         using: function () {
-            Route::middleware('web')->group(base_path('routes/web.php'));
-            Route::middleware('web')
+            Route::middleware(['web', 'frontendLocale'])->group(base_path('routes/web.php'));
+
+            Route::middleware(['web', 'adminLocale'])->group(base_path('routes/admin.php'))
                 ->prefix('admin')
                 ->as('admin.')
                 ->group(base_path('routes/admin.php'));
@@ -19,7 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'frontendLocale' => \App\Http\Middleware\SetFrontendLocale::class,
+            'adminLocale' => \App\Http\Middleware\SetAdminLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (OrderException $e, Request $request) {

@@ -5,12 +5,12 @@
         <x-slot:breadcrumbs>
             <li>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600">
-                    @lang('Dashboard')
+                    {{__('Dashboard')}}
                 </a>
             </li>
             <li>
                 <span class="text-gray-700">
-                    @lang('Albums')
+                    {{__('Albums')}}
                 </span>
             </li>
         </x-slot:breadcrumbs>
@@ -35,7 +35,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                @lang('Add New')
+                {{__('Add New')}}
             </a>
 
             <div class="relative ml-auto">
@@ -56,22 +56,22 @@
                 <tr>
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center">
-                            <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Title')
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{ __('Title') }}
                             </p>
                         </div>
                     </th>
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center justify-center">
-                            <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Status')
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{__('Status')}}
                             </p>
                         </div>
                     </th>
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center justify-center">
-                            <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Action')
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{__('Action')}}
                             </p>
                         </div>
                     </th>
@@ -84,7 +84,7 @@
                 <template x-if="data.length === 0">
                     <tr>
                         <td class="text-muted text-center py-4" colspan="100%">
-                           @lang('No Albums found')
+                            {{__('No Albums found')}}
                         </td>
                     </tr>
                 </template>
@@ -114,13 +114,13 @@
                                     title="{{ __('Are you sure to Delete this Album?') }}"
                                     route-name="{{ route('admin.albums.destroy', ':id') }}">
                                     <!-- Trash icon -->
-                                    <button @click="itemId = album.id" data-tippy-content="@lang('Delete Album')" class="flex items-center justify-center text-gray-500 hover:text-error-500">
+                                    <button @click="itemId = album.id" data-tippy-content="{{__('Delete Album')}}" class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                         <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.54142 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" fill=""></path>
                                         </svg>
                                     </button>
                                 </x-common.confirm-delete>
-                                <a x-bind:href="`{{ route('admin.albums.media.index', ':id') }}`.replace(':id', album.id)" data-tippy-content="@lang('View Photos')" class="text-gray-500 hover:text-gray-800">
+                                <a x-bind:href="`{{ route('admin.albums.media.index', ':id') }}`.replace(':id', album.id)" data-tippy-content="{{__('View Photos')}}" class="text-gray-500 hover:text-gray-800">
                                     {!! \App\Helpers\MenuHelper::getIconSvg('camera') !!}
                                 </a>
                             </div>
