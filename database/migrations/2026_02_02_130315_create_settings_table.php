@@ -18,6 +18,10 @@ return new class extends Migration
             $table->smallInteger('break_minutes')->unsigned();
             $table->smallInteger('slot_step_minutes')->unsigned();
             $table->string('phone', 20);
+            $table->string('email');
+            $table->string('fb_link')->nullable();
+            $table->string('inst_link')->nullable();
+            $table->string('address', 255)->nullable();
             $table->timestamps();
         });
     }

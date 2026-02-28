@@ -20,6 +20,7 @@ class SettingSeeder extends Seeder
                 'break_minutes' => 30,
                 'slot_step_minutes' => 60,
                 'phone' => fake()->numerify('############'),
+                'email' => fake()->email(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]

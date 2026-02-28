@@ -10,7 +10,7 @@ return Application::configure(basePath: dirname(__DIR__))
         using: function () {
             Route::middleware(['web', 'frontendLocale'])->group(base_path('routes/web.php'));
 
-            Route::middleware(['web', 'adminLocale'])->group(base_path('routes/admin.php'))
+            Route::middleware(['web', 'adminLocale'])
                 ->prefix('admin')
                 ->as('admin.')
                 ->group(base_path('routes/admin.php'));

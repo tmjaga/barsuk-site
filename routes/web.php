@@ -5,8 +5,9 @@ use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.home');
 })->name('home');
+
 
 Route::middleware('guest:admin')->group(function () {
     Route::get('admin/login', [LoginController::class, 'create'])->name('login');

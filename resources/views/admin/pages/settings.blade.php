@@ -22,18 +22,70 @@
                 <div class="-mx-2.5 flex flex-wrap gap-y-5">
                     <div class="w-full px-2.5">
                         <h4 class="border-b border-gray-200 pb-2 text-base font-medium text-gray-800">
-                            @lang('Main Settings')
+                            {{ __('Main Settings') }}
                         </h4>
                     </div>
-                    <div class="w-1/3 px-2.5">
+                    <div class="w-1/2 px-2.5">
                         <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                            @lang('Contact Phone') <span class="text-red-500">*</span>
+                            {{ __('Contact Phone') }} <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
                             <input name="phone" value="{{ old('phone', $settings->phone) }}" maxlength="20" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
                         </div>
 
                         @error('phone')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="w-1/2 px-2.5">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                            {{ __('Contact Email') }} <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input name="email" value="{{ old('email', $settings->email) }}" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        </div>
+
+                        @error('email')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="w-1/2 px-2.5">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                            {{ __('Facebook Link') }}
+                        </label>
+                        <div class="relative">
+                            <input name="fb_link" value="{{ old('fb_link', $settings->fb_link) }}" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        </div>
+
+                        @error('fb_link')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="w-1/2 px-2.5">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                            {{ __('Instagram Link') }}
+                        </label>
+                        <div class="relative">
+                            <input name="inst_link" value="{{ old('inst_link', $settings->inst_link) }}" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        </div>
+
+                        @error('inst_link')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="w-full px-2.5">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                            {{ __('Address') }}
+                        </label>
+                        <div class="relative">
+                            <input name="address" value="{{ old('address', $settings->address) }}" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 pl-4 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        </div>
+
+                        @error('address')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
