@@ -1,16 +1,16 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <x-common.page-breadcrumb pageTitle="{{__('Services')}}">
+    <x-common.page-breadcrumb pageTitle="{{ __('Reviews') }}">
         <x-slot:breadcrumbs>
             <li>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600">
-                    @lang('Services')
+                    {{ __('Reviews') }}
                 </a>
             </li>
             <li>
                 <span class="text-gray-700 ">
-                    @lang('Services')
+                    {{ __('Reviews') }}
                 </span>
             </li>
         </x-slot:breadcrumbs>
@@ -22,7 +22,7 @@
         </div>
     </template>
 
-    <div x-data="serviceModal()">
+    <div x-data="reviewModal()">
         <div x-data="listingpage()" class="overflow-hidden rounded-2xl border border-gray-200 bg-white">
             <!-- loader (spinner)-->
             <x-common.loader :show="'loading'" style="display: none;"/>
@@ -34,7 +34,7 @@
                          stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                     </svg>
-                    @lang('Add New')
+                    {{ __('Add New') }}
                 </a>
 
                 <!-- search input-->
@@ -50,32 +50,6 @@
                     <input x-model.debounce.500ms="search" type="text" placeholder="Search..."
                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-10 w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pr-4 pl-[42px] text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden xl:w-[300px]">
                 </div>
-
-                <!-- category select input-->
-                <div x-data="{ isOptionSelected: {{ $category ? 'true' : 'false' }} }"
-                     class="relative z-20 bg-transparent">
-                    <select x-model="filters.category" @change="$dispatch('reload-items');"
-                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
-                            :class="isOptionSelected &amp;&amp; 'text-gray-800'" @change="isOptionSelected = true">
-                        <option value="" class="text-gray-700">
-                            @lang('Select Category')
-                        </option>
-                        @foreach ($categories as $cat)
-                            <option
-                                value="{{ $cat->id }}"
-                                @selected(optional($category)->id === $cat->id)>
-                                {{ $cat->title }}
-                            </option>
-                        @endforeach
-                    </select>
-                    <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
-                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                              stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                </span>
-                </div>
             </div>
 
             <div class="max-w-full overflow-x-auto custom-scrollbar">
@@ -85,42 +59,49 @@
                     <tr>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <p class="font-medium text-gray-500 text-theme-xs">
-                                    @lang('Title')
+                                <p class="font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Name') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-start justify-start">
-                                <p class="items-start font-medium text-gray-500 text-theme-xs">
-                                    @lang('Category')
+                                <p class="items-start font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Email') }}
+                                </p>
+                            </div>
+                        </th>
+                        <th class="px-6 py-3 whitespace-nowrap">
+                            <div class="flex items-center justify-start">
+                                <p class="items-center font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Review Text') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
-                                <p class="items-center font-medium text-gray-500 text-theme-xs">
-                                    @lang('Price') &euro;
+                                <p class="items-center font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Rating') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
-                                <p class="items-center font-medium text-gray-500 text-theme-xs">
-                                    @lang('Duration (min)')
+                                <p class="items-center font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Creation Date') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
-                                <p class="font-medium text-gray-500 text-theme-xs">
-                                    @lang('Status')
+                                <p class="font-bold text-gray-500 text-theme-xs">
+                                    {{ __('Status') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
-                                <p class="font-medium text-gray-500 text-theme-xs">
+                                <p class="font-bold text-gray-500 text-theme-xs">
                                     @lang('Action')
                                 </p>
                             </div>
@@ -134,45 +115,52 @@
                     <template x-if="data.length === 0">
                         <tr>
                             <td class="text-muted text-center py-4" colspan="100%">
-                                @lang('No Services found')
+                                {{ __('No Reviews found') }}
                             </td>
                         </tr>
                     </template>
 
-                    <template x-for="service in data" :key="service.id">
+                    <template x-for="review in data" :key="review.id">
                         <tr x-data="statusBadge">
                             <td class="px-6 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <p x-text="service.title" class="text-gray-700 text-theme-sm"></p>
-                                </div>
-                            </td>
-                            <td class="px-6 py-3 whitespace-nowrap text-start">
-                                <a href="#"
-                                   @click.prevent=" filters.category = service.category_id; $dispatch('reload-items')"
-                                   class="text-theme-sm text-blue-600 hover:underline">
-                                    <p x-text="service.category.title" class=""></p>
-                                </a>
-                            </td>
-                            <td class="px-6 py-3 whitespace-nowrap ">
-                                <div class="flex justify-center items-center">
-                                    <p x-text="service.price" class="text-gray-700 text-theme-sm "></p>
+                                    <p x-text="review.name" class="text-gray-700 text-theme-sm"></p>
                                 </div>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap ">
-                                <div class="flex justify-center items-center">
-                                    <p x-text="service.duration" class="text-gray-700 text-theme-sm "></p>
+                                <div class="flex items-center">
+                                    <p x-text="review.email" class="text-gray-700 text-theme-sm "></p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-3 whitespace-nowrap ">
+                                <div class="flex items-center">
+                                    <p x-text="review.short_comment" class="text-gray-700 text-theme-sm "></p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-3 whitespace-nowrap ">
+                                <div class="flex gap-1 justify-center items-center">
+                                    <template x-for="i in 5" :key="i">
+                                        <x-heroicon-s-star
+                                            x-bind:class="i <= review.rating ? 'w-4 h-4 text-yellow-400' : 'w-4 h-4 text-gray-300'"
+                                        />
+                                    </template>
+                                </div>
+                            </td>
+                            <td class="px-6 py-3 whitespace-nowrap ">
+                                <div class="flex items-center">
+                                    <p x-text="review.formatted_creation_date" class="text-gray-700 text-theme-sm "></p>
                                 </div>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap text-center">
-                            <span
-                                x-text="service.active !== undefined ? getBadge(service.active).text : getBadge().text"
-                                :class="service.active !== undefined ? getBadge(service.active).color : getBadge().color"
-                                class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
-                            </span>
+                                <span
+                                    x-text="review.status !== undefined ? getBadge(review.status).text : getBadge().text"
+                                    :class="review.status !== undefined ? getBadge(review.status).color : getBadge().color"
+                                    class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
+                                </span>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap items-center">
                                 <div class="flex w-full items-center justify-center gap-2">
-                                    <a href="#" @click.prevent="openEditModal(service.id)"
+                                    <a href="#" @click.prevent="openEditModal(review.id)"
                                        data-tippy-content="@lang('Edit Service')"
                                        class="text-gray-500 hover:text-gray-800">
                                         <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none"
@@ -183,17 +171,17 @@
                                         </svg>
                                     </a>
                                     <x-common.confirm-delete
-                                        title="{{ __('Are you sure to Delete this Service?') }}"
-                                        route-name="{{ route('admin.services.destroy', ':id') }}">
+                                        title="{{ __('Are you sure to Delete this Review?') }}"
+                                        route-name="{{ route('admin.reviews.destroy', ':id') }}">
                                         <!-- Trash icon -->
-                                        <button @click="itemId = service.id"
-                                                data-tippy-content="@lang('Delete Service')"
+                                        <button @click="itemId = review.id"
+                                                data-tippy-content="{{__('Delete Review') }}"
                                                 class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                             <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21"
                                                  fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                      d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.54142 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z"
-                                                      fill=""></path>
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.54142 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" fill="">
+
+                                                </path>
                                             </svg>
                                         </button>
                                     </x-common.confirm-delete>
@@ -245,6 +233,7 @@
                     </p>
                 </div>
             </div>
+
             <!-- Add/Edit category modal -->
             <div x-show="isModalOpen"
                  class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
@@ -271,98 +260,72 @@
                         <div class="flex flex-wrap gap-x-5 gap-y-5">
                             <div class="w-full mb-5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Title') <span class="text-red-500">*</span>
+                                    {{ __('Name') }} <span class="text-red-500">*</span>
                                 </label>
-                                <input name="title" value="" x-model="formData.title" type="text"
+                                <input name="name" value="" x-model="formData.name" type="text"
                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                <p x-show="$v.formData.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
+                                <p x-show="$v.formData.name.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">{{ __('Please enter a valid Name') }}</p>
                             </div>
 
                             <div class="w-full mb-5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Category') <span class="text-red-500">*</span>
+                                    {{ __('Email') }} <span class="text-red-500">*</span>
                                 </label>
-                                <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
-                                    <select x-model="formData.category_id" name="category_id"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
-                                            :class="isOptionSelected &amp;&amp; 'text-gray-800'"
-                                            @change="isOptionSelected = true">
-                                        <option value="" class="text-gray-700">
-                                            @lang('Select Category')
-                                        </option>
-                                        @foreach ($categories as $cat)
-                                            <option value="{{ $cat->id }}"> {{ $cat->title }} </option>
-                                        @endforeach
-                                    </select>
-                                    <p x-show="$v.formData.category_id.$invalid && $v.$touch"
-                                       class="text-red-500 text-sm mt-1">@lang('Please select a Category')</p>
-                                    <span
-                                        class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                                          stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </span>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-wrap gap-5">
-                            <!-- time field -->
-                            <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Duration') <span class="text-red-500">*</span>
-                                </label>
-                                <div class="flex items-center gap-2">
-                                    <!-- Hours -->
-                                    <input x-model="formData.hours" type="number" name="hours" placeholder="HH"
-                                           class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                    <span class="text-gray-500 font-semibold">:</span>
-                                    <!-- Minutes -->
-                                    <input x-model="formData.minutes" type="number" name="minutes" placeholder="MM"
-                                           class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                </div>
-                                <p x-show="$v.formData.hours.$invalid && $v.$touch"
-                                   class="text-red-500 text-sm mt-1">@lang('Only digits for Hours from 00 to 05 allowed')</p>
-                                <p x-show="$v.formData.minutes.$invalid && $v.$touch"
-                                   class="text-red-500 text-sm mt-1">@lang('Only digits for Minutes from 00 to 59 allowed')</p>
-                            </div>
-                            <div class="flex-1 min-w-[260px]">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Price') <span class="text-red-500">*</span>
-                                </label>
-                                <input name="price" value=""placeholder="0.00" x-model="formData.price" type="text"
-                                       class="w-full shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                <p x-show="$v.formData.price.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Price')</p>
-                            </div>
+                                <input name="Email" value="" x-model="formData.email" type="text"
+                                       class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                <p x-show="$v.formData.email.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">{{ __('Please enter a valid Email') }}</p>
                             </div>
 
                             <div class="w-full">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Description')
+                                    {{ __('Review Text') }} <span class="text-red-500">*</span>
                                 </label>
-                                <textarea name="description" x-model="formData.description"
-                                          placeholder="Enter a description..." type="text" rows="6"
-                                          class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"></textarea>
+                                <textarea name="comment" x-model="formData.comment" placeholder="Enter a review text..." type="text" rows="6"
+                                          class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+
+                                </textarea>
+                                <p x-show="$v.formData.comment.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">{{ __('Please enter a valid Review Text') }}</p>
+                            </div>
+
+                            <div class="w-full">
+                                <div class="w-20">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                    {{ __('Rating') }}
+                                </label>
+                                <div x-data="{ isOptionSelected: formData.rating ?? false }" class="relative z-20 bg-transparent">
+                                    <select x-model="formData.rating" name="rating"
+                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
+                                            :class="isOptionSelected &amp;&amp; 'text-gray-800'" @change="isOptionSelected = true">
+                                        <template x-for="i in 5" :key="i">
+                                            <option x-bind:value="i" x-text="i"></option>
+                                        </template>
+                                    </select>
+                                    <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
+                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+                            </div>
                             </div>
 
                             <div class="mt-6">
                                 <x-forms.checkbox-status
-                                    name="active"
+                                    name="status"
                                     label="{{ __('Active') }}"
-                                    id="service_id"
-                                    model="formData.active"
+                                    id="review_id"
+                                    model="formData.status"
                                 ></x-forms.checkbox-status>
                             </div>
 
                             <div class="flex items-center justify-end w-full gap-3 mt-6">
                                 <button type="submit"
                                         class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
-                                    @lang('Save Changes')
+                                    {{ __('Save Changes') }}
                                 </button>
                                 <button @click="isModalOpen = false" type="button"
                                         class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
-                                    @lang('Cancel')
+                                    {{ __('Cancel') }}
                                 </button>
                             </div>
                         </div>
@@ -380,72 +343,67 @@
     <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
-            Alpine.data('serviceModal', () => ({
+            Alpine.data('reviewModal', () => ({
                 isModalOpen: false,
                 isLoading: false,
                 formData: {
-                    title: '',
-                    category_id: '',
-                    description: '',
-                    hours: '00',
-                    minutes: '10',
-                    price: null,
-                    active: 1
+                    name: '',
+                    email: '',
+                    comment: '',
+                    rating: 1,
+                    status: 0
                 },
                 errors: {},
                 formAction: '',
                 formMethod: 'POST',
                 modalTitle: '',
                 routeTemplates: {
-                    edit: "{{ route('admin.services.edit', ':id') }}",
-                    update: "{{ route('admin.services.update', ':id') }}",
-                    store: "{{ route('admin.services.store') }}",
+                    edit: "{{ route('admin.reviews.edit', ':id') }}",
+                    update: "{{ route('admin.reviews.update', ':id') }}",
+                    store: "{{ route('admin.reviews.store') }}",
                 },
                 validations: {
-                    'formData.title': ['required', 'min:2'],
-                    'formData.category_id': ['required'],
-                    'formData.hours': ['required', 'regex:^(0[0-5])$'],
-                    'formData.minutes': ['required', 'regex:^(0[0-9]|[1-5][0-9])$'],
-                    'formData.price': ['required', 'regex:^\\d{1,8}(\.\\d{1,2})?$'],
+                    'formData.name': ['required', 'min:2'],
+                    'formData.email': ['required', 'email'],
+                    'formData.comment': ['required'],
                 },
 
                 init() {
                     this.$validation(this)
+
                 },
 
                 openCreateModal() {
                     this.resetForm();
                     this.formAction = this.routeTemplates.store;
                     this.formMethod = 'POST';
-                    this.modalTitle = '@lang("Add New Service")';
+                    this.modalTitle = '{{ __("Add New Review") }}';
 
-                    this.$dispatch('update-toggle', this.formData.active);
+                    this.$dispatch('update-toggle', this.formData.status);
 
                     this.isModalOpen = true;
                 },
 
-                async openEditModal(serviceId) {
+                async openEditModal(reviewId) {
                     this.isLoading = true;
 
                     try {
-                        const response = await axios.get(this.routeTemplates.edit.replace(':id', serviceId));
+                        const response = await axios.get(this.routeTemplates.edit.replace(':id', reviewId));
                         // TODO For test errors uncomment line below
                         // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
-                        const service = response.data;
-                        const [hours, minutes] = service.duration.split(':');
+                        const review = response.data;
 
-                        this.formData.title = service.title;
-                        this.formData.category_id = service.category_id;
-                        this.formData.hours = hours.padStart(2, '00');
-                        this.formData.minutes = minutes.padStart(2, '00');
-                        this.formData.active = service.active;
-                        this.formData.price = service.price;
-                        this.formData.description = service.description;
-                        this.formAction = this.routeTemplates.update.replace(':id', serviceId);
+
+                        this.formData.name = review.name;
+                        this.formData.email = review.email;
+                        this.formData.comment = review.comment;
+                        this.formData.rating = review.rating;
+                        this.formData.status = review.status;
+                        this.formAction = this.routeTemplates.update.replace(':id', reviewId);
                         this.formMethod = 'PUT';
-                        this.modalTitle = '@lang("Edit Service")';
+                        this.modalTitle = '{{ __("Edit Review") }}';
 
-                        this.$dispatch('update-toggle', this.formData.active);
+                        this.$dispatch('update-toggle', this.formData.status);
 
                         // reset validation
                         if (this.$v?.reset) {
@@ -460,13 +418,11 @@
 
                 resetForm() {
                     this.formData = {
-                        title: '',
-                        category_id: '',
-                        description: '',
-                        hours: '00',
-                        minutes: '10',
-                        price: null,
-                        active: 1
+                        name: '',
+                        email: '',
+                        comment: '',
+                        rating: 1,
+                        status: 0
                     };
 
                     this.errors = {};
@@ -480,14 +436,11 @@
                 async submitForm() {
                     this.errors = {};
 
-                    this.formData.title = this.formData.title.trim();
-                    this.formData.description = this.formData.description?.trim() ?? '';
+                    this.formData.name = this.formData.name.trim();
+                    this.formData.comment = this.formData.comment.trim();
                     this.$v.validate();
 
-                    if (this.$v.formData.title.$invalid ||
-                        this.$v.formData.hours.$invalid ||
-                        this.$v.formData.minutes.$invalid ||
-                        this.$v.formData.price.$invalid) {
+                    if (this.$v.formData.name.$invalid || this.$v.formData.comment.$invalid) {
                         return;
                     }
 

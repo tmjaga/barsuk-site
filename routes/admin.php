@@ -9,12 +9,13 @@ use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lang/{locale}', function ($locale) {
 
-    if (in_array($locale, ['en', 'bg', 'ru'])) {
+    if (in_array($locale, array_keys(config('logat.languages')))) {
         Session::put('admin_locale', $locale);
     }
 
@@ -98,5 +99,9 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/events', [CalendarController::class, 'events'])->name('events');
     });
 
+    // reviews routes
+    Route::resource('reviews', ReviewController::class);
+
+    // loguot
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
 });
