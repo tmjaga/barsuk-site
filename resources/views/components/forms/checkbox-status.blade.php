@@ -4,7 +4,7 @@
     'value' => 1,
     'checked' => true,
     'id' => 'toggle_' . uniqid(),
-    'model' => ''
+    'model' => null
 ])
 
 <div x-data="{ switcherToggle: {{ $checked ? 'true' : 'false' }} }"
@@ -22,7 +22,9 @@
                 class="sr-only"
                 :checked="switcherToggle"
                 @change="switcherToggle = !switcherToggle"
-                x-model="{{ $model }}"
+                @if($model)
+                    x-model="{{ $model }}"
+                @endif
             >
             <div
                 class="block h-6 w-11 rounded-full duration-300 ease-linear"

@@ -10,6 +10,8 @@ import deleteItem from "./delete_item.js";
 import { delegate } from 'tippy.js';
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
+import 'trix';
+import 'trix/dist/trix.css';
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;

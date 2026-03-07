@@ -102,7 +102,7 @@
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
                                 <p class="font-bold text-gray-500 text-theme-xs">
-                                    @lang('Action')
+                                    {{ __('Action') }}
                                 </p>
                             </div>
                         </th>
@@ -161,7 +161,7 @@
                             <td class="px-6 py-3 whitespace-nowrap items-center">
                                 <div class="flex w-full items-center justify-center gap-2">
                                     <a href="#" @click.prevent="openEditModal(review.id)"
-                                       data-tippy-content="@lang('Edit Service')"
+                                       data-tippy-content="{{ __('Edit Review') }}"
                                        class="text-gray-500 hover:text-gray-800">
                                         <svg class="fill-current" width="24" height="24" viewBox="0 0 21 21" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">

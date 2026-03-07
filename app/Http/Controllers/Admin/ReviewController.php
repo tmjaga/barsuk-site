@@ -54,7 +54,6 @@ class ReviewController extends Controller
         }
     }
 
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -95,6 +94,7 @@ class ReviewController extends Controller
         }
 
     }
+
     /**
      * Remove the specified resource from storage.
      */

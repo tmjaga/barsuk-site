@@ -27,3 +27,29 @@ if (! function_exists('minutes_to_hhmm')) {
         return sprintf('%02d:%02d', $hours, $mins);
     }
 }
+
+if (! function_exists('page')) {
+    function page(string $key)
+    {
+        [$slug, $sectionKey] = explode('.', $key);
+
+        $locale = app()->getLocale();
+
+        $page = Cache::remember("page_{$slug}", now()->addHours(12), function () use ($slug) {
+            return Page::where('slug', $slug)->with('sections.translations')->first();
+        }
+        );
+
+        if (! $page) {
+            return null;
+        }
+
+        $section = $page->sections->where('key', $sectionKey)->first();
+
+        if (! $section) {
+            return null;
+        }
+
+        return $section->translations->where('locale', $locale)->first()?->value;
+    }
+}

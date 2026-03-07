@@ -15,7 +15,15 @@ class SetFrontendLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = session('admin_locale', config('app.locale'));
+        $locale = session('frontend_locale');
+        $languages = array_keys(config('logat.languages'));
+
+        if (! $locale) {
+            $browserLocale = substr($request->server('HTTP_ACCEPT_LANGUAGE'), 0, 2);
+            $locale = in_array($browserLocale, $languages) ? $browserLocale : 'en';
+
+            session(['frontend_locale' => $locale]);
+        }
 
         app()->setLocale($locale);
 

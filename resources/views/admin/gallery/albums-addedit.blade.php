@@ -36,9 +36,9 @@
                     <div class="px-2.5">
                         <x-forms.checkbox-status
                             name="active"
-                            label="{{__('Active')}}"
+                            label="{{ __('Active') }}"
                             :checked="($album->active->value ?? 1) == 1"
-                        />
+                        ></x-forms.checkbox-status>
                     </div>
                     <div class="w-full px-2.5">
                         <div class="mt-1 flex items-center gap-3">
@@ -58,6 +58,7 @@
 @endsection
 
 @push('footer_scripts')
+    <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('album_validate', () => ({
