@@ -12,6 +12,7 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import 'trix';
 import 'trix/dist/trix.css';
+import './trix-extensions'
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;

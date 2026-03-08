@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -39,8 +40,6 @@ class PageController extends Controller
      */
     public function store(PageRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
         DB::transaction(function () use ($request) {
             $page = Page::create([
                 'title' => $request->title,
@@ -62,6 +61,8 @@ class PageController extends Controller
                 }
             }
         });
+
+        Cache::forget("page_{$request->slug}");
 
         return to_route('admin.pages.index')->with([
             'status' => __('Page has been Created'),
@@ -118,6 +119,8 @@ class PageController extends Controller
             $page->sections()->whereNotIn('key', $existingKeys)->delete();
         });
 
+        Cache::forget("page_{$page->slug}");
+
         return to_route('admin.pages.index')->with([
             'status' => __('Page has been Updated'),
             'variant' => 'success',
@@ -130,6 +133,8 @@ class PageController extends Controller
     public function destroy(Page $page): JsonResponse
     {
         try {
+            Cache::forget("page_{$page->slug}");
+
             $page->delete();
 
             return response()->json([

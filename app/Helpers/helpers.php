@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Page;
+
 if (! function_exists('settings')) {
     function settings()
     {
@@ -31,6 +33,7 @@ if (! function_exists('minutes_to_hhmm')) {
 if (! function_exists('page')) {
     function page(string $key)
     {
+        // key must be in <page_slug>.<section_name> format e.x. about.about_text_1
         [$slug, $sectionKey] = explode('.', $key);
 
         $locale = app()->getLocale();
