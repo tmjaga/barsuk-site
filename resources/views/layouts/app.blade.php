@@ -27,7 +27,7 @@
 
     <!--all css files -->
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="{{ asset('') }}assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <!-- <link rel="stylesheet" href="assets/css/app.min.css"> -->
     <!-- Fontawesome Icon -->
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
@@ -41,6 +41,39 @@
     <link rel="stylesheet" href="{{ asset('assets/css/slick.min.css') }}">
     <!-- Theme Custom CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
+    <style>
+        .closeButton {
+            width: 40px !important;
+            height: 40px !important;
+            line-height: 40px !important;
+            top: 10px !important;
+        }
+
+        .footer-top {
+            margin: 0 0 10px 0 !important;
+            padding: 40px 0 !important;
+        }
+
+        .social-style-custom {
+            padding: 10px 5px !important;
+        }
+
+        .social-style-custom a:hover {
+            background-color: #3d4952ff !important;
+            color: #fff !important;
+
+        }
+
+        .social-style-custom .dropdown-item.active,
+        .social-style-custom .dropdown-item:active {
+            background-color: #3d4952ff;
+            color: #fff;
+        }
+        .header-logo {
+            max-width: none !important;
+        }
+    </style>
 </head>
 
 
@@ -65,7 +98,7 @@
         <div class="vs-menu-area text-center">
             <button class="vs-menu-toggle"><i class="fal fa-times"></i></button>
             <div class="mobile-logo">
-                <a href="index.html"><img src="assets/img/logo.svg" alt="Wellnez"></a>
+                <a href="{{ route('home') }}"><img src="{{ asset('images/logo/glosse_logo.svg') }}" alt="Glosse"></a>
             </div>
             <div class="vs-mobile-menu">
                 <ul>
@@ -85,7 +118,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="about.html">About Us</a>
+                        <a href=" {{ route('about') }}">{{ __('About Us') }}</a>
                     </li>
                     <li class="menu-item-has-children">
                         <a href="match.html">Service</a>
@@ -127,9 +160,9 @@
     <div class="sidemenu-wrapper d-none d-lg-block  ">
         <div class="sidemenu-content">
             <button class="closeButton sideMenuCls"><i class="far fa-times"></i></button>
-            <div class="widget  ">
+            <div class="widget mt-3">
                 <div class="footer-logo">
-                    <img src="assets/img/logo.svg" alt="logo">
+                    <img src="{{ asset('images/logo/glosse_logo.svg') }}" alt="logo">
                 </div>
                 <div class="info-media1">
                     <div class="media-icon"><i class="fal fa-map-marker-alt"></i></div>
@@ -207,207 +240,17 @@
     -->
 
     <!-- header area -->
-    <header class="vs-header header-layout1">
-        <div class="header-top">
-            <div class="container">
-                <div class="row justify-content-center justify-content-md-between align-items-center">
-                    <div class="col-auto text-center py-2 py-md-0">
-                        <div class="header-links style-white">
-                            <ul>
-                                @if(settings()->address)
-                                <li class="d-none d-xxl-inline-block"><i class="far fa-map-marker-alt"></i>{{ settings()->address }}</li>
-                                @endif
-                                <li><i class="far fa-phone-alt"></i><a href="tel:+25632542598">{{ settings()->formatted_phone }}</a></li>
-                                <li><i class="far fa-envelope"></i><a href="mailto:{{ settings()->email }}">{{ settings()->email }}</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-auto d-none d-md-block">
-                        <div class="social-style1">
-                            @if(settings()->fb_link)
-                                <a href="{{ settings()->fb_link }}" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                            @endif
-                            @if(settings()->inst_link)
-                                <a href="{{ settings()->inst_link }}" target="_blank"><i class="fab fa-instagram"></i></a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="sticky-wrap">
-            <div class="sticky-active">
-                <div class="container">
-                    <div class="row justify-content-between align-items-center gx-60">
-                        <div class="col">
-                            <div class="header-logo">
-                                <a href="index.html"><img src="assets/img/logo.svg" alt="logo"></a>
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <nav class="main-menu menu-style1 d-none d-lg-block">
-                                <ul>
-                                    <li class="menu-item-has-children mega-menu-wrap">
-                                        <a href="index.html">Demos</a>
-                                        <ul class="menu-pages">
-                                            <li>
-                                                <a href="index.html">
-                                                    <img src="assets/img/pages/index.jpg" alt="image">
-                                                    Demo Style 1
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-2.html">
-                                                    <img src="assets/img/pages/index-2.jpg" alt="image">
-                                                    Demo Style 2
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-3.html">
-                                                    <img src="assets/img/pages/index-3.jpg" alt="image">
-                                                    Demo Style 3
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-4.html">
-                                                    <img src="assets/img/pages/index-4.jpg" alt="image">
-                                                    Demo Style 4
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-5.html">
-                                                    <img src="assets/img/pages/index-5.jpg" alt="image">
-                                                    Demo Style 5
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-6.html">
-                                                    <img src="assets/img/pages/index-6.jpg" alt="image">
-                                                    Demo Style 6
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-7.html">
-                                                    <img src="assets/img/pages/index-7.jpg" alt="image">
-                                                    Demo Style 7 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-8.html">
-                                                    <img src="assets/img/pages/index-8.jpg" alt="image">
-                                                    Demo Style 8 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-9.html">
-                                                    <img src="assets/img/pages/index-9.jpg" alt="image">
-                                                    Demo Style 9 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="index-10.html">
-                                                    <img src="assets/img/pages/index-10.jpg" alt="image">
-                                                    Demo Style 10 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <img src="assets/img/pages/index-11.jpg" alt="image">
-                                                    Demo Style 11 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)">
-                                                    <img src="assets/img/pages/index-12.jpg" alt="image">
-                                                    Demo Style 12 <span class="new-label">New</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="about.html">About Us</a>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="match.html">Service</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="service.html">Services</a></li>
-                                            <li><a href="service-details.html">Service Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children">
-                                        <a href="blog.html">Blog</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Blog One</a></li>
-                                            <li><a href="blog-2.html">Blog Two</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item-has-children mega-menu-wrap">
-                                        <a href="#">Pages</a>
-                                        <ul class="mega-menu">
-                                            <li><a href="shop.html">Pagelist 1</a>
-                                                <ul>
-                                                    <li><a href="about.html">About Us</a></li>
-                                                    <li><a href="blog.html">Blog One</a></li>
-                                                    <li><a href="blog-2.html">Blog Two</a></li>
-                                                    <li><a href="blog-details.html">Blog Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Pagelist 2</a>
-                                                <ul>
-                                                    <li><a href="appointment.html">Appointment</a></li>
-                                                    <li><a href="price-plan.html">Price Plan</a></li>
-                                                    <li><a href="service.html">Services</a></li>
-                                                    <li><a href="service-details.html">Service Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Pagelist 3</a>
-                                                <ul>
-                                                    <li><a href="gallery.html">Portfolio</a></li>
-                                                    <li><a href="gallery-details.html">Portfolio Details</a></li>
-                                                    <li><a href="team.html">Team</a></li>
-                                                    <li><a href="team-details.html">Team Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Pagelist 4</a>
-                                                <ul>
-                                                    <li><a href="shop.html">Shop</a></li>
-                                                    <li><a href="shop-details.html">Shop Details</a></li>
-                                                    <li><a href="contact.html">Contact Us</a></li>
-                                                    <li><a href="error.html">Error Page</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="contact.html">Contact Us</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="col-auto">
-                            <div class="header-icons">
-                                <!--
-                                <button class="searchBoxTggler"><i class="far fa-search"></i></button>
-                                -->
-                                <a href="contact.html" class="vs-btn style2 d-none d-xl-inline-block rounded-4">Book</a>
+    @include('layouts.header')
 
-                                <button class="bar-btn sideMenuToggler d-none d-xl-inline-block">
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                    <span class="bar"></span>
-                                </button>
-                                <button class="vs-menu-toggle d-inline-block d-lg-none" type="button"><i class="fal fa-bars"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- main content -->
+    @yield('content')
+    <!-- end main content -->
 
+    <!-- footer-->
+    @include('layouts.footer')
 
-
+    <!-- Scroll To Top -->
+    <a href="#" class="scrollToTop scroll-btn"><i class="far fa-arrow-up"></i></a>
 
     <!-- all js files -->
     <!-- Jquery -->
@@ -421,6 +264,7 @@
 
     <!-- Bootstrap -->
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <!-- Parallax Scroll -->
     <script src="{{ asset('assets/js/universal-parallax.min.js') }}"></script>
     <!-- Wow.js Animation -->

@@ -79,6 +79,7 @@ class PageController extends Controller
 
         $existingSections = $page->sections->map(function ($section) {
             return [
+                'id' => $section->id,
                 'title' => $section->key,
                 'content' => $section->translations->mapWithKeys(function ($t) {
                     return [$t->locale => $t->value];

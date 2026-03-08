@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ServiceController;
 use Illuminate\Support\Facades\Route;
@@ -98,6 +99,9 @@ Route::middleware(['auth:admin'])->group(function () {
         Route::get('/', [CalendarController::class, 'index'])->name('index');
         Route::get('/events', [CalendarController::class, 'events'])->name('events');
     });
+
+    // pages routes
+    Route::resource('pages', PageController::class);
 
     // reviews routes
     Route::resource('reviews', ReviewController::class);

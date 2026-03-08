@@ -15,6 +15,7 @@
                     <label class="mb-1.5 block text-sm font-bold text-gray-700">
                         {{ __('Section Name') }} <span class="text-red-500">*</span>
                     </label>
+                    <input type="hidden" :name="`sections[${index}][id]`" :value="section.id">
                     <input type="text" :name="`sections[${index}][title]`" x-model="section.title" @input="section.title = section.title.replace(/[^A-Za-z0-9_-]/g,'')"
                            class="h-11 w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm">
                     <template x-if="validationErrors?.[`sections.${index}.title`] && validationErrors[`sections.${index}.title`].length">
@@ -74,11 +75,12 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('sectionsBuilder', (existing = [],  errors = {}, languages = []) => ({
             sections: existing.length ? existing.map((s, index) => ({
-                    uid: Date.now() + Math.random(),
-                    title: s.title || '',
-                    content: s.content || {},
-                    activeTab: languages.find(lang => errors[`sections.${index}.content.${lang}`]) || languages[0]
-                })) : [{ uid: Date.now(), title: '', content: {}, activeTab: languages[0] }],
+                uid: Date.now() + Math.random(),
+                id: s.id ?? null,
+                title: s.title || '',
+                content: s.content || {},
+                activeTab: languages.find(lang => errors[`sections.${index}.content.${lang}`]) || languages[0]
+                })) : [{ uid: Date.now(), id:null, title: '', content: {}, activeTab: languages[0] }],
             validationErrors: errors,
             languages: languages,
 

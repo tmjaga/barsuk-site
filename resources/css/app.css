@@ -876,3 +876,14 @@ pre[class*='language-'] {
         fill: none !important;
     }
 }
+
+#clear-formatting {
+    margin-left: 6px !important;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    vertical-align: middle;
+
+}
+
+
