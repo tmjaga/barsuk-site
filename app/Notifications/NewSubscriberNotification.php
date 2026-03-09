@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Subscriber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,7 +12,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(protected array $data) {}
+    public function __construct(protected Subscriber $subscriber) {}
 
     public function via($notifiable): array
     {
@@ -23,7 +24,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('New Sibscriber')
             ->view('emails.new-subscriber', [
-                'subscriber' => $this->data['subscriber'],
+                'subscriber' => $this->subscriber,
             ]);
     }
 

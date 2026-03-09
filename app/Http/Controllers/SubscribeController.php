@@ -25,12 +25,8 @@ class SubscribeController extends Controller
         ]);
 
         // send notification to admin
-        $data = [
-            'subscriber' => $subscriber,
-        ];
-
         $admin = Admin::find(1);
-        Notification::send($admin, new NewSubscriberNotification($data));
+        Notification::send($admin, new NewSubscriberNotification($subscriber));
 
         return response()->json([
             'message' => __('You have successfully subscribed!'),
