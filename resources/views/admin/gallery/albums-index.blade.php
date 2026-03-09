@@ -106,7 +106,7 @@
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
                                 <a x-bind:href="`{{ route('admin.albums.edit', ':id') }}`.replace(':id', album.id)" data-tippy-content="Edit Album" class="text-gray-500 hover:text-gray-800">
-                                    <x-heroicon-o-pencil class="stroke-2" width="22" height="22" />
+                                    <x-heroicon-o-pencil-square class="stroke-2" width="24" height="24" />
                                 </a>
                                 <x-common.confirm-delete
                                     title="{{ __('Are you sure to Delete this Album?') }}"

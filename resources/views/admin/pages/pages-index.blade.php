@@ -100,7 +100,7 @@
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
                                 <a x-bind:href="`{{ route('admin.pages.edit', ':id') }}`.replace(':id', page.id)" data-tippy-content="{{ __('Edit Page') }}" class="text-gray-500 hover:text-gray-800">
-                                    <x-heroicon-o-pencil class="stroke-2" width="22" height="22" />
+                                    <x-heroicon-o-pencil-square class="stroke-2" width="24" height="24" />
                                 </a>
                                 <x-common.confirm-delete
                                     title="{{ __('Are you sure to Delete this Page?') }}"
