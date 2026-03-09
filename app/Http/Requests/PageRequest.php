@@ -15,18 +15,18 @@ class PageRequest extends FormRequest
 
     public function rules(): array
     {
-        $pageId = $this->route('page')?->id ?? $this->route('page');
+        $page = $this->route('page');
 
         $rules = [
             'title' => ['required', 'string'],
             'sections' => ['required', 'array', 'min:1'],
-            'sections.*.title' => ['required', 'regex:/^[A-Za-z0-9\-_]+$/', 'distinct', new UniquePageSectionKey($pageId, $this->sections), ],
+            'sections.*.title' => ['required', 'regex:/^[A-Za-z0-9\-_]+$/', 'distinct', new UniquePageSectionKey($page, $this->sections)],
             'sections.*.content' => ['required', 'array'],
             'sections.*.content.*' => ['required', 'string'],
         ];
 
         // add rule for Add operation only
-        if (! $pageId) {
+        if (! $page) {
             $rules['slug'] = ['required', 'regex:/^[A-Za-z0-9_-]+$/'];
         }
 
@@ -43,7 +43,7 @@ class PageRequest extends FormRequest
             'sections.*.title.required' => __('The title for each section is required.'),
             'sections.*.title.regex' => __('Section title may only contain letters, numbers, hyphens, and underscores.'),
             'sections.*.title.distinct' => __('Sections Names must be unique for this page.'),
-            //'sections.*.title.unique' => __('Sections Names must be unique for this page.'),
+            // 'sections.*.title.unique' => __('Sections Names must be unique for this page.'),
             'sections.*.content.required' => __('Each section must have translations.'),
             'sections.*.content.*.string' => __('Each translation must be a string.'),
             'sections.*.content.*.required' => __('Each section must have translations for all languages.'),

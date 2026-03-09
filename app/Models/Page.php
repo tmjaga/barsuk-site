@@ -11,6 +11,6 @@ class Page extends Model
 
     public function sections(): HasMany
     {
-        return $this->hasMany(PageSection::class);
+        return $this->hasMany(PageSection::class)->orderBy('created_at');
     }
 }

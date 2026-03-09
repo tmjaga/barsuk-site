@@ -2,30 +2,23 @@
 
 namespace App\Rules;
 
+use App\Models\Page;
+use App\Models\PageSection;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Facades\DB;
 
 class UniquePageSectionKey implements ValidationRule
 {
-    protected $pageId;
-
-    protected $sections;
-
-    public function __construct($pageId, $sections)
-    {
-        $this->pageId = $pageId;
-        $this->sections = $sections;
-    }
+    public function __construct(protected ?Page $page, protected array $sections) {}
 
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $index = explode('.', $attribute)[1];
         $sectionId = $this->sections[$index]['id'] ?? null;
 
-        $exists = DB::table('page_sections')
-            ->where('page_id', $this->pageId)
-            ->where('key', $value)
+        $query = $this->page ? $this->page->sections() : PageSection::query()->where('page_id', request('page_id'));
+
+        $exists = $query->where('key', $value)
             ->when($sectionId, fn ($q) => $q->where('id', '!=', $sectionId))
             ->exists();
 

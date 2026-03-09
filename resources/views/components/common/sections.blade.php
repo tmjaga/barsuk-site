@@ -8,9 +8,8 @@
 
     <template x-for="(section, index) in sections" :key="section.uid">
         <div class="rounded-xl border border-gray-200 p-6">
-
             {{-- Section header --}}
-            <div class="flex justify-between items-center mb-5">
+            <div :id="'section-' + (section.id ?? section.uid)" class="flex justify-between items-center mb-5 scroll-mt-24">
                 <div class="w-full max-w-sm">
                     <label class="mb-1.5 block text-sm font-bold text-gray-700">
                         {{ __('Section Name') }} <span class="text-red-500">*</span>
@@ -83,6 +82,19 @@
                 })) : [{ uid: Date.now(), id:null, title: '', content: {}, activeTab: languages[0] }],
             validationErrors: errors,
             languages: languages,
+
+            init() {
+                this.$nextTick(() => {
+                    this.scrollToHash();
+                });
+            },
+
+            scrollToHash() {
+                const hash = window.location.hash;
+                if (!hash) return;
+                const el = document.querySelector(hash);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            },
 
             getTabError(index, lang) {
                 return this.validationErrors[`sections.${index}.content.${lang}`]?.[0] ?? null;

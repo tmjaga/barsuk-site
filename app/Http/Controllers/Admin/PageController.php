@@ -18,7 +18,9 @@ class PageController extends Controller
 {
     public function index(Request $request): JsonResponse|View
     {
-        $pages = Page::query()->latest()->paginate(config('app.items_per_page'));
+        $pages = Page::with('sections')
+            ->latest()
+            ->paginate(config('app.items_per_page'));
 
         if ($request->ajax()) {
             return response()->json($pages);
