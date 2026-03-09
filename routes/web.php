@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SubscribeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -41,3 +42,9 @@ Route::get('/about', [FrontendController::class, 'aboutUs'])->name('about');
 // reviews
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttle:5,10')->name('reviews.store');
+
+// subscribe and unsubscribe
+Route::post('/subscribe', [SubscribeController::class, 'subscribe'])
+    ->middleware('throttle:10,10')
+    ->name('subscribe');
+Route::post('/unsubscribe/{token}', [SubscribeController::class, 'unsubscribe'])->middleware('throttle:5,10')->name('unsubscribe');

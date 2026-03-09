@@ -9,6 +9,7 @@
     <meta name="description" content="Glosse - Nail Studio">
     <meta name="keywords" content="beauty, beauty salon, beauty shop, beauty spa, cosmetics, hairdresser, health, lifestyle, massage, salon, spa, spa booking, wellness, wellness template, yoga">
     <meta name="robots" content="INDEX,FOLLOW">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Mobile Specific Metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -249,6 +250,8 @@
     <!-- footer-->
     @include('layouts.footer')
 
+    @stack('footer_css')
+
     <!-- Scroll To Top -->
     <a href="#" class="scrollToTop scroll-btn"><i class="far fa-arrow-up"></i></a>
 
@@ -278,5 +281,7 @@
     <script src="{{ asset('assets/js/isotope.pkgd.min.js') }}"></script>
     <!-- Main Js File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    @stack('footer_scripts')
 </body>
 </html>

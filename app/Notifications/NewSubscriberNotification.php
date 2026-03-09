@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewOrderNotification extends Notification implements ShouldQueue
+class NewSubscriberNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -21,11 +21,9 @@ class NewOrderNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('New Booking')
-            ->view('emails.new-booking', [
-                'order' => $this->data['order'],
-                'duration' => $this->data['duration'],
-                'total_price' => $this->data['total_price'],
+            ->subject('New Sibscriber')
+            ->view('emails.new-subscriber', [
+                'subscriber' => $this->data['subscriber'],
             ]);
     }
 
