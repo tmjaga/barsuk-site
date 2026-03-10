@@ -110,6 +110,7 @@ Route::middleware(['auth:admin'])->group(function () {
     // subscribers routes
     Route::get('subscribers', [SubscriberController::class, 'index'])->name('subscribers.index');
     Route::post('/subscribers/delete-selected', [SubscriberController::class, 'deleteSelected'])->name('subscribers.delete-selected');
+    Route::put('/subscribers/{subscriber}/change-status', [SubscriberController::class, 'changeStatus'])->name('subscribers.change-status');
 
     // loguot
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');

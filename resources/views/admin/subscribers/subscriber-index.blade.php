@@ -52,10 +52,10 @@
                     <thead class="border-gray-100 border-y bg-gray-50">
                     <tr>
                         <th class="w-[1%] px-5 py-3 whitespace-nowrap">
-                            <button data-tippy-content="{{ __('Select All') }}" @click="handleSelectAll()" class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-1 py-1 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300" type="button">
+                            <button data-tippy-content="{{ __('Select All') }}" @click="handleSelectAll()" class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-1 py-1 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50" type="button">
                                 <x-heroicon-o-check width="14" height="14" />
                             </button>
-                            <button data-tippy-content="{{ __('Unselect All') }}" @click="handleUnselectAll()" class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-1 py-1 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03] dark:hover:text-gray-300" type="button">
+                            <button data-tippy-content="{{ __('Unselect All') }}" @click="handleUnselectAll()" class="inline-flex items-center justify-center font-medium gap-2 rounded-lg transition px-1 py-1 text-sm bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50" type="button">
                                 <x-heroicon-o-minus width="14" height="14" />
                             </button>
                         </th>
@@ -113,11 +113,13 @@
                                 </div>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap text-center">
-                                <span
-                                    x-text="subscriber.is_verified !== undefined ? getBadge(subscriber.is_verified).text : getBadge().text"
-                                    :class="subscriber.is_verified !== undefined ? getBadge(subscriber.is_verified).color : getBadge().color"
-                                    class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
-                                </span>
+                                <div x-data="changeStatus(currentPage)">
+                                    <span data-tippy-content="{{ __('Change Verified') }}" @click="setStatus(subscriber.id, subscriber.is_verified)"
+                                        x-text="subscriber.is_verified !== undefined ? getBadge(subscriber.is_verified).text : getBadge().text"
+                                        :class="subscriber.is_verified !== undefined ? getBadge(subscriber.is_verified).color : getBadge().color"
+                                        class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium cursor-pointer">
+                                    </span>
+                                </div>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap text-center w-auto">
                                 <div class="flex justify-center">
@@ -139,4 +141,29 @@
 
 @push('footer_scripts')
     <script src="{{ asset('js/status-badge.js') }}"></script>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('changeStatus', (currentPage = 1) => ({
+                currentPage: currentPage,
+
+                async setStatus(id, currentStatus) {
+                    const newStatus = currentStatus == 1 ? 0 : 1;
+                    console.log(this.currentPage);
+
+                    try {
+                        const response = await axios.put('{{ route('admin.subscribers.change-status', ':id') }}'.replace(':id', id), {
+                            'is_verified': newStatus,
+                        });
+
+                        Alpine.store('alert').success(response?.data?.message);
+
+                        this.$dispatch('reload-items', { page: this.currentPage });
+                    } catch (error) {
+                        this.isModalOpen = false;
+                        Alpine.store('alert').error(error?.response?.data?.message);
+                    }
+                }
+            }));
+        });
+    </script>
 @endpush

@@ -24,7 +24,8 @@ export default function (initialData = {}) {
             });
 
             window.addEventListener('reload-items', () => {
-                this.goToPage();
+                const page = event.detail?.page ?? 1;
+                this.goToPage(page);
             });
         },
 

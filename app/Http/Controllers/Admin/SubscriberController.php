@@ -8,6 +8,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Throwable;
 
 class SubscriberController extends Controller
 {
@@ -49,6 +50,29 @@ class SubscriberController extends Controller
 
             return response()->json([
                 'message' => __('Error while deleting Subscribers'),
+            ], 500);
+        }
+    }
+    public function changeStatus(Subscriber $subscriber, Request $request): JsonResponse
+    {
+        try {
+            $validated = $request->validate([
+                'is_verified' => 'required|integer|in:0,1',
+            ]);
+
+            $subscriber->update($validated);
+
+            return response()->json([
+                'message' => __('Subscriber updated successfully'),
+            ]);
+
+        } catch (Throwable $e) {
+            Log::error('Error updating Subscriber', [
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'message' => __('Error while update Subscriber'),
             ], 500);
         }
     }
