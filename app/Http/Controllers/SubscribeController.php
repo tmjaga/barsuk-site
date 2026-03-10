@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Subscriber;
-use App\Notifications\NewOrderNotification;
 use App\Notifications\NewSubscriberNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +19,7 @@ class SubscribeController extends Controller
 
         $subscriber = Subscriber::create([
             'email' => $request->email,
-            'is_verified' => true,
+            'is_verified' => 0,
             'verified_at' => now(),
         ]);
 

@@ -12,8 +12,9 @@ class Subscriber extends Model
 
     protected $fillable = ['email', 'token', 'is_verified', 'verified_at'];
 
+    protected $appends = ['formatted_creation_date'];
+
     protected $casts = [
-        'is_verified' => 'boolean',
         'verified_at' => 'datetime',
     ];
 
@@ -29,5 +30,10 @@ class Subscriber extends Model
     public function routeNotificationForMail($notification)
     {
         return $this->email;
+    }
+
+    public function getFormattedCreationDateAttribute(): string
+    {
+        return $this->created_at ? $this->created_at->format('d.m.Y H:i') : '';
     }
 }

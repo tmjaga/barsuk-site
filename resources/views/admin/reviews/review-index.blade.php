@@ -1,16 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <x-common.page-breadcrumb pageTitle="{{ __('Reviews') }}">
+    @php
+        $title = __('Reviews');
+    @endphp
+    <x-common.page-breadcrumb pageTitle="{{ $title }}">
         <x-slot:breadcrumbs>
             <li>
-                <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600">
-                    {{ __('Reviews') }}
-                </a>
-            </li>
-            <li>
                 <span class="text-gray-700 ">
-                    {{ __('Reviews') }}
+                    {{ $title }}
                 </span>
             </li>
         </x-slot:breadcrumbs>
@@ -183,44 +181,7 @@
             </div>
 
             <!-- Pagination -->
-            <div x-show="totalPages > 1" class="border-t border-gray-100 py-4 pl-[18px] pr-4">
-                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between">
-                    <div class="flex items-center justify-center gap-0.5 pb-4 xl:justify-normal xl:pt-0">
-                        <button @click="prevPage()"
-                                class="mr-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50"
-                                :disabled="currentPage === 1" disabled="disabled">
-                            Previous
-                        </button>
-                        <template x-if="currentPage &gt; 3">
-                            <span
-                                class="flex h-10 w-10 items-center justify-center rounded-lg hover:bg-blue-500/[0.08] hover:text-brand-500">...</span>
-                        </template>
-
-                        <template x-for="page in pagesAroundCurrent" :key="page">
-                            <button @click="goToPage(page)"
-                                    :class="currentPage === page ? 'bg-blue-500/[0.08] text-brand-500' : 'text-gray-700'"
-                                    class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium hover:bg-blue-500/[0.08] hover:text-brand-500">
-                                <span x-text="page"></span>
-                            </button>
-                        </template>
-                        <template x-if="currentPage &lt; totalPages - 2">
-                            <span
-                                class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium text-gray-700 hover:bg-blue-500/[0.08] hover:text-brand-500">...</span>
-                        </template>
-                        <button @click="nextPage()"
-                                class="ml-2.5 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50"
-                                :disabled="currentPage === totalPages">
-                            Next
-                        </button>
-                    </div>
-
-                    <p class="border-t border-gray-100 pt-3 text-center text-sm font-medium text-gray-500 xl:border-t-0 xl:pt-0 xl:text-left">
-                        Showing <span x-text="startEntry">1</span> to
-                        <span x-text="endEntry">10</span> of
-                        <span x-text="totalEntries">30</span> entries
-                    </p>
-                </div>
-            </div>
+            <x-common.pagination />
 
             <!-- Add/Edit category modal -->
             <div x-show="isModalOpen"
@@ -326,8 +287,6 @@
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ asset('js/status-badge.js') }}"></script>
-
     <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {

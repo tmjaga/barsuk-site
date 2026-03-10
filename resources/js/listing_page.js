@@ -11,6 +11,8 @@ export default function (initialData = {}) {
         search: '',
         filters: {},
         loading: false,
+        selectedRows: [],
+        selectAll: false,
 
         init() {
             this.fetchPage(this.currentPage);
@@ -24,6 +26,53 @@ export default function (initialData = {}) {
             window.addEventListener('reload-items', () => {
                 this.goToPage();
             });
+        },
+
+        handleSelectAll() {
+            const pageIds = this.data.map(row => row.id)
+            const newIds = pageIds.filter(id => !this.selectedRows.includes(id))
+
+            this.selectedRows = [...this.selectedRows, ...newIds]
+        },
+
+        handleUnselectAll() {
+            const pageIds = this.data.map(row => row.id)
+
+            this.selectedRows = this.selectedRows.filter(
+                id => !pageIds.includes(id)
+            );
+        },
+
+        async deleteSelected(deleteUrl) {
+            if (!this.selectedRows.length) return alert('No rows selected')
+
+            if (!confirm('Delete selected items?')) return
+
+            try {
+                const response = await axios.post(deleteUrl, {
+                    ids: this.selectedRows
+                });
+
+                Alpine.store('alert').success(response?.data?.message);
+
+
+
+            } catch (error) {
+                Alpine.store('alert').error(error?.response?.data?.message);
+            } finally {
+                this.selectedRows = [];
+                this.selectAll = false;
+                this.goToPage();
+            }
+        },
+
+        handleRowSelect(id) {
+            if (this.selectedRows.includes(id)) {
+                this.selectedRows = this.selectedRows.filter(rowId => rowId !== id)
+            } else {
+                this.selectedRows.push(id)
+            }
+
         },
 
         updatePagesAroundCurrent() {

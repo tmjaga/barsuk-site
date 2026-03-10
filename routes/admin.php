@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lang/{locale}', function ($locale) {
@@ -105,6 +106,10 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // reviews routes
     Route::resource('reviews', ReviewController::class);
+
+    // subscribers routes
+    Route::get('subscribers', [SubscriberController::class, 'index'])->name('subscribers.index');
+    Route::post('/subscribers/delete-selected', [SubscriberController::class, 'deleteSelected'])->name('subscribers.delete-selected');
 
     // loguot
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
