@@ -69,5 +69,7 @@
     "Action": "Action",
     "No Albums found": "No Albums found",
     "Delete Album": "Delete Album",
-    "View Photos": "View Photos"
+    "View Photos": "View Photos",
+    "Get in": "Get in :target",
+    "Touch": "Touch"
 }
