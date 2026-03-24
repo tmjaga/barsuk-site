@@ -20,8 +20,6 @@
                 @isset($page)
                     @method('PUT')
                 @endisset
-
-
                 <div class="w-ful max-w-sm mb-4">
                     <label class="mb-1.5 block text-sm font-bold text-gray-700">
                         {{__('Page Title')}} <span class="text-red-500">*</span>
@@ -57,7 +55,6 @@
                     :existing-sections="$existingSections ?? []"
                     :errors="$errors"
                 />
-
                 <hr class="my-6 border-gray-300">
 
                 <div class="mt-1 flex items-center gap-3">

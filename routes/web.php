@@ -32,19 +32,21 @@ Route::prefix('booking')->as('booking.')->group(function () {
 });
 
 // TODO Delete this route
-Route::get('/mail', [BookingController::class, 'mail']);
+Route::get('/mail', [\App\Http\Controllers\Admin\MailingController::class, 'mail']);
 
 // pages routes
 
 // about us
 Route::get('/about', [FrontendController::class, 'aboutUs'])->name('about');
 
+// contact
+Route::get('/contact', [FrontendController::class, 'contactUs'])->name('contact');
+Route::post('/contact', [FrontendController::class, 'contactMessage'])->middleware('throttle:10,10')->name('contact-message');
+
 // reviews
 Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttle:5,10')->name('reviews.store');
 
 // subscribe and unsubscribe
-Route::post('/subscribe', [SubscribeController::class, 'subscribe'])
-    ->middleware('throttle:10,10')
-    ->name('subscribe');
-Route::post('/unsubscribe/{token}', [SubscribeController::class, 'unsubscribe'])->middleware('throttle:5,10')->name('unsubscribe');
+Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->middleware('throttle:10,10')->name('subscribe');
+Route::get('/unsubscribe/{token}', [SubscribeController::class, 'unsubscribe'])->middleware('throttle:5,10')->name('unsubscribe');

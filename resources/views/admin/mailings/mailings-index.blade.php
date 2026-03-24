@@ -2,7 +2,7 @@
 
 @section('content')
     @php
-        $title = __('Albums');
+        $title = __('Mailings');
     @endphp
     <x-common.page-breadcrumb pageTitle="{{ $title }}">
         <x-slot:breadcrumbs>
@@ -29,7 +29,7 @@
         <x-common.loader :show="'loading'" style="display: none;" />
         <!-- search form-->
         <div class="flex flex-col gap-3 sm:flex-row items-center p-3">
-            <a href="{{ route('admin.albums.create') }}" class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+            <a href="{{ route('admin.mailings.create') }}" class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -55,7 +55,35 @@
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center">
                             <p class="font-bold text-gray-500 text-theme-xs">
-                                {{ __('Title') }}
+                                {{ __('Subject') }}
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-6 py-3 whitespace-nowrap">
+                        <div class="flex items-center justify-center">
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{ __('Started At') }}
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-6 py-3 whitespace-nowrap">
+                        <div class="flex items-center justify-center">
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{ __('Total') }}
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-6 py-3 whitespace-nowrap">
+                        <div class="flex items-center justify-center">
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{ __('Sent') }}
+                            </p>
+                        </div>
+                    </th>
+                    <th class="px-6 py-3 whitespace-nowrap">
+                        <div class="flex items-center justify-center">
+                            <p class="font-bold text-gray-500 text-theme-xs">
+                                {{ __('Failed') }}
                             </p>
                         </div>
                     </th>
@@ -82,42 +110,67 @@
                 <template x-if="data.length === 0">
                     <tr>
                         <td class="text-muted text-center py-4" colspan="100%">
-                            {{ __('No Albums found') }}
+                            {{ __('No Mailings found') }}
                         </td>
                     </tr>
                 </template>
 
-                <template x-for="album in data" :key="album.id">
-                    <tr x-data="statusBadge">
+                <template x-for="mailing in data" :key="mailing.id">
+                    <tr x-data="mailingStatusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <p x-text="album.title" class="text-gray-700 text-theme-sm"></p>
+                                <p x-text="mailing.subject" class="text-gray-700 text-theme-sm"></p>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <p x-text="mailing.formatted_starting_date" class="text-gray-700 text-theme-sm"></p>
+                            </div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <p x-text="mailing.total" class="text-gray-700 text-theme-sm"></p>
+                            </div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <p x-text="mailing.sent" class="text-gray-700 text-theme-sm"></p>
+                            </div>
+                        </td>
+                        <td class="px-6 py-3 whitespace-nowrap">
+                            <div class="flex items-center justify-center">
+                                <p x-text="mailing.failed" class="text-gray-700 text-theme-sm"></p>
                             </div>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-center">
                             <span
-                                x-text="album.active !== undefined ? getBadge(album.active).text : getBadge().text"
-                                :class="album.active !== undefined ? getBadge(album.active).color : getBadge().color"
+                                x-text="mailing.status !== undefined ? getBadge(mailing.status).text : getBadge().text"
+                                :class="mailing.status !== undefined ? getBadge(mailing.status).color : getBadge().color"
                                 class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-sm font-medium">
                             </span>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap items-center">
-                            <div class="flex w-full items-center justify-center gap-2">
-                                <a x-bind:href="`{{ route('admin.albums.edit', ':id') }}`.replace(':id', album.id)" data-tippy-content="Edit Album" class="text-gray-500 hover:text-gray-800">
+                            <template x-data="mailings()" x-if="mailing.status != 1">
+                                <div class="flex w-full items-center justify-center gap-2">
+                                <a x-bind:href="`{{ route('admin.mailings.edit', ':id') }}`.replace(':id', mailing.id)" data-tippy-content="{{__('Edit Mailing')}}" class="text-gray-500 hover:text-gray-800">
                                     <x-heroicon-o-pencil-square class="stroke-2" width="24" height="24" />
                                 </a>
                                 <x-common.confirm-delete
-                                    title="{{ __('Are you sure to Delete this Album?') }}"
-                                    route-name="{{ route('admin.albums.destroy', ':id') }}">
+                                    title="{{ __('Are you sure to Delete this Mailing?') }}"
+                                    route-name="{{ route('admin.mailings.destroy', ':id') }}">
                                     <!-- Trash icon -->
-                                    <button @click="itemId = album.id" data-tippy-content="{{__('Delete Album')}}" class="flex items-center justify-center text-gray-500 hover:text-error-500">
+                                    <button @click="itemId = mailing.id" data-tippy-content="{{__('Delete Mailing')}}" class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                         <x-heroicon-o-trash class="stroke-2" width="22" height="22" />
                                     </button>
                                 </x-common.confirm-delete>
-                                <a x-bind:href="`{{ route('admin.albums.media.index', ':id') }}`.replace(':id', album.id)" data-tippy-content="{{__('View Photos')}}" class="text-gray-500 hover:text-gray-800">
-                                    <x-heroicon-o-camera class="stroke-2" width="22" height="22" />
-                                </a>
-                            </div>
+                                <button @click="startMailing(mailing.id)" data-tippy-content="{{__('Start Mailing')}}" class="flex items-center justify-center text-gray-500 hover:text-error-500">
+                                        <x-heroicon-o-play class="stroke-2" width="22" height="22" />
+                                </button>
+
+
+                                </div>
+                            </template>
                         </td>
                     </tr>
                 </template>
@@ -131,3 +184,31 @@
     </div>
 @endsection
 
+@push('footer_scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('mailings', () => ({
+
+                async startMailing(mailingId) {
+
+                    try {
+                        loading = true;
+                        const response = await axios.post('{{ route('admin.mailings.start-mailing', ':id') }}'.replace(':id', mailingId));
+                        console.log(response);
+
+                        Alpine.store('alert').success(response?.data?.message);
+
+                        this.$dispatch('reload-items');
+                    } catch (error) {
+                        console.log(error);
+                        Alpine.store('alert').error(error?.response?.data?.message);
+                    } finally {
+                        loading = false
+                    }
+
+                }
+            }));
+        });
+    </script>
+
+@endpush

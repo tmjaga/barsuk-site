@@ -140,7 +140,6 @@
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('changeStatus', (currentPage = 1) => ({
@@ -148,7 +147,6 @@
 
                 async setStatus(id, currentStatus) {
                     const newStatus = currentStatus == 1 ? 0 : 1;
-                    console.log(this.currentPage);
 
                     try {
                         const response = await axios.put('{{ route('admin.subscribers.change-status', ':id') }}'.replace(':id', id), {

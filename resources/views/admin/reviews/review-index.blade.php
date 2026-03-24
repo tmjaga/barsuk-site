@@ -336,8 +336,6 @@
 
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', reviewId));
-                        // TODO For test errors uncomment line below
-                        // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                         const review = response.data;
 
 

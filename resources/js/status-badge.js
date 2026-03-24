@@ -28,4 +28,19 @@ document.addEventListener('alpine:init', () => {
             }
         }
     }));
+
+    Alpine.data('mailingStatusBadge', () => ({
+        getBadge(status) {
+            switch (status) {
+                case 0:
+                    return { text: 'Pending', color: 'bg-warning-500 text-white' };
+                case 1:
+                    return { text: 'In Progress', color: 'bg-blue-light-500 text-white' };
+                case 2:
+                    return { text: 'Completed', color: 'bg-success-500 text-white' };
+                default:
+                    return { text: 'Undefined', color: 'bg-gray-400 text-white' };
+            }
+        }
+    }));
 });

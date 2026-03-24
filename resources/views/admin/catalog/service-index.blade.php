@@ -419,8 +419,6 @@
 
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', serviceId));
-                        // TODO For test errors uncomment line below
-                        // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                         const service = response.data;
                         const [hours, minutes] = service.duration.split(':');
 

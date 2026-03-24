@@ -209,8 +209,6 @@
 
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', categoryId));
-                        // TODO For test errors uncomment line below
-                        // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                         const category = response.data;
 
                         this.formData.title = category.title;

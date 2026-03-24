@@ -194,7 +194,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="contact.html">Contact Us</a>
+                                    <a href="{{ route('contact') }}">{{ __('Contact Us') }}</a>
                                 </li>
                             </ul>
                         </nav>

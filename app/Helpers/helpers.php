@@ -56,3 +56,28 @@ if (! function_exists('page')) {
         return $section->translations->where('locale', $locale)->first()?->value;
     }
 }
+
+if (! function_exists('formatEmailContent')) {
+    function formatEmailContent($html)
+    {
+        $map = [
+            '<align-left>' => '<div style="text-align:left;">',
+            '<align-center>' => '<div style="text-align:center;">',
+            '<align-right>' => '<div style="text-align:right;">',
+            '</align-left>' => '</div>',
+            '</align-center>' => '</div>',
+            '</align-right>' => '</div>',
+        ];
+
+        return str_replace(array_keys($map), array_values($map), $html);
+    }
+}
+
+if (! function_exists('getManifestCssFile')) {
+    function getManifestCssFile(): string
+    {
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+
+        return public_path('build/'.$manifest['resources/css/app.css']['file']);
+    }
+}

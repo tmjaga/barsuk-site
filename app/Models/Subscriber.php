@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Str;
@@ -35,5 +36,10 @@ class Subscriber extends Model
     public function getFormattedCreationDateAttribute(): string
     {
         return $this->created_at ? $this->created_at->format('d.m.Y H:i') : '';
+    }
+
+    public function scopeVerified(Builder $query): Builder
+    {
+        return $query->where('is_verified', true);
     }
 }

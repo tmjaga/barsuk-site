@@ -4,7 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Sleek Newsletter</title>
-    @vite(['resources/css/app.css'])
+    <style>
+        progress {
+            display: none;
+        }
+
+        figcaption {
+            display: none;
+        }
+
+        ul {
+            list-style: disc;
+            padding-left: 20px; }
+        ol {
+            list-style: decimal;
+            padding-left: 20px;
+        }
+    </style>
 
 </head>
 <body>
@@ -23,6 +39,10 @@
         @yield('content')
     </div>
     <!-- end content -->
+
+    <div class=" bg-white">
+        @yield('before-footer-content')
+    </div>
 
     <!-- footer-->
     <div class="text-sm text-gray-800 relative bg-[#fde7da] text-center p-1">

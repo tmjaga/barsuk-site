@@ -190,8 +190,6 @@
                 this.errors = {};
                 try {
                     const response = await axios.get(this.routeTemplates.edit.replace(':id', orderId));
-                    // TODO For test errors uncomment line below
-                    // const response = await axios.get(this.routeTemplates.edit.replace(':id', 22));
                     const order = response.data;
 
                     this.formData.names = order.names;

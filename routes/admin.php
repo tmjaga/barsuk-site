@@ -8,11 +8,13 @@ use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MailingController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriberController;
+use App\Http\Controllers\Admin\TrixController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/lang/{locale}', function ($locale) {
@@ -112,6 +114,13 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::post('/subscribers/delete-selected', [SubscriberController::class, 'deleteSelected'])->name('subscribers.delete-selected');
     Route::put('/subscribers/{subscriber}/change-status', [SubscriberController::class, 'changeStatus'])->name('subscribers.change-status');
 
+    // mailings routes
+    Route::resource('mailings', MailingController::class);
+    Route::post('mailings/{mailing}/start-mailing', [MailingController::class, 'startMailing'])->name('mailings.start-mailing');
+
     // loguot
     Route::post('logout', [LoginController::class, 'destroy'])->name('logout');
+
+    // trix routes
+    Route::post('trix-upload', [TrixController::class, 'store'])->name('trix.upload');
 });

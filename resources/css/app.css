@@ -4,12 +4,10 @@
 @import "flag-icons/css/flag-icons.min.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
-
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
 
 @custom-variant dark (&:is(.dark *));
 
@@ -886,4 +884,39 @@ pre[class*='language-'] {
 
 }
 
+@layer components {
+    trix-editor {
+        @apply bg-white border border-gray-300 rounded-lg p-4 min-h-[400px] w-full;
+    }
 
+    trix-editor h1 { @apply text-2xl font-bold mt-4 mb-2; }
+    trix-editor h2 { @apply text-xl font-semibold mt-3 mb-2; }
+    trix-editor h3 { @apply text-lg font-semibold mt-2 mb-1; }
+    trix-editor blockquote { @apply border-l-4 border-gray-300 pl-4 italic text-gray-700; }
+    trix-editor ul { @apply list-disc ml-6 mt-2 mb-2; }
+    trix-editor ol { @apply list-decimal ml-6 mt-2 mb-2; }
+    trix-editor li { @apply mb-1; }
+    trix-editor img { @apply max-w-full rounded my-2; }
+
+    .trix-align-center {
+        text-align: center !important;
+    }
+
+
+    trix-toolbar .trix-button--icon-align-center::before {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-text-center" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M4 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/></svg>');
+    }
+    trix-toolbar .trix-button--icon-align-right::before {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-text-right" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm4-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-4-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/></svg>');
+    }
+
+    trix-toolbar .trix-button--icon-align-left::before {
+        background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-text-left" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M2 12.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/></svg>');
+    }
+
+    align-center,
+    trix-editor div[data-trix-attribute="alignCenter"] {
+        text-align: center;
+    }
+
+}
