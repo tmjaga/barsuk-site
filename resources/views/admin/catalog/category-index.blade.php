@@ -1,16 +1,20 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <x-common.page-breadcrumb pageTitle="{{__('Categories')}}">
+    @php
+        $languages = config('logat.languages');
+    @endphp
+
+    <x-common.page-breadcrumb pageTitle="{{ __('Categories') }}">
         <x-slot:breadcrumbs>
             <li>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600">
-                    @lang('Dashboard')
+                    {{ __('Dashboard') }}
                 </a>
             </li>
             <li>
                 <span class="text-gray-700">
-                    @lang('Categories')
+                    {{ __('Categories') }}
                 </span>
             </li>
         </x-slot:breadcrumbs>
@@ -32,7 +36,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
-                @lang('Add New')
+                {{ __('Add New') }}
             </a>
         </div>
 
@@ -44,21 +48,21 @@
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center">
                             <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Title')
+                                {{ __('Title') }}
                             </p>
                         </div>
                     </th>
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center justify-center">
                             <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Status')
+                                {{ __('Status') }}
                             </p>
                         </div>
                     </th>
                     <th class="px-6 py-3 whitespace-nowrap">
                         <div class="flex items-center justify-center">
                             <p class="font-medium text-gray-500 text-theme-xs">
-                                @lang('Action')
+                                {{ __('Action') }}
                             </p>
                         </div>
                     </th>
@@ -71,7 +75,7 @@
                     <template x-if="data.length === 0">
                         <tr>
                             <td class="text-muted text-center py-4" colspan="100%">
-                                @lang('No Categories found')
+                                {{ __('No Categories found') }}
                             </td>
                         </tr>
                     </template>
@@ -80,7 +84,7 @@
                     <tr x-data="statusBadge">
                         <td class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
-                                <p x-text="category.title" class="text-gray-700 text-theme-sm"></p>
+                                <p x-text="category.title_localized" class="text-gray-700 text-theme-sm"></p>
                             </div>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-center">
@@ -93,7 +97,7 @@
                         <td class="px-6 py-3 whitespace-nowrap items-center">
                             <div class="flex w-full items-center justify-center gap-2">
                                 <!-- edit icon -->
-                                <a href="#"  @click.prevent="openEditModal(category.id)" data-tippy-content="@lang('Edit Category')" class="text-gray-500 hover:text-gray-800">
+                                <a href="#"  @click.prevent="openEditModal(category.id)" data-tippy-content="{{ __('Edit Category') }}" class="text-gray-500 hover:text-gray-800">
                                     <x-heroicon-o-pencil-square class="stroke-2" width="24" height="24" />
                                 </a>
                                 <x-common.confirm-delete
@@ -101,7 +105,7 @@
                                     text="{{ __('Warning! All Services in this Category will be deleted also.') }}"
                                     route-name="{{ route('admin.categories.destroy', ':id') }}">
                                     <!-- delete trash icon -->
-                                    <button @click="itemId = category.id" data-tippy-content="@lang('Delete Category')" class="flex items-center justify-center text-gray-500 hover:text-error-500">
+                                    <button @click="itemId = category.id" data-tippy-content="{{ __('Delete Category')}}" class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                         <x-heroicon-o-trash class="stroke-2" width="22" height="22" />
                                     </button>
                                 </x-common.confirm-delete>
@@ -128,16 +132,35 @@
                 <form @submit.prevent="submitForm" method="POST" :action="formAction">
                     @csrf
                     <input type="hidden" name="_method" :value="formMethod">
-                    <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800">
-                        Modal Title
-                    </h4>
+                    <h4 x-text="modalTitle" class="mb-3 text-lg font-medium text-gray-800"></h4>
 
-                    <div class="w-full">
-                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                            @lang('Category Title') <span class="text-red-500">*</span>
-                        </label>
-                        <input name="title" value="{{ old('title', $album->title ?? '') }}" x-model="formData.title" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                        <p x-show="$v.formData.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
+                    <div class="border-b border-gray-200">
+                        <nav class="-mb-px flex space-x-2 overflow-x-auto">
+                            @foreach($languages as $code => $lang)
+                                <button type="button" @click="activeTab='{{ $code }}'"
+                                        :class="activeTab === '{{ $code }}' ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-transparent'"
+                                        class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 text-sm font-medium">
+                                    <span class="fi fi-{{ $lang['flag'] }}"></span>
+                                    {{ $lang['label'] }}
+                                </button>
+                            @endforeach
+                        </nav>
+                    </div>
+                    <div class="w-full mt-3">
+                        @foreach($languages as $code => $lang)
+                            <div x-show="activeTab === '{{ $code }}'">
+                                <div class="w-full">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                        {{ __('Category Title') }} [{{ strtoupper($code) }}] <span class="text-red-500">*</span>
+                                    </label>
+                                    <input name="title[{{ $code }}]" value="" x-model.trim="formData.title['{{ $code }}']" type="text"
+                                           class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                    <p x-show="$v.formData.title.{{ $code }}.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">
+                                        {{ __('Please enter a valid Title') }}
+                                    </p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                     <div class="mt-6">
@@ -166,27 +189,32 @@
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
+            const defaultFormData = () => ({
+                title: @js(array_fill_keys(array_keys($languages), '')),
+                active: 1
+            });
+
             Alpine.data('categoryModal', () => ({
                 isModalOpen: false,
                 isLoading: false,
-                formData: {
-                    title: '',
-                    active: 1
-                },
+                activeTab: @js(array_key_first($languages)),
+                formData: defaultFormData(),
                 errors: {},
                 formAction: '',
                 formMethod: 'POST',
                 modalTitle: '',
+                languages: @js(array_fill_keys(array_keys($languages), '')),
                 routeTemplates: {
                     edit: "{{ route('admin.categories.edit', ':id') }}",
                     update: "{{ route('admin.categories.update', ':id') }}",
                     store: "{{ route('admin.categories.store') }}",
                 },
                 validations: {
-                    'formData.title': ['required', 'min:3'],
+                    @foreach($languages as $code => $lang)
+                    'formData.title.{{ $code }}': ['required', 'min:2'],
+                    @endforeach
                 },
 
                 init() {
@@ -206,6 +234,7 @@
 
                 async openEditModal(categoryId) {
                     this.isLoading = true;
+                    this.activeTab = @js(array_key_first($languages));
 
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', categoryId));
@@ -231,10 +260,7 @@
                 },
 
                 resetForm() {
-                    this.formData = {
-                        title: '',
-                        active: 1
-                    };
+                    this.formData = defaultFormData();
 
                     this.errors = {};
 
@@ -247,10 +273,18 @@
                 async submitForm() {
                     this.errors = {};
 
-                    this.formData.title = this.formData.title.trim();
                     this.$v.validate();
 
+                    const languages = @js(array_keys($languages));
+                    const invalidTitleTab = languages.find(code =>
+                        this.$v.formData.title[`${code}`]?.$invalid
+                    );
+
                     if (this.$v.formData.title.$invalid) {
+                        if (invalidTitleTab) {
+                            this.activeTab = invalidTitleTab;
+                        }
+
                         return;
                     }
 

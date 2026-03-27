@@ -11,6 +11,8 @@ use Spatie\Translatable\HasTranslations;
 
 class Service extends Model
 {
+    use HasFactory, HasTranslations;
+
     public array $translatable = ['title', 'description'];
 
     protected $fillable = ['title', 'slug', 'category_id', 'description', 'duration', 'active', 'price'];
@@ -20,8 +22,6 @@ class Service extends Model
     protected $casts = [
         'price' => 'decimal:2',
     ];
-
-    use HasFactory, HasTranslations;
 
     /*
     protected static function boot(): void

@@ -34,7 +34,8 @@ class CategoryController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|array',
+                'title.*' => 'required|string|max:255',
                 'active' => 'sometimes|boolean',
             ]);
 
@@ -80,7 +81,8 @@ class CategoryController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|array',
+                'title.*' => 'required|string|max:255',
                 'active' => 'sometimes|boolean',
             ]);
 

@@ -5,16 +5,16 @@
         $languages = config('logat.languages');
     @endphp
 
-    <x-common.page-breadcrumb pageTitle="{{__('Services')}}">
+    <x-common.page-breadcrumb pageTitle="{{ __('Services') }}">
         <x-slot:breadcrumbs>
             <li>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-700 hover:text-brand-600">
-                    @lang('Services')
+                    {{ __('Dashboard') }}
                 </a>
             </li>
             <li>
                 <span class="text-gray-700 ">
-                    @lang('Services')
+                    {{ __('Services') }}
                 </span>
             </li>
         </x-slot:breadcrumbs>
@@ -38,7 +38,7 @@
                          stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
                     </svg>
-                    @lang('Add New')
+                    {{ __('Add New') }}
                 </a>
 
                 <!-- search input-->
@@ -62,13 +62,13 @@
                             class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
                             :class="isOptionSelected &amp;&amp; 'text-gray-800'" @change="isOptionSelected = true">
                         <option value="" class="text-gray-700">
-                            @lang('Select Category')
+                            {{ __('Select Category') }}
                         </option>
                         @foreach ($categories as $cat)
                             <option
                                 value="{{ $cat->id }}"
                                 @selected(optional($category)->id === $cat->id)>
-                                {{ $cat->title }}
+                                {{ $cat->title_localized }}
                             </option>
                         @endforeach
                     </select>
@@ -152,7 +152,7 @@
                                 <a href="#"
                                    @click.prevent=" filters.category = service.category_id; $dispatch('reload-items')"
                                    class="text-theme-sm text-blue-600 hover:underline">
-                                    <p x-text="service.category.title" class=""></p>
+                                    <p x-text="service.category.title_localized" class=""></p>
                                 </a>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap ">
@@ -175,7 +175,7 @@
                             <td class="px-6 py-3 whitespace-nowrap items-center">
                                 <div class="flex w-full items-center justify-center gap-2">
                                     <a href="#" @click.prevent="openEditModal(service.id)"
-                                       data-tippy-content="@lang('Edit Service')"
+                                       data-tippy-content="{{ __('Edit Service') }}"
                                        class="text-gray-500 hover:text-gray-800">
                                         <x-heroicon-o-pencil-square class="stroke-2" width="24" height="24" />
                                     </a>
@@ -184,7 +184,7 @@
                                         route-name="{{ route('admin.services.destroy', ':id') }}">
                                         <!-- Trash icon -->
                                         <button @click="itemId = service.id"
-                                                data-tippy-content="@lang('Delete Service')"
+                                                data-tippy-content="{{ __('Delete Service') }}"
                                                 class="flex items-center justify-center text-gray-500 hover:text-error-500">
                                             <x-heroicon-o-trash class="stroke-2" width="22" height="22" />
                                         </button>
@@ -302,7 +302,7 @@
                                             {{ __('Select Category') }}
                                         </option>
                                         @foreach ($categories as $cat)
-                                            <option value="{{ $cat->id }}"> {{ $cat->title }} </option>
+                                            <option value="{{ $cat->id }}"> {{ $cat->title_localized }} </option>
                                         @endforeach
                                     </select>
 
@@ -319,7 +319,7 @@
                                 <!-- time field -->
                                 <div>
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                        @lang('Duration') <span class="text-red-500">*</span>
+                                        {{ __('Duration') }} <span class="text-red-500">*</span>
                                     </label>
                                     <div class="flex items-center gap-2">
                                         <!-- Hours -->
@@ -336,10 +336,10 @@
                                 <!-- price field -->
                                 <div class="flex-1 min-w-[200px]">
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                        @lang('Price') &euro; <span class="text-red-500">*</span>
+                                        {{ __('Price') }} &euro; <span class="text-red-500">*</span>
                                     </label>
                                     <input name="price" value=""placeholder="0.00" x-model="formData.price" type="text" class="w-full shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                    <p x-show="$v.formData.price.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Price')</p>
+                                    <p x-show="$v.formData.price.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">{{ __('Please enter a valid Price') }}</p>
                                 </div>
                             </div>
                             <!-- active checkbox -->
@@ -350,10 +350,10 @@
                             <!-- submit and cancel buttons -->
                             <div class="flex items-center w-full gap-3 mt-6">
                                 <button type="submit" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
-                                    @lang('Save Changes')
+                                    {{ __('Save Changes') }}
                                 </button>
                                 <button @click="isModalOpen = false" type="button" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
-                                    @lang('Cancel')
+                                    {{ __('Cancel') }}
                                 </button>
                             </div>
                         </div>
@@ -466,8 +466,8 @@
                     this.errors = {};
 
                     this.$v.validate();
-                    const languages = @js(array_keys($languages));
 
+                    const languages = @js(array_keys($languages));
                     const invalidTitleTab = languages.find(code =>
                         this.$v.formData.title[`${code}`]?.$invalid
                     );
