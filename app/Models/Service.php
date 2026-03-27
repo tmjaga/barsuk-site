@@ -7,16 +7,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Translatable\HasTranslations;
 
 class Service extends Model
 {
-    protected $fillable = ['title', 'category_id', 'description', 'duration', 'active', 'price'];
+    public array $translatable = ['title', 'description'];
+
+    protected $fillable = ['title', 'slug', 'category_id', 'description', 'duration', 'active', 'price'];
+
+    protected $appends = ['title_localized'];
 
     protected $casts = [
         'price' => 'decimal:2',
     ];
 
-    use HasFactory;
+    use HasFactory, HasTranslations;
+
+    /*
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function (self $service) {
+            if (empty($service->slug)) {
+                $service->slug = static::generateSlug($service->title);
+            }
+        });
+
+        static::updating(function (self $service) {
+            if ($service->isDirty('title') && empty($service->slug)) {
+                $service->slug = static::generateSlug($service->title);
+            }
+        });
+    }
+    */
 
     protected function duration(): Attribute
     {
@@ -49,5 +73,10 @@ class Service extends Model
     public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class);
+    }
+
+    public function getTitleLocalizedAttribute()
+    {
+        return $this->getTranslation('title', app()->getLocale());
     }
 }

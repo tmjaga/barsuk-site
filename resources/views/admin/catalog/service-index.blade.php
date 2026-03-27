@@ -1,6 +1,10 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @php
+        $languages = config('logat.languages');
+    @endphp
+
     <x-common.page-breadcrumb pageTitle="{{__('Services')}}">
         <x-slot:breadcrumbs>
             <li>
@@ -69,10 +73,8 @@
                         @endforeach
                     </select>
                     <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
-                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                              stroke-linecap="round" stroke-linejoin="round"></path>
+                    <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                     </svg>
                 </span>
                 </div>
@@ -86,42 +88,42 @@
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center">
                                 <p class="font-medium text-gray-500 text-theme-xs">
-                                    @lang('Title')
+                                    {{ __('Title') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-start justify-start">
                                 <p class="items-start font-medium text-gray-500 text-theme-xs">
-                                    @lang('Category')
+                                    {{ __('Category') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
                                 <p class="items-center font-medium text-gray-500 text-theme-xs">
-                                    @lang('Price') &euro;
+                                    {{ __('Price') }} &euro;
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
                                 <p class="items-center font-medium text-gray-500 text-theme-xs">
-                                    @lang('Duration (min)')
+                                    {{ __('Duration (min)') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
                                 <p class="font-medium text-gray-500 text-theme-xs">
-                                    @lang('Status')
+                                    {{ __('Status') }}
                                 </p>
                             </div>
                         </th>
                         <th class="px-6 py-3 whitespace-nowrap">
                             <div class="flex items-center justify-center">
                                 <p class="font-medium text-gray-500 text-theme-xs">
-                                    @lang('Action')
+                                    {{ __('Action') }}
                                 </p>
                             </div>
                         </th>
@@ -134,7 +136,7 @@
                     <template x-if="data.length === 0">
                         <tr>
                             <td class="text-muted text-center py-4" colspan="100%">
-                                @lang('No Services found')
+                                {{ __('No Services found') }}
                             </td>
                         </tr>
                     </template>
@@ -143,7 +145,7 @@
                         <tr x-data="statusBadge">
                             <td class="px-6 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <p x-text="service.title" class="text-gray-700 text-theme-sm"></p>
+                                    <p x-text="service.title_localized" class="text-gray-700 text-theme-sm"></p>
                                 </div>
                             </td>
                             <td class="px-6 py-3 whitespace-nowrap text-start">
@@ -235,123 +237,122 @@
                     </p>
                 </div>
             </div>
+
             <!-- Add/Edit category modal -->
-            <div x-show="isModalOpen"
-                 class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999"
-                 style="display: none;">
+            <div x-show="isModalOpen" class="fixed inset-0 flex items-center justify-center p-5 overflow-y-auto modal z-99999" style="display: none;">
                 <div class="modal-close-btn fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"></div>
-                <div @click.outside="isModalOpen = false"
-                     class="relative w-full max-w-[584px] rounded-3xl bg-white p-6 lg:p-10">
+                <div @click.outside="isModalOpen = false" class="relative w-full max-w-5xl rounded-3xl bg-white p-6 lg:p-10">
                     <!-- close btn -->
                     <button @click="isModalOpen = false"
-                            class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 sm:right-6 sm:top-6 sm:h-11 sm:w-11">
-                        <svg class="transition-colors fill-current group-hover:text-gray-600" width="24" height="24"
-                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                  d="M6.04289 16.5413C5.65237 16.9318 5.65237 17.565 6.04289 17.9555C6.43342 18.346 7.06658 18.346 7.45711 17.9555L11.9987 13.4139L16.5408 17.956C16.9313 18.3466 17.5645 18.3466 17.955 17.956C18.3455 17.5655 18.3455 16.9323 17.955 16.5418L13.4129 11.9997L17.955 7.4576C18.3455 7.06707 18.3455 6.43391 17.955 6.04338C17.5645 5.65286 16.9313 5.65286 16.5408 6.04338L11.9987 10.5855L7.45711 6.0439C7.06658 5.65338 6.43342 5.65338 6.04289 6.0439C5.65237 6.43442 5.65237 7.06759 6.04289 7.45811L10.5845 11.9997L6.04289 16.5413Z"
-                                  fill=""></path>
-                        </svg>
+                            class="group absolute right-3 top-3 z-999 flex h-9.5 w-9.5 items-center justify-center rounded-full bg-gray-200 text-gray-500 transition-colors hover:bg-gray-300 hover:text-gray-500 sm:right-6 sm:top-6 sm:h-10 sm:w-10">
+
+                        <x-heroicon-c-x-mark width="30" height="30" />
                     </button>
 
                     <form @submit.prevent="submitForm" method="POST" :action="formAction">
                         @csrf
                         <input type="hidden" name="_method" :value="formMethod">
                         <h4 x-text="modalTitle" class="mb-6 text-lg font-medium text-gray-800"></h4>
-
-                        <div class="flex flex-wrap gap-x-5 gap-y-5">
-                            <div class="w-full mb-5">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Title') <span class="text-red-500">*</span>
-                                </label>
-                                <input name="title" value="" x-model="formData.title" type="text"
-                                       class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                <p x-show="$v.formData.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Title')</p>
+                        <div  class="flex flex-wrap gap-x-5 gap-y-5">
+                            <div class="border-b border-gray-200">
+                                <nav class="-mb-px flex space-x-2 overflow-x-auto">
+                                    @foreach($languages as $code => $lang)
+                                        <button type="button" @click="activeTab='{{ $code }}'"
+                                                :class="activeTab === '{{ $code }}' ? 'text-blue-500 border-blue-500' : 'text-gray-500 border-transparent'"
+                                                class="inline-flex items-center gap-2 border-b-2 px-2.5 py-2 text-sm font-medium">
+                                            <span class="fi fi-{{ $lang['flag'] }}"></span>
+                                            {{ $lang['label'] }}
+                                        </button>
+                                    @endforeach
+                                </nav>
                             </div>
-
-                            <div class="w-full mb-5">
+                            <div class="w-full">
+                                @foreach($languages as $code => $lang)
+                                    <div x-show="activeTab === '{{ $code }}'">
+                                        <div class="w-1/2 mb-3">
+                                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                                {{ __('Service Title') }} <span class="text-red-500">*</span>
+                                            </label>
+                                            <input name="title[{{ $code }}]" value="" x-model.trim="formData.title['{{ $code }}']" type="text"
+                                                   class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                            <p x-show="$v.formData.title.{{ $code }}.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">
+                                                {{ __('Please enter a valid Title') }}
+                                            </p>
+                                        </div>
+                                        <div class="w-full">
+                                            <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                                {{ __('Service Description') }}
+                                            </label>
+                                            <textarea  :key="'desc-{{ $code }}'" name="description[{{ $code }}]" x-model.trim="formData.description['{{ $code }}']" placeholder="Enter a description..." type="text" rows="6"
+                                                      class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="w-1/2 mb-5">
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Category') <span class="text-red-500">*</span>
+                                    {{ __('Service Category') }} <span class="text-red-500">*</span>
                                 </label>
                                 <div x-data="{ isOptionSelected: false }" class="relative z-20 bg-transparent">
-                                    <select x-model="formData.category_id" name="category_id"
-                                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
+                                    <select x-model="formData.category_id" name="category_id" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
                                             :class="isOptionSelected &amp;&amp; 'text-gray-800'"
                                             @change="isOptionSelected = true">
                                         <option value="" class="text-gray-700">
-                                            @lang('Select Category')
+                                            {{ __('Select Category') }}
                                         </option>
                                         @foreach ($categories as $cat)
                                             <option value="{{ $cat->id }}"> {{ $cat->title }} </option>
                                         @endforeach
                                     </select>
-                                    <p x-show="$v.formData.category_id.$invalid && $v.$touch"
-                                       class="text-red-500 text-sm mt-1">@lang('Please select a Category')</p>
-                                    <span
-                                        class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
-                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5"
-                                          stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </span>
+
+                                    <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
+                                        <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                        </svg>
+                                    </span>
                                 </div>
+                                <p x-show="$v.formData.category_id.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please select a Category')</p>
                             </div>
 
                             <div class="flex flex-wrap gap-5">
-                            <!-- time field -->
-                            <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Duration') <span class="text-red-500">*</span>
-                                </label>
-                                <div class="flex items-center gap-2">
-                                    <!-- Hours -->
-                                    <input x-model="formData.hours" type="number" name="hours" placeholder="HH"
-                                           class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                    <span class="text-gray-500 font-semibold">:</span>
-                                    <!-- Minutes -->
-                                    <input x-model="formData.minutes" type="number" name="minutes" placeholder="MM"
-                                           class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                <!-- time field -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                        @lang('Duration') <span class="text-red-500">*</span>
+                                    </label>
+                                    <div class="flex items-center gap-2">
+                                        <!-- Hours -->
+                                        <input x-model="formData.hours" type="number" name="hours" placeholder="HH"
+                                               class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                        <span class="text-gray-500 font-semibold">:</span>
+                                        <!-- Minutes -->
+                                        <input x-model="formData.minutes" type="number" name="minutes" placeholder="MM"
+                                               class="w-24 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                    </div>
+                                    <p x-show="$v.formData.hours.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Only digits for Hours from 00 to 05 allowed')</p>
+                                    <p x-show="$v.formData.minutes.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Only digits for Minutes from 00 to 59 allowed')</p>
                                 </div>
-                                <p x-show="$v.formData.hours.$invalid && $v.$touch"
-                                   class="text-red-500 text-sm mt-1">@lang('Only digits for Hours from 00 to 05 allowed')</p>
-                                <p x-show="$v.formData.minutes.$invalid && $v.$touch"
-                                   class="text-red-500 text-sm mt-1">@lang('Only digits for Minutes from 00 to 59 allowed')</p>
+                                <!-- price field -->
+                                <div class="flex-1 min-w-[200px]">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                                        @lang('Price') &euro; <span class="text-red-500">*</span>
+                                    </label>
+                                    <input name="price" value=""placeholder="0.00" x-model="formData.price" type="text" class="w-full shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                                    <p x-show="$v.formData.price.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Price')</p>
+                                </div>
                             </div>
-                            <div class="flex-1 min-w-[260px]">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Price') <span class="text-red-500">*</span>
-                                </label>
-                                <input name="price" value=""placeholder="0.00" x-model="formData.price" type="text"
-                                       class="w-full shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                                <p x-show="$v.formData.price.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">@lang('Please enter a valid Price')</p>
-                            </div>
-                            </div>
-
-                            <div class="w-full">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700">
-                                    @lang('Service Description')
-                                </label>
-                                <textarea name="description" x-model="formData.description"
-                                          placeholder="Enter a description..." type="text" rows="6"
-                                          class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"></textarea>
+                            <!-- active checkbox -->
+                            <div class="mt-2 block w-full">
+                                <x-forms.checkbox-status name="active" label="{{ __('Active') }}" id="service_id" model="formData.active"></x-forms.checkbox-status>
                             </div>
 
-                            <div class="mt-6">
-                                <x-forms.checkbox-status
-                                    name="active"
-                                    label="{{ __('Active') }}"
-                                    id="service_id"
-                                    model="formData.active"
-                                ></x-forms.checkbox-status>
-                            </div>
-
-                            <div class="flex items-center justify-end w-full gap-3 mt-6">
-                                <button type="submit"
-                                        class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
+                            <!-- submit and cancel buttons -->
+                            <div class="flex items-center w-full gap-3 mt-6">
+                                <button type="submit" class="flex justify-center w-full px-4 py-3 text-sm font-medium text-white rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600 sm:w-auto">
                                     @lang('Save Changes')
                                 </button>
-                                <button @click="isModalOpen = false" type="button"
-                                        class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
+                                <button @click="isModalOpen = false" type="button" class="flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs transition-colors hover:bg-gray-50 hover:text-gray-800 sm:w-auto">
                                     @lang('Cancel')
                                 </button>
                             </div>
@@ -365,34 +366,37 @@
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ asset('js/status-badge.js') }}"></script>
-
-    <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
+            const defaultFormData = () => ({
+                title: @js(array_fill_keys(array_keys($languages), '')),
+                description: @js(array_fill_keys(array_keys($languages), '')),
+                category_id: '',
+                hours: '00',
+                minutes: '10',
+                price: null,
+                active: 1
+            });
+
             Alpine.data('serviceModal', () => ({
                 isModalOpen: false,
                 isLoading: false,
-                formData: {
-                    title: '',
-                    category_id: '',
-                    description: '',
-                    hours: '00',
-                    minutes: '10',
-                    price: null,
-                    active: 1
-                },
+                activeTab: @js(array_key_first($languages)),
+                formData: defaultFormData(),
                 errors: {},
                 formAction: '',
                 formMethod: 'POST',
                 modalTitle: '',
+                languages: @js(array_fill_keys(array_keys($languages), '')),
                 routeTemplates: {
                     edit: "{{ route('admin.services.edit', ':id') }}",
                     update: "{{ route('admin.services.update', ':id') }}",
                     store: "{{ route('admin.services.store') }}",
                 },
                 validations: {
-                    'formData.title': ['required', 'min:2'],
+                    @foreach($languages as $code => $lang)
+                    'formData.title.{{ $code }}': ['required', 'min:2'],
+                    @endforeach
                     'formData.category_id': ['required'],
                     'formData.hours': ['required', 'regex:^(0[0-5])$'],
                     'formData.minutes': ['required', 'regex:^(0[0-9]|[1-5][0-9])$'],
@@ -400,7 +404,7 @@
                 },
 
                 init() {
-                    this.$validation(this)
+                    this.$validation(this);
                 },
 
                 openCreateModal() {
@@ -408,15 +412,13 @@
                     this.formAction = this.routeTemplates.store;
                     this.formMethod = 'POST';
                     this.modalTitle = '@lang("Add New Service")';
-
                     this.$dispatch('update-toggle', this.formData.active);
-
                     this.isModalOpen = true;
                 },
 
                 async openEditModal(serviceId) {
                     this.isLoading = true;
-
+                    this.activeTab = @js(array_key_first($languages));
                     try {
                         const response = await axios.get(this.routeTemplates.edit.replace(':id', serviceId));
                         const service = response.data;
@@ -428,7 +430,10 @@
                         this.formData.minutes = minutes.padStart(2, '00');
                         this.formData.active = service.active;
                         this.formData.price = service.price;
-                        this.formData.description = service.description;
+
+                        // to get nullable translatable values
+                        this.formData.description = Object.keys(service.description ?? {}).length ? service.description : this.languages;
+
                         this.formAction = this.routeTemplates.update.replace(':id', serviceId);
                         this.formMethod = 'PUT';
                         this.modalTitle = '@lang("Edit Service")';
@@ -447,16 +452,8 @@
                 },
 
                 resetForm() {
-                    this.formData = {
-                        title: '',
-                        category_id: '',
-                        description: '',
-                        hours: '00',
-                        minutes: '10',
-                        price: null,
-                        active: 1
-                    };
-
+                    this.activeTab = @js(array_key_first($languages));
+                    this.formData = defaultFormData();
                     this.errors = {};
 
                     // reset validation
@@ -468,14 +465,22 @@
                 async submitForm() {
                     this.errors = {};
 
-                    this.formData.title = this.formData.title.trim();
-                    this.formData.description = this.formData.description?.trim() ?? '';
                     this.$v.validate();
+                    const languages = @js(array_keys($languages));
+
+                    const invalidTitleTab = languages.find(code =>
+                        this.$v.formData.title[`${code}`]?.$invalid
+                    );
 
                     if (this.$v.formData.title.$invalid ||
                         this.$v.formData.hours.$invalid ||
                         this.$v.formData.minutes.$invalid ||
                         this.$v.formData.price.$invalid) {
+
+                        if (invalidTitleTab) {
+                            this.activeTab = invalidTitleTab;
+                        }
+
                         return;
                     }
 

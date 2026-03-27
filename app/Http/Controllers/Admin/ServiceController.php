@@ -22,7 +22,9 @@ class ServiceController extends Controller
         $services = Service::query()
             ->with('category')
             ->when($category, fn ($q) => $q->where('category_id', $category))
-            ->when($search, fn ($q) => $q->where('title', 'like', "%{$search}%"))
+            ->when($search, function ($q) use ($search) {
+                $q->where('title->'.app()->getLocale(), 'like', "%{$search}%");
+            })
             ->latest()
             ->paginate(config('app.items_per_page'))
             ->withQueryString();
@@ -43,9 +45,11 @@ class ServiceController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|array',
+                'title.*' => 'required|string|max:255',
+                'description' => 'nullable|array',
+                'description.*' => 'nullable|string',
                 'category_id' => 'required|exists:categories,id',
-                'description' => 'nullable|string',
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
@@ -80,7 +84,15 @@ class ServiceController extends Controller
         try {
             $service = Service::findOrFail($id);
 
-            return response()->json($service);
+            return response()->json([
+                'id' => $service->id,
+                'category_id' => $service->category_id,
+                'title' => $service->getTranslations('title'),
+                'description' => $service->getTranslations('description'),
+                'duration' => $service->duration,
+                'price' => $service->price,
+                'active' => $service->active,
+            ]);
         } catch (Throwable $e) {
             Log::error('Service not found', [
                 'message' => $e->getMessage(),
@@ -97,9 +109,11 @@ class ServiceController extends Controller
     {
         try {
             $validated = $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|array',
+                'title.*' => 'required|string|max:255',
+                'description' => 'nullable|array',
+                'description.*' => 'nullable|string',
                 'category_id' => 'required|exists:categories,id',
-                'description' => 'nullable|string',
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
