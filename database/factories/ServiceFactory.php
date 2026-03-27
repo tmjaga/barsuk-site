@@ -19,10 +19,23 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        $number = self::$number++;
+        $locales = config('logat.locales', ['en']);
+
+        foreach ($locales as $locale) {
+            $titles[$locale] = match ($locale) {
+                'ru' => "Тестовый сервис #{$number}",
+                'bg' => "Тестов сервис #{$number}",
+                default => "Test Service #{$number}",
+            };
+
+            $descriptions[$locale] = $this->faker->paragraph();
+        }
+
         return [
             'category_id' => Category::query()->inRandomOrder()->value('id'),
-            'title' => 'Test Service #'.self::$number++,
-            'description' => $this->faker->paragraph(),
+            'title' => $titles,
+            'description' => $descriptions,
             'duration' => $this->faker->numberBetween(10, 120),
             'price' => $this->faker->randomFloat(2, 10, 200),
         ];

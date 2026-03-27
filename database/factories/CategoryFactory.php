@@ -10,8 +10,19 @@ class CategoryFactory extends Factory
 
     public function definition(): array
     {
+        $number = self::$number++;
+        $locales = config('logat.locales', ['en']);
+
+        foreach ($locales as $locale) {
+            $titles[$locale] = match ($locale) {
+                'ru' => "Тестовая категория #{$number}",
+                'bg' => "Тестова категория #{$number}",
+                default => "Test Category #{$number}",
+            };
+        }
+
         return [
-            'title' => 'Test Category #'.self::$number++,
+            'title' => $titles,
         ];
     }
 }
