@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
+use Str;
 
 class Service extends Model
 {
@@ -23,24 +24,21 @@ class Service extends Model
         'price' => 'decimal:2',
     ];
 
-    /*
     protected static function boot(): void
     {
         parent::boot();
 
-        static::creating(function (self $service) {
-            if (empty($service->slug)) {
-                $service->slug = static::generateSlug($service->title);
-            }
-        });
+        static::saving(function (self $service) {
+            $locale = config('logat.default');
+            $title = $service->getTranslation('title', $locale);
 
-        static::updating(function (self $service) {
-            if ($service->isDirty('title') && empty($service->slug)) {
-                $service->slug = static::generateSlug($service->title);
+            if (! $title) {
+                return;
             }
+
+            $service->slug = Str::slug($title).'-'.mt_rand(1000, 9999);
         });
     }
-    */
 
     protected function duration(): Attribute
     {
