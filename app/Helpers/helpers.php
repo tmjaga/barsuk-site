@@ -81,3 +81,22 @@ if (! function_exists('getManifestCssFile')) {
         return public_path('build/'.$manifest['resources/css/app.css']['file']);
     }
 }
+
+if (! function_exists('getPageTemplates')) {
+    function getPageTemplates(): array
+    {
+        $files = glob(resource_path('views/pages/templates/*.blade.php'));
+
+        $pages = [];
+        foreach ($files as $file) {
+            $name = basename($file, '.blade.php');
+            $title = Str::of($name)
+                ->replace('-', ' ')
+                ->replace('_', ' ')
+                ->title();
+            $pages[$name] = $title->value();
+        }
+
+        return $pages;
+    }
+}

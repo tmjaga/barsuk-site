@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Page extends Model
 {
-    protected $fillable = ['title', 'slug'];
+    protected $fillable = ['title', 'slug', 'template', 'custom_template'];
 
     public function sections(): HasMany
     {

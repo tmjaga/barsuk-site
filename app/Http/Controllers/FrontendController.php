@@ -20,17 +20,16 @@ class FrontendController extends Controller
             ->limit(10)
             ->get();
 
-        return view('pages.about', compact('reviews'));
+        return view('pages.templates.about', compact('reviews'));
     }
 
     public function contactUs(): View
     {
-        return view('pages.contact');
+        return view('pages.templates.contact');
     }
 
     public function contactMessage(Request $request): JsonResponse
     {
-
         $validated = $request->validate([
             'name' => 'required|string|min:5',
             'email' => 'required|email',

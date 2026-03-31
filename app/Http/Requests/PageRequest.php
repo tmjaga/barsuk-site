@@ -19,6 +19,8 @@ class PageRequest extends FormRequest
 
         $rules = [
             'title' => ['required', 'string'],
+            'template' => 'required_if:custom_template,true|nullable|string',
+            'custom_template' => 'boolean',
             'sections' => ['required', 'array', 'min:1'],
             'sections.*.title' => ['required', 'regex:/^[A-Za-z0-9\-_]+$/', 'distinct', new UniquePageSectionKey($page, $this->sections)],
             'sections.*.content' => ['required', 'array'],

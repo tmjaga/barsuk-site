@@ -46,6 +46,8 @@ class PageController extends Controller
             $page = Page::create([
                 'title' => $request->title,
                 'slug' => $request->slug,
+                'template' => $request->template,
+                'custom_template' => $request->custom_template ?? false,
             ]);
 
             // sections
@@ -97,9 +99,11 @@ class PageController extends Controller
      */
     public function update(PageRequest $request, Page $page)
     {
-        DB::transaction(function() use ($request, $page) {
+        DB::transaction(function () use ($request, $page) {
             $page->update([
                 'title' => $request->title,
+                'template' => $request->template,
+                'custom_template' => $request->custom_template ?? false,
             ]);
 
             foreach ($request->sections as $sectionData) {
