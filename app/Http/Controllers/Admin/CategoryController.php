@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class CategoryController extends Controller
@@ -123,10 +124,15 @@ class CategoryController extends Controller
                 'message' => $e->getMessage(),
             ]);
 
+            $errorMessage = __('Error while deleting service');
+
+            if ($e instanceof ValidationException) {
+                $errorMessage = $e->validator->errors()->first();
+            }
+
             return response()->json([
-                'message' => __('Error while deleting category'),
+                'message' => $errorMessage,
             ], 500);
         }
-
     }
 }

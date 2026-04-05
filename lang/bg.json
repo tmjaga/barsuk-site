@@ -70,6 +70,16 @@
     "No Albums found": "",
     "Delete Album": "",
     "View Photos": "",
-    "Get in :target": "Свържете се :target",
-    "Touch": "с нас"
+    "Get in :target": "Пишете :target",
+    "Touch": "ни",
+    "About :target": "За Нас",
+    "Us": "",
+    "About Us": "За Нас",
+    "Contact :target": "Свържете се :target",
+    "WithUs": "с нас",
+    "Contact Us": "Свържете се с нас",
+    "Service :target": "Нашите :target",
+    "Details": "услуги",
+    "Service Details": "Нашите услуги",
+    "Contact Us Menu": "Контакти"
 }

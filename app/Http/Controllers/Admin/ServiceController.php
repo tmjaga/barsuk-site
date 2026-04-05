@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\Service;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class ServiceController extends Controller
@@ -34,8 +36,9 @@ class ServiceController extends Controller
         }
 
         $categories = Category::orderBy('title')->get();
+        $pages = Page::customTemplate()->get();
 
-        return view('admin.catalog.service-index', compact('services', 'categories', 'category'));
+        return view('admin.catalog.service-index', compact('services', 'pages', 'categories', 'category'));
     }
 
     /**
@@ -50,6 +53,7 @@ class ServiceController extends Controller
                 'description' => 'nullable|array',
                 'description.*' => 'nullable|string',
                 'category_id' => 'required|exists:categories,id',
+                'page_id' => 'nullable|exists:pages,id',
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
@@ -87,6 +91,7 @@ class ServiceController extends Controller
             return response()->json([
                 'id' => $service->id,
                 'category_id' => $service->category_id,
+                'page_id' => $service->page_id,
                 'title' => $service->getTranslations('title'),
                 'description' => $service->getTranslations('description'),
                 'duration' => $service->duration,
@@ -114,6 +119,7 @@ class ServiceController extends Controller
                 'description' => 'nullable|array',
                 'description.*' => 'nullable|string',
                 'category_id' => 'required|exists:categories,id',
+                'page_id' => 'nullable|exists:pages,id',
                 'hours' => 'required|digits:2',
                 'minutes' => 'required|digits:2',
                 'active' => 'sometimes|boolean',
@@ -159,8 +165,14 @@ class ServiceController extends Controller
                 'message' => $e->getMessage(),
             ]);
 
+            $errorMessage = __('Error while deleting service');
+
+            if ($e instanceof ValidationException) {
+                $errorMessage = $e->validator->errors()->first();
+            }
+
             return response()->json([
-                'message' => __('Error while deleting service'),
+                'message' => $errorMessage,
             ], 500);
         }
     }

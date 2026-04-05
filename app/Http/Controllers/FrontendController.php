@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactMail;
 use App\Models\Admin;
+use App\Models\Category;
 use App\Models\Review;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -45,5 +46,15 @@ class FrontendController extends Controller
         return response()->json([
             'message' => __('Your message was sent successfully'),
         ]);
+    }
+
+    public function services(): View
+    {
+        $categories = Category::with('activeServices')
+            ->whereHas('activeServices')
+            ->active()
+            ->get();
+
+        return view('pages.templates.services', compact('categories'));
     }
 }

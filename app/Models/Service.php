@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Translatable\HasTranslations;
-use Str;
 
 class Service extends Model
 {
@@ -16,29 +15,13 @@ class Service extends Model
 
     public array $translatable = ['title', 'description'];
 
-    protected $fillable = ['title', 'slug', 'category_id', 'description', 'duration', 'active', 'price'];
+    protected $fillable = ['title', 'slug', 'page_id', 'category_id', 'description', 'duration', 'active', 'price'];
 
     protected $appends = ['title_localized'];
 
     protected $casts = [
         'price' => 'decimal:2',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::saving(function (self $service) {
-            $locale = config('logat.default');
-            $title = $service->getTranslation('title', $locale);
-
-            if (! $title) {
-                return;
-            }
-
-            $service->slug = Str::slug($title).'-'.mt_rand(1000, 9999);
-        });
-    }
 
     protected function duration(): Attribute
     {
@@ -66,6 +49,11 @@ class Service extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(Page::class);
     }
 
     public function orders(): BelongsToMany

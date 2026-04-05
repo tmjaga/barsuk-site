@@ -71,5 +71,17 @@
     "Delete Album": "Delete Album",
     "View Photos": "View Photos",
     "Get in": "Get in :target",
-    "Touch": "Touch"
+    "Touch": "Touch",
+    "About :target": "About :target",
+    "Us": "Us",
+    "About Us": "About Us",
+    "Contact :target": "Contact :target",
+    "WithUs": "Us",
+    "Contact Us": "Contact Us",
+    "Service :target": "Service :target",
+    "Details": "Details",
+    "Service Details": "Service Details",
+    "Contact Us Menu": "Contact Us"
+
+
 }
