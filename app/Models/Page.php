@@ -44,4 +44,9 @@ class Page extends Model
     {
         return $this->hasMany(Service::class);
     }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class);
+    }
 }

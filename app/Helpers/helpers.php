@@ -85,7 +85,7 @@ if (! function_exists('getManifestCssFile')) {
 if (! function_exists('getPageTemplates')) {
     function getPageTemplates(): array
     {
-        $files = glob(resource_path('views/pages/templates/*.blade.php'));
+        $files = glob(resource_path('views/pages/templates/*_custom.blade.php'));
 
         $pages = [];
         foreach ($files as $file) {

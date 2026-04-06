@@ -137,7 +137,7 @@
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-start">
                             <template x-for="service in order.services" :key="service.id">
-                                <div class="text-gray-700 text-theme-sm" x-text="service.title"></div>
+                                <div class="text-gray-700 text-theme-sm" x-text="service.title_localized"></div>
                             </template>
                         </td>
                         <td class="px-6 py-3 whitespace-nowrap text-center">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Page;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,9 @@ class CategoryController extends Controller
             return response()->json(['data' => $categories]);
         }
 
-        return view('admin.catalog.category-index', compact('categories'));
+        $pages = Page::customTemplate()->get();
+
+        return view('admin.catalog.category-index', compact('categories', 'pages'));
     }
 
     /**
@@ -38,6 +41,7 @@ class CategoryController extends Controller
                 'title' => 'required|array',
                 'title.*' => 'required|string|max:255',
                 'active' => 'sometimes|boolean',
+                'page_id' => 'nullable|exists:pages,id',
             ]);
 
             // process 'active' checkbox
@@ -85,6 +89,7 @@ class CategoryController extends Controller
                 'title' => 'required|array',
                 'title.*' => 'required|string|max:255',
                 'active' => 'sometimes|boolean',
+                'page_id' => 'nullable|exists:pages,id',
             ]);
 
             // process 'active' checkbox

@@ -6,6 +6,7 @@ use App\Enums\Status;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Translatable\HasTranslations;
 
@@ -15,7 +16,7 @@ class Category extends Model
 
     public array $translatable = ['title'];
 
-    protected $fillable = ['title', 'active'];
+    protected $fillable = ['title', 'active', 'slug', 'page_id'];
 
     protected $appends = ['title_localized'];
 
@@ -41,5 +42,10 @@ class Category extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', Status::ACTIVE->value);
+    }
+
+    public function page(): BelongsTo
+    {
+        return $this->belongsTo(Page::class);
     }
 }

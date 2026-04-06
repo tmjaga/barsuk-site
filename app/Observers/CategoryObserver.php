@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Category;
 use Illuminate\Validation\ValidationException;
+use Str;
 
 class CategoryObserver
 {
@@ -55,5 +56,18 @@ class CategoryObserver
             throw ValidationException::withMessages([
                 'category' => "Can not delete {$category->title_localized} category. It contain services wich is used in one or more orders."]);
         }
+    }
+
+    public function saving(Category $category): void
+    {
+        $locale = config('logat.default');
+
+        $title = $category->getTranslation('title', $locale);
+
+        if (! $title) {
+            return;
+        }
+
+        $category->slug = Str::slug($title).'-'.mt_rand(1000, 9999);
     }
 }

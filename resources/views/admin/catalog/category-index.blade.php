@@ -162,6 +162,29 @@
                             </div>
                         @endforeach
                     </div>
+                    <!-- pages select -->
+                    <div class="w-full mt-3">
+                        <label class="mb-1.5 block text-sm font-medium text-gray-700">
+                            {{ __('Use Page With Custom Template') }}
+                        </label>
+                        <div x-data="{ isOptionSelectedPage: false }" class="relative z-20 bg-transparent">
+                            <select x-model="formData.page_id" name="page_id" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden"
+                                    :class="isOptionSelectedPage &amp;&amp; 'text-gray-800'"
+                                    @change="isOptionSelectedPage = true">
+                                <option value="" class="text-gray-700">
+                                    {{ __('Select Page with Template') }}
+                                </option>
+                                @foreach ($pages as $page)
+                                    <option value="{{ $page->id }}"> {{ $page->title }} </option>
+                                @endforeach
+                            </select>
+                            <span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-500">
+                                <svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
 
                     <div class="mt-6">
                         <x-forms.checkbox-status
@@ -205,6 +228,7 @@
                 formAction: '',
                 formMethod: 'POST',
                 modalTitle: '',
+                page_id: '',
                 languages: @js(array_fill_keys(array_keys($languages), '')),
                 routeTemplates: {
                     edit: "{{ route('admin.categories.edit', ':id') }}",
@@ -242,6 +266,7 @@
 
                         this.formData.title = category.title;
                         this.formData.active = category.active;
+                        this.formData.page_id = category.page_id;
                         this.formAction = this.routeTemplates.update.replace(':id', categoryId);
                         this.formMethod = 'PUT';
                         this.modalTitle = '@lang("Edit Category")';
@@ -261,7 +286,7 @@
 
                 resetForm() {
                     this.formData = defaultFormData();
-
+                    this.page_id = '',
                     this.errors = {};
 
                     // reset validation
