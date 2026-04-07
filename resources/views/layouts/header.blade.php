@@ -141,13 +141,10 @@
                                 <li>
                                     <a href="{{ route('about') }}">{{ __('About Us') }}</a>
                                 </li>
-                                <li class="menu-item-has-children">
-                                    <a href="match.html">Service</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="service.html">Services</a></li>
-                                        <li><a href="service-details.html">Service Details</a></li>
-                                    </ul>
+                                <li>
+                                    <a href="{{ route('catalog') }}">{{ __('Services') }}</a>
                                 </li>
+
                                 <li class="menu-item-has-children">
                                     <a href="blog.html">Blog</a>
                                     <ul class="sub-menu">
@@ -194,7 +191,7 @@
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="{{ route('contact') }}">{{ __('Contact Us') }}</a>
+                                    <a href="{{ route('contact') }}">{{ __('Contact Us Menu') }}</a>
                                 </li>
                             </ul>
                         </nav>

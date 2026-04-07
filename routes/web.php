@@ -50,3 +50,6 @@ Route::post('/reviews', [ReviewController::class, 'store'])->middleware('throttl
 // subscribe and unsubscribe
 Route::post('/subscribe', [SubscribeController::class, 'subscribe'])->middleware('throttle:10,10')->name('subscribe');
 Route::get('/unsubscribe/{token}', [SubscribeController::class, 'unsubscribe'])->middleware('throttle:5,10')->name('unsubscribe');
+
+// services
+Route::get('/catalog/{slug?}', [FrontendController::class, 'catalog'])->name('catalog');

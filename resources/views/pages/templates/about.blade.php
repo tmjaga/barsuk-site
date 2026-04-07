@@ -4,7 +4,7 @@
     <div class="breadcumb-wrapper " data-bg-src="{{ asset('assets/img/breadcumb/about_bg.jpg') }}">
         <div class="container z-index-common">
             <div class="breadcumb-content">
-                <h1 class="breadcumb-title">{{ __('About Us') }}</h1>
+                <h1 class="breadcumb-title">{!! __('About :target', ['target' => '<span class="text-theme">'.__('Us').'</span>']) !!}</h1>
                 <div class="breadcumb-menu-wrap">
                     <ul class="breadcumb-menu">
                         <li><a href="{{ route('home') }}">Home</a></li>

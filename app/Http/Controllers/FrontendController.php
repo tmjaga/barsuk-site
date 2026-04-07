@@ -48,13 +48,28 @@ class FrontendController extends Controller
         ]);
     }
 
-    public function services(): View
+    public function catalog(?string $slug = null): View
     {
-        $categories = Category::with('activeServices')
+        $locale = app()->getLocale();
+
+        $categories = Category::with(['activeServices', 'page'])
             ->whereHas('activeServices')
             ->active()
+            ->orderBy("title->$locale")
             ->get();
 
-        return view('pages.templates.services', compact('categories'));
+        $template = 'categories';
+        $currentSlug = $categories->first()->slug;
+
+        if ($slug) {
+            $currentSlug = $slug;
+            $category = $categories->whereNotNull('page_id')->firstWhere('slug', $slug);
+
+            if ($category) {
+                $template = $category?->page?->template;
+            }
+        }
+
+        return view('pages.templates.'.$template, compact('categories', 'currentSlug'));
     }
 }

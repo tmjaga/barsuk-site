@@ -10,7 +10,7 @@
     <div class="breadcumb-wrapper " data-bg-src="{{ asset('assets/img/breadcumb/contact_bg.jpg') }}">
         <div class="container z-index-common">
             <div class="breadcumb-content">
-                <h1 class="breadcumb-title">{{ __('Contact Us') }}</h1>
+                <h1 class="breadcumb-title">{!! __('Contact :target', ['target' => '<span class="text-theme">'.__('WithUs').'</span>']) !!}</h1>
                 <div class="breadcumb-menu-wrap">
                     <ul class="breadcumb-menu">
                         <li><a href="{{ route('home') }}">{{ __('Home') }}</a></li>
@@ -45,7 +45,7 @@
                              x-text="$store.alert.message"></div>
                     </template>
 
-                    <form action="mail.php" method="POST" class="ajax-contact form-style6">
+                    <form action="" method="POST" class="ajax-contact form-style6">
                         <div class="form-group">
                             <input type="text" name="name" x-model="formData.name" id="name" placeholder="{{ __('Your Name') }}*">
                             <p x-show="$v.formData.name.$invalid && $v.$touch" class="text-danger text-sm ps-1">{{ __('Please enter a Name') }}</p>

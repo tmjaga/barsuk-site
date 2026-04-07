@@ -10170,7 +10170,10 @@ blockquote.vs-quote cite:before {
   max-width: 100%;
   margin-bottom: 50px;
 }
+
 .service-box .box-title {
+  font-family: var(--title-font);
+  color: var(--title-color);
   font-size: 24px;
   background-color: #fdebe0;
   border: 1px solid rgba(196, 198, 200, 0.2);
@@ -10178,6 +10181,25 @@ blockquote.vs-quote cite:before {
   padding: 23.5px 20px 23.5px 25px;
   margin: 0;
 }
+
+.service-box .box-title.box-title-active {
+    background-color: #fcd2b8;
+}
+
+.service-box .box-title a {
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    border: none;
+    color: inherit;
+    transition: inherit;
+}
+
+.service-box .box-title:hover, .service-box .box-title a:hover {
+    background-color: #fce3d4;
+    color: var(--title-color);
+}
+
 .service-box a {
   border: 1px solid rgba(196, 198, 200, 0.3);
   border-top: none;
@@ -10186,10 +10208,10 @@ blockquote.vs-quote cite:before {
   font-size: 16px;
   color: #6f6c6c;
   display: block;
+    transition: none;
 }
 .service-box a:hover {
-  color: var(--white-color);
-  background-color: var(--theme-color);
+  background-color: #fcfcfc;
 }
 
 /* Medium Large devices */

@@ -104,7 +104,7 @@ Route::middleware(['auth:admin'])->group(function () {
     });
 
     // pages routes
-    Route::resource('pages', PageController::class);
+    Route::resource('pages', PageController::class)->except('show');
 
     // reviews routes
     Route::resource('reviews', ReviewController::class);
