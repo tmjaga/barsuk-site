@@ -13,7 +13,7 @@
 
     <div class="rounded-2xl border border-gray-200 bg-white">
         <div x-data="album_validate()" class="space-y-6 border-t border-gray-100 p-5 sm:p-6">
-            <form @submit.prevent="submit" action="{{ isset($album) ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST">
+            <form x-validate="{ live: 'input' }" @submit.prevent="submit" action="{{ isset($album) ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST">
                 @csrf
                 @isset($album)
                     @method('PUT')
@@ -24,10 +24,8 @@
                         <label class="mb-1.5 block text-sm font-bold text-gray-700">
                             {{__('Album Title')}} <span class="text-red-500">*</span>
                         </label>
-                        <input name="title" x-model="title" value="" type="text" class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                        <p x-show="$v.title.$invalid && $v.$touch" class="text-red-500 text-sm mt-1">
-                            {{__('Please enter a valid Title')}}
-                        </p>
+                        <input name="title" x-model="title" value="" type="text" class="req int shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        <p x-show="$validation.hasErrors" x-text="$validation.errors.title" class="text-red-500 text-sm mt-1"></p>
                         @error('title')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -58,23 +56,12 @@
 @endsection
 
 @push('footer_scripts')
-    <script src="{{ asset('js/status-badge.js') }}"></script>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('album_validate', () => ({
                 title: @json(old('title', $album->title ?? '')),
-
-                init() {
-                    this.$validation(this);
-                },
-                validations: {
-                    title: ['required', 'min:3'],
-                },
                 submit() {
-                    this.title = this.title.trim();
-                    this.$v.validate();
-
-                    if (this.$v.title.$invalid) {
+                    if (!this.$validate()) {
                         return;
                     }
 

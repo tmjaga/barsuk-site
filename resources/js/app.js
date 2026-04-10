@@ -14,6 +14,7 @@ import 'trix';
 import 'trix/dist/trix.css';
 import './trix-extensions';
 import './status-badge.js';
+import AlpineValidation from './validation-alpine.js';
 
 window.flatpickr = flatpickr;
 window.$ = window.jQuery = $;
@@ -62,5 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// register validation plugin
+Alpine.plugin(AlpineValidation);
 
 Alpine.start();
