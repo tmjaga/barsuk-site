@@ -1,10 +1,13 @@
 {
     "agents": [
-        "claude_code"
+        "claude_code",
+        "cursor"
     ],
     "editors": [
         "claude_code",
-        "phpstorm"
+        "cursor",
+        "phpstorm",
+        "vscode"
     ],
     "guidelines": []
 }
