@@ -6,10 +6,12 @@ Video Lesson [New TailAdmin Laravel Starter Kit with Basic Auth](https://www.you
 
 [Tail Admin Template hompage](https://tailadmin.com)
 
-## Used Components
+## Used Components and Packages
 - [Alpine.js](https://alpinejs.dev) all componenets implemented with this framework
 - [Tippy.js](https://atomiks.github.io/tippyjs) - tooltips for Tailwind Css
 - [Alpidate](https://github.com/h7arash/alpidate) - a lightweight validation plugin for Alpine.js inspired by Vuelidate.
 - [Full Calendar](https://fullcalendar.io) - JavaScript Calendar
-- [Spatie Laravel-backup](https://spatie.be/docs/laravel-backup/v10/introduction) - make a full backup, includig DB
+- [Spatie Laravel Backup](https://spatie.be/docs/laravel-backup/v10/introduction) - make a full backup, includig DB
+- [Spatie Laravel Media Library](https://spatie.be/docs/laravel-medialibrary/v11/introduction) - A free package that associates files to Eloquent models, generates thumbnails and responsive images, and manages media across file systems.
+- [Spatie Laravel Translatable](https://spatie.be/docs/laravel-translatable/v6/introduction) - A trait to make Eloquent models translatable.
 - [Emogrifier](https://github.com/MyIntervals/emogrifier) - converts CSS styles into inline style attributes in your HTML code.
