@@ -24,8 +24,8 @@
                         <label class="mb-1.5 block text-sm font-bold text-gray-700">
                             {{__('Album Title')}} <span class="text-red-500">*</span>
                         </label>
-                        <input name="title" x-model="title" value="" type="text" class="req int shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
-                        <p x-show="$validation.hasErrors" x-text="$validation.errors.title" class="text-red-500 text-sm mt-1"></p>
+                        <input name="title" x-model="title" value="" type="text" class="req shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden">
+                        <p x-show="$formValidation.hasErrors" x-text="$formValidation.errors.title" class="text-red-500 text-sm mt-1"></p>
                         @error('title')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
