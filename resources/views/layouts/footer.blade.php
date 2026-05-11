@@ -30,12 +30,10 @@
     <div class="footer-number"><a href="tel:{{ settings()->phone }}">{{ settings()->formatted_phone }}</a> - {{ \Carbon\Carbon::createFromFormat('H:i:s', settings()->work_from)->format('H:i') }} – {{ \Carbon\Carbon::createFromFormat('H:i:s', settings()->work_to)->format('H:i') }}</div>
     <div class="copyright-menu">
         <ul>
-            <li><a href="{{ route('home') }}">HOME</a></li>
-            <li><a href="service.html">service</a></li>
-            <li><a href="price-plan.html">Pricing</a></li>
-            <li><a href="blog.html">blog</a></li>
-            <li><a href="shop.html">shop</a></li>
-            <li><a href="contact.html">contact</a></li>
+            <li><a href="{{ route('home') }}">{{ __('Home') }}</a></li>
+            <li><a href="{{ route('catalog') }}">{{ __('Services') }}</a></li>
+            <li><a href="price-plan.html">{{ __('Pricing') }}</a></li>
+            <li><a href="{{ route('contact') }}">{{ __('Contact') }}</a></li>
         </ul>
     </div>
     <p class="copyright-text">Copyright <i class="fal fa-copyright"></i> {{ date('Y') }} <a href="{{ route('home') }}">Glosse</a>.</p>
@@ -67,7 +65,6 @@
         }
     </style>
 @endpush
-
 
 @push('footer_scripts')
     <script>

@@ -77,7 +77,6 @@
     </style>
 </head>
 
-
 <body>
     <!--[if lte IE 9]>
     <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
@@ -166,19 +165,17 @@
                     <img src="{{ asset('images/logo/glosse_logo.svg') }}" alt="logo">
                 </div>
                 <div class="info-media1">
-                    <div class="media-icon"><i class="fal fa-map-marker-alt"></i></div>
-                    <span class="media-label">Centerl Park West La, New York</span>
-                </div>
-                <div class="info-media1">
                     <div class="media-icon"><i class="far fa-phone-alt "></i></div>
-                    <span class="media-label"><a href="tel:+01234567890" class="text-inherit">+0 123 456 7890</a></span>
+                    <span class="media-label"><a href="tel:{{ settings()->phone }}" class="text-inherit">{{ settings()->formatted_phone }}</a></span>
                 </div>
                 <div class="info-media1">
                     <div class="media-icon"><i class="fal fa-envelope"></i></div>
-                    <span class="media-label"><a class="text-inherit" href="mailto:info@example.com">info@example.com</a></span>
+                    <span class="media-label"><a class="text-inherit" href="mailto:{{ settings()->email }}">{{ settings()->email }}</a></span>
                 </div>
             </div>
-            <div class="widget  ">
+            {{--
+            <!-- promotions can be added here -->
+            <div class="widget">
                 <h3 class="widget_title">Latest post</h3>
                 <div class="recent-post-wrap">
                     <div class="recent-post">
@@ -227,6 +224,7 @@
                     </div>
                 </div>
             </div>
+            --}}
         </div>
     </div>
     <!-- popup search box -->

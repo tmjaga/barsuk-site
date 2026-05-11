@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\CalendarController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\MailingController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ReviewController;
@@ -123,4 +124,17 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // trix routes
     Route::post('trix-upload', [TrixController::class, 'store'])->name('trix.upload');
+
+    // notification routes
+
+    Route::group([
+        'prefix' => 'notifications',
+        'as' => 'notifications.',
+    ], function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+        Route::get('/fetch', [NotificationController::class, 'fetch'])->name('fetch');
+        Route::put('/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('mark-as-read');
+        Route::delete('/{id}', [NotificationController::class, 'destroy'])->name('destroy');
+        Route::post('/mark-all-read', [NotificationController::class, 'markAllRead'])->name('mark-all-read');
+    });
 });

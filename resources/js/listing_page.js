@@ -106,7 +106,7 @@ export default function (initialData = {}) {
             axios.get(this.url, {
                 params: {
                     page: page,
-                    search: this.search,
+                    ...(this.search && { search: this.search }),
                     ...this.filters
 
                 }

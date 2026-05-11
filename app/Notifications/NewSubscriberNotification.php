@@ -16,7 +16,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     public function toMail($notifiable): MailMessage
@@ -26,6 +26,15 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
             ->view('emails.new-subscriber', [
                 'subscriber' => $this->subscriber,
             ]);
+    }
+
+    public function toDatabase($notifiable): array
+    {
+        return [
+            'type' => 'subscriber',
+            'email' => $this->subscriber->email,
+            'message' => 'New subscriber: '.$this->subscriber->email,
+        ];
     }
 
     public function toArray($notifiable): array
