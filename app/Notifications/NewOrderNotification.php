@@ -15,7 +15,7 @@ class NewOrderNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     public function toMail($notifiable): MailMessage
@@ -32,5 +32,17 @@ class NewOrderNotification extends Notification implements ShouldQueue
     public function toArray($notifiable): array
     {
         return [];
+    }
+
+    public function toDatabase($notifiable): array
+    {
+        $order = $this->data['order'];
+
+        return [
+            'type'    => 'order',
+            'order_id' => $order->id,
+            'message' => 'New order from: ' . $order->names,
+            'email'   => $order->email,
+        ];
     }
 }

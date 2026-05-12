@@ -65,14 +65,14 @@
                             </td>
                             <td class="text-center px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 py-1 text-xs font-medium rounded-full"
-                                      :class="notification.type === 'order' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'"
-                                      x-text="notification.type === 'order' ? 'Order' : 'Subscriber'">
+                                      :class="notification.data.type === 'order' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'"
+                                      x-text="notification.data.type === 'order' ? 'Order' : 'Subscriber'">
                                 </span>
                             </td>
                             <td class="text-center px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 <span x-text="$formatDate(notification.created_at)"></span>
                             </td>
-                            <td class="text-center px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end gap-3">
                                     <template x-if="!notification.read_at">
                                          <div x-data="changeReadStatus(currentPage)">
