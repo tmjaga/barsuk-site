@@ -12,16 +12,20 @@
             <template x-if="!loading && step === 1">
                 <div>
                     <h2 class="text-lg font-semibold mb-4">
-                        @lang('Select Services')
+                        {{ __('Select Services') }}
                     </h2>
                     <div class="space-y-2">
                         <template x-for="service in services" :key="service.id">
-                            <label class="flex items-center gap-3 p-3 border rounded hover:bg-gray-50">
+                            <label class="flex items-center gap-3 p-3 border rounded cursor-pointer transition-colors"
+                                :class="isSelected(service.id) ? 'bg-teal-500 text-white border-teal-500' : 'hover:bg-gray-50'">
                                 <input type="checkbox"
                                        :checked="isSelected(service.id)"
                                        @change="toggleService(service)">
-                                <span class="flex-1" x-text="service.title"></span>
-                                <span class="text-sm text-gray-500" x-text="formatPrice(service.price) + ' &euro;'"></span>
+                                <span class="flex-1" x-text="service.title_localized"></span>
+                                <span class="text-sm transition-colors"
+                                    :class="isSelected(service.id) ? 'text-white' : 'text-gray-500'"
+                                    x-text="formatPrice(service.price) + ' €'"
+                                ></span>
                             </label>
                         </template>
                     </div>
@@ -34,7 +38,7 @@
             </template>
 
             <!-- step2 — weeks dates times -->
-            <template x-if="!slotsLoading && step === 2">
+            <template x-if="step === 2">
                 <div>
                     <h2 class="text-lg font-semibold mb-4">
                         @lang('Select Date and Time')
@@ -74,8 +78,16 @@
                         </button>
                     </div>
 
+                    <!-- loader while timeslots is loading -->
+                    <div x-show="slotsLoading" class="flex justify-center items-center py-8">
+                        <svg class="animate-spin h-6 w-6 text-teal-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 22 6.477 22 12h-4z"></path>
+                        </svg>
+                    </div>
+
                     <!-- hours -->
-                    <div class="grid grid-cols-8 gap-3">
+                    <div x-show="!slotsLoading" class="grid grid-cols-8 gap-3">
                         <template x-for="slot in daySlots" :key="slot.time">
                             <button @click="selectedTime = slot.time"
                                 :disabled="!slot.available"
@@ -97,7 +109,6 @@
                             @lang('Next')
                         </button>
                     </div>
-
                 </div>
             </template>
 
@@ -246,6 +257,7 @@
                 isSelected(id) {
                     return this.selectedServices.some(s => s.id === id);
                 },
+
                 async loadDaySlots() {
                     if (!this.selectedServices.length) return;
                     if (!this.selectedDate) return;
